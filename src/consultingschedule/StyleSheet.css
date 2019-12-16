@@ -1,0 +1,40 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 13, 2019, 2:06:26 PM
+    Author     : matthewp
+*/
+
+.button {
+  -fx-background-color: black;
+  -fx-text-fill: white;
+  -fx-background-radius: 16px;
+  -fx-padding: 10px;
+  -fx-border-insets: 5px;
+  -fx-background-insets: 5px;
+}
+
+.label
+{
+    -fx-font-family: "arial";
+    -fx-font-size: 12px;
+    -fx-font-style: normal;
+    -fx-font-weight: bolder;
+    -fx-padding: 10px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+#error-label {
+   -fx-text-fill: red;
+}
+
+.text-field {
+  -fx-padding: 5px;
+  -fx-border-insets: 5px;
+  -fx-background-insets: 5px;
+  -fx-border-color: black;
+}

@@ -5,6 +5,8 @@
  */
 package consultingschedule;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -29,16 +31,16 @@ public class User {
                 String name,
                 String pw,
                 boolean isActive,
-                LocalDate date,
+                Date date,
                 String creater,
-                LocalDateTime time){
+                Timestamp time){
         userId = id;
         userName = name;
         password = pw;
         active = isActive;
-        createDate = date;
+        createDate = new java.sql.Date(date.getTime()).toLocalDate();
         createdBy = creater;
-        lastUpdate = time;
+        lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
         lastUpdateBy = creater;
     }
     
@@ -79,14 +81,14 @@ public class User {
     public void setStatus(boolean isActive){
         active = isActive;
     }
-    public void setDateAdded(LocalDate date){
-        createDate = date;
+    public void setDateAdded(Date date){
+        createDate = new java.sql.Date(date.getTime()).toLocalDate();
     }
     public void setCreator(String creator){
         createdBy = creator;
     }
-    public void setUpdateTime(LocalDateTime updateTime){
-        lastUpdate = updateTime;
+    public void setUpdateTime(Timestamp updateTime){
+        lastUpdate = new java.sql.Timestamp(updateTime.getTime()).toLocalDateTime();
     }
     public void setUpdatedBy(String updatedBy){
         lastUpdateBy = updatedBy;
