@@ -23,10 +23,13 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -38,6 +41,7 @@ import javax.sql.DataSource;
  *
  * @author matthewp
  */
+
 public class ConsultingSchedule extends Application {
     
     @Override
@@ -60,7 +64,7 @@ public class ConsultingSchedule extends Application {
                 java.sql.Timestamp.valueOf(LocalDateTime.now()));
         
         //Insert tested and works
-        //insertUser(testUser);
+        insertUser(testUser);
         
         ///update tested and works
         //testUser.setCreator("GOD");
@@ -86,57 +90,42 @@ public class ConsultingSchedule extends Application {
         Locale  france = new Locale("fr");
         System.out.println(languageConvert(france,"Hello"));
         
-        /*
-        //Add An Image 
-        Image image = new Image("Placeholder.png");
-        ImageView imageView = new ImageView(image);
-        HBox hboxImage = new HBox(imageView);
-        
-        Label labelName = new Label("User Name: ");
-        Label labelPw = new Label("Password: ");
-        
-        TextField tfName = new TextField();
-        TextField tfPw = new TextField();
-        
-        HBox hboxName = new HBox(labelName,tfName);
-        hboxName.setAlignment(Pos.CENTER_RIGHT);
-        HBox hboxPw = new HBox(labelPw,tfPw);
-        hboxPw.setAlignment(Pos.CENTER_RIGHT);
-        VBox vboxInput = new VBox(hboxName,hboxPw);
-        
-        GridPane gridPane = new GridPane();
-        gridPane.add(labelName, 0,0,1,1);
-        gridPane.add(tfName, 1,0,1,1);
-        gridPane.add(labelPw, 0,1,1,1);
-        gridPane.add(tfPw, 1,1,1,1);
-        gridPane.setAlignment(Pos.CENTER);
-        
-        Button btnSignIn = new Button();
-        btnSignIn.setText("Sign In");
-        btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //DO STUFF ON BUTTON PRESS
-            }
-        });
-        HBox hboxSignIn = new HBox(btnSignIn);
-        hboxSignIn.setAlignment(Pos.CENTER);
-        
-        VBox mainScreen = new VBox(hboxImage, gridPane, hboxSignIn);
-        */
-        
         SignInWindow signInWindow = new SignInWindow();
         
         root.getChildren().add(signInWindow.view);
         
-        //Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Matt Pfeiffer Consulting");
+        primaryStage.setTitle("Sign In");
         primaryStage.setScene(sceneMain);
         primaryStage.show();
+        primaryStage.setResizable(false);
+        primaryStage.sizeToScene();
+        
+        SignInWindow.btnSignIn.setOnMouseClicked((new EventHandler<MouseEvent>() { 
+            public void handle(MouseEvent event) { 
+               String name = SignInWindow.getName();
+               String password = SignInWindow.getPassword();
+               handleSignIn(name, password);
+            } 
+        }));
     }
     
-    public interface Dao{
+    public void handleSignIn(String name, String pw)
+    {
+        CurrentUser currentUser = CurrentUser.getInstance();
+        currentUser.setUser(getUserByNameAndPassword(name, pw));
+        if (currentUser.getUser() == null) SignInError();
+        else System.out.println(currentUser.getUser().getUserName());
+    }
+    
+    void SignInError()
+    {
+        Alert errorAlert = new Alert(AlertType.ERROR);
+        errorAlert.setHeaderText("Invalid Input");
+        errorAlert.setContentText("Username and Password do not match our records.");
+        errorAlert.showAndWait();
+    }
+    
+    public interface UserDao{
         User getUser();
         Set<User> getAllUsers();
         User getUserByUserNameAndPassword();
@@ -148,9 +137,6 @@ public class ConsultingSchedule extends Application {
     public User getUserByNameAndPassword(String name, String pw) {
         Connection connection = connectToDB();
         try {
-            //Statement stmt = connection.createStatement();
-            //ResultSet rs = stmt.executeQuery("SELECT * FROM user WHERE userName=" + "userName" + " AND password=" + pw);
-            
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM user WHERE userName=? AND password=?");
             statement.setString(1, name);
             statement.setString(2, pw);
