@@ -39,7 +39,7 @@ public class SignInWindow extends VBox {
         
         //name
         labelName = new Label("User Name: ");
-        TextField tfName = new TextField();
+        TextField tfName = new TextField("");
         tfName.setPromptText("UserName");
         tfName.textProperty().addListener((obs, oldText, newText) -> {
             name = newText;

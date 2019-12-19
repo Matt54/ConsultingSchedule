@@ -47,7 +47,7 @@ public class ConsultingSchedule extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         
-        
+        MainWindow mainWindow = new MainWindow();
         StackPane root = new StackPane();
         Scene sceneMain = new Scene(root);//, 875, 510);
         sceneMain.getStylesheets().add("consultingschedule/StyleSheet.css");
@@ -100,21 +100,38 @@ public class ConsultingSchedule extends Application {
         primaryStage.setResizable(false);
         primaryStage.sizeToScene();
         
+       
+        
         SignInWindow.btnSignIn.setOnMouseClicked((new EventHandler<MouseEvent>() { 
             public void handle(MouseEvent event) { 
                String name = SignInWindow.getName();
                String password = SignInWindow.getPassword();
-               handleSignIn(name, password);
+               boolean isSignedIn = handleSignIn(name, password);
+               if(isSignedIn){
+                   mainWindow.handleSignIn();
+                   primaryStage.setScene(mainWindow.scene);
+               }
             } 
         }));
+        
+        MainWindow.btnSignOut.setOnMouseClicked((new EventHandler<MouseEvent>() { 
+            public void handle(MouseEvent event) { 
+                primaryStage.setScene(sceneMain);
+            } 
+        }));
+        
     }
     
-    public void handleSignIn(String name, String pw)
+    public boolean handleSignIn(String name, String pw)
     {
         CurrentUser currentUser = CurrentUser.getInstance();
         currentUser.setUser(getUserByNameAndPassword(name, pw));
         if (currentUser.getUser() == null) SignInError();
-        else System.out.println(currentUser.getUser().getUserName());
+        else{
+            System.out.println(currentUser.getUser().getUserName());
+            return true;
+        }
+        return false;
     }
     
     void SignInError()
