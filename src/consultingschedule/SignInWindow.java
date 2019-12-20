@@ -22,6 +22,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 /**
  *
@@ -34,8 +36,14 @@ public class SignInWindow extends VBox {
         //header image
         Image image = new Image("LogoDraft1.png");
         ImageView imageView = new ImageView(image);
-        HBox hboxImage = new HBox(imageView);
-        hboxImage.setAlignment(Pos.CENTER);
+        Image gif = new Image("globe_small.gif");
+        ImageView gifView = new ImageView(gif);
+        gifView.setX(55);
+        gifView.setY(80);
+        double width = 75;
+        gifView.setFitWidth(width);
+        gifView.setFitHeight(width);
+        Pane stackPane = new Pane(imageView,gifView);
         
         //name
         labelName = new Label("User Name: ");
@@ -70,13 +78,13 @@ public class SignInWindow extends VBox {
         gridPane.setAlignment(Pos.CENTER);
 
         //copyright label set at full width
-        Label copyrightLabel = new Label("Copyright ® Matt Pfeiffer Consulting");
+        Label copyrightLabel = new Label("Copyright ® 2019 Matt Pfeiffer Consulting");
         copyrightLabel.setId("copyright-label");
         copyrightLabel.setAlignment(Pos.CENTER);
         copyrightLabel.setMaxWidth(Double.MAX_VALUE);
         
         //vbox combines into one view to display
-        view = new VBox(hboxImage, gridPane, copyrightLabel);
+        view = new VBox(stackPane, gridPane, copyrightLabel);
         view.setId("sign-in-window");
     }
     
