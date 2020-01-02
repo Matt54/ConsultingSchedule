@@ -103,21 +103,6 @@ public class ConsultingSchedule extends Application {
         
        
         SignInWindow.btnSignIn.setDefaultButton(true);
-        
-        /*
-        SignInWindow.btnSignIn.setOnMouseClicked((new EventHandler<MouseEvent>() { 
-            public void handle(MouseEvent event) { 
-               String name = SignInWindow.getName();
-               String password = SignInWindow.getPassword();
-               boolean isSignedIn = handleSignIn(name, password);
-               if(isSignedIn){
-                   mainWindow.handleSignIn();
-                   primaryStage.setScene(mainWindow.scene);
-               }
-            } 
-        }));
-        */
-        
         SignInWindow.btnSignIn.setOnAction(e -> {       
             String name = SignInWindow.getName();
             String password = SignInWindow.getPassword();
@@ -136,13 +121,7 @@ public class ConsultingSchedule extends Application {
             primaryStage.setScene(sceneMain);
         });
         
-        /*
-        MainWindow.btnSignOut.setOnMouseClicked((new EventHandler<MouseEvent>() { 
-            public void handle(MouseEvent event) { 
-                primaryStage.setScene(sceneMain);
-            } 
-        }));
-        */
+
         
     }
     
