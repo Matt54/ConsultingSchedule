@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
  * @author macbook
  */
 public class Customer {
-    private Integer customerId;
-    private String customerName;
-    private Integer addressId;
-    private boolean active;
-    private LocalDate createDate;
-    private String createdBy;
-    private LocalDateTime lastUpdate;
-    private String lastUpdateBy;
+    protected int customerId;
+    protected String customerName;
+    protected int addressId;
+    protected boolean active;
+    protected LocalDate createDate;
+    protected String createdBy;
+    protected LocalDateTime lastUpdate;
+    protected String lastUpdateBy;
     
     Customer () {}
     
@@ -43,10 +43,10 @@ public class Customer {
         lastUpdateBy = creater;
     }
     
-    public Integer getUserId(){
+    public Integer getId(){
         return customerId;
     }
-    public String getUserName(){
+    public String getName(){
         return customerName;
     }
     public Integer getAddressId(){
@@ -68,10 +68,10 @@ public class Customer {
         return lastUpdateBy;
     }
     
-    public void setUserId(Integer id){
+    public void setId(Integer id){
         customerId = id;
     }
-    public void setUserName(String name){
+    public void setName(String name){
         customerName = name;
     }
     public void setAddressId(Integer id){

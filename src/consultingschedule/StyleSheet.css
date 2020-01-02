@@ -13,7 +13,7 @@ and open the template in the editor.
   -fx-min-height: 170px ;
 }
 
- .button:hover {
+.button:hover {
     -fx-background-color: #404040;
 }
 

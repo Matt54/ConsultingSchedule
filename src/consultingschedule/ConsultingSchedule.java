@@ -6,35 +6,18 @@
 package consultingschedule;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import java.io.FileInputStream;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.sql.*;  
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import javax.sql.DataSource;
 
@@ -47,11 +30,8 @@ public class ConsultingSchedule extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
+
         MainWindow mainWindow = new MainWindow();
-        StackPane root = new StackPane();
-        Scene sceneMain = new Scene(root);//, 875, 510);
-        sceneMain.getStylesheets().add("consultingschedule/StyleSheet.css");
         
         Connection dbConnection = connectToDB();
         System.out.println(dbConnection);
@@ -92,15 +72,7 @@ public class ConsultingSchedule extends Application {
         System.out.println(languageConvert(france,"Hello"));
         
         SignInWindow signInWindow = new SignInWindow();
-        
-        root.getChildren().add(signInWindow.view);
-        
-        primaryStage.setTitle("Sign In");
-        primaryStage.setScene(sceneMain);
-        primaryStage.show();
-        primaryStage.setResizable(false);
-        primaryStage.sizeToScene();
-        
+        //signInWindow.show();
        
         SignInWindow.btnSignIn.setDefaultButton(true);
         SignInWindow.btnSignIn.setOnAction(e -> {       
@@ -109,7 +81,8 @@ public class ConsultingSchedule extends Application {
             boolean isSignedIn = handleSignIn(name, password);
             if(isSignedIn){
                 mainWindow.handleSignIn();
-                primaryStage.setScene(mainWindow.scene);
+                mainWindow.show();
+                signInWindow.hide();
             }
         });
         
@@ -118,13 +91,12 @@ public class ConsultingSchedule extends Application {
         });
         
         MainWindow.btnSignOut.setOnAction(e -> { 
-            primaryStage.setScene(sceneMain);
+            signInWindow.show();
+            mainWindow.hide();
         });
-        
 
-        
     }
-    
+
     public boolean handleSignIn(String name, String pw)
     {
         CurrentUser currentUser = CurrentUser.getInstance();

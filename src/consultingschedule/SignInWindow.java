@@ -5,25 +5,20 @@
  */
 package consultingschedule;
 
-import java.awt.event.ActionListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import java.util.*;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 /**
  *
@@ -32,6 +27,10 @@ import javafx.scene.layout.StackPane;
 
 public class SignInWindow extends VBox {
     SignInWindow(){
+
+        root = new StackPane();
+        scene = new Scene(root);
+        scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         
         //header image
         Image image = new Image("LogoDraft1.png");
@@ -64,6 +63,9 @@ public class SignInWindow extends VBox {
         //button
         btnSignIn = new Button();
         btnSignIn.setText("Sign In");
+        SignInWindow.btnSignIn.setOnAction(e -> {   
+            stage.hide();
+        });
 
         //grid aligns labels,textfields, and button
         GridPane gridPane = new GridPane();
@@ -86,8 +88,32 @@ public class SignInWindow extends VBox {
         //vbox combines into one view to display
         view = new VBox(stackPane, gridPane, copyrightLabel);
         view.setId("sign-in-window");
+        
+        root.getChildren().add(view);
+        
+        stage = new Stage();
+        stage.setTitle("Sign In");
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(false);
+        stage.sizeToScene();
+        stage.setScene(scene);
+        show();
     }
     
+    public Stage getStage(){
+        return stage;
+    }
+    
+    public void show(){
+        stage.show();
+        stage.sizeToScene();
+    }
+    
+    public void hide(){
+        stage.hide();
+    }
+            
     public static String getName(){
         return name;
     }
@@ -102,6 +128,9 @@ public class SignInWindow extends VBox {
     
     private Label labelName;
     private Label labelPw;
-    public VBox view;
+    VBox view;
+    StackPane root;
+    Stage stage;
+    Scene scene;
 }
 
