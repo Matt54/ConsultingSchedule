@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
  * @author macbook
  */
 public class Customer {
-    protected int customerId;
+    protected Integer customerId;
     protected String customerName;
-    protected int addressId;
+    protected Integer addressId;
     protected boolean active;
     protected LocalDate createDate;
     protected String createdBy;
@@ -43,10 +43,10 @@ public class Customer {
         lastUpdateBy = creater;
     }
     
-    public Integer getId(){
+    public Integer getCustomerId(){
         return customerId;
     }
-    public String getName(){
+    public String getCustomerName(){
         return customerName;
     }
     public Integer getAddressId(){

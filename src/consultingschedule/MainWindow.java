@@ -92,7 +92,7 @@ public class MainWindow {
         
         consultant.addCustomer(customer);
         
-        TableView tvCustomers = new TableView<Customer>(consultant.getAllCustomers());
+        tvCustomers = new TableView<>(consultant.getAllCustomers());
         
         TableColumn<Customer, String> customerId = new TableColumn<>("Customer ID");
         customerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -101,6 +101,8 @@ public class MainWindow {
         TableColumn<Customer, String> customerName = new TableColumn<>("Customer Name");
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         tvCustomers.getColumns().add(customerName);
+        
+        tvCustomers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         tvCustomers.setPrefWidth(355);
         tvCustomers.setPrefHeight(300);
@@ -153,7 +155,7 @@ public class MainWindow {
     }
     */
     
-    
+    TableView tvCustomers;
     VBox view;
     HBox hboxImage;
     Label labelName = new Label();

@@ -25,14 +25,14 @@ public class Consultant {
     
     public Customer lookupCustomer(int customerId){
         for(Customer customer : allCustomers){
-            if(customer.getId() == customerId) return customer;
+            if(customer.getCustomerId() == customerId) return customer;
         }
         return null;
     }
     
     public Customer lookupCustomer(String customerName){
         for(Customer customer : allCustomers){
-            if(customer.getName().equals(customerName)) return customer;
+            if(customer.getCustomerName().equals(customerName)) return customer;
         }
         return null;
     }

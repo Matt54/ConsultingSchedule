@@ -8,6 +8,10 @@ and open the template in the editor.
     Author     : matthewp
 */
 
+.table-column {
+  -fx-alignment: CENTER;
+}
+
 .grid-pane{
   /*-fx-padding: 10px;*/
   -fx-min-height: 170px ;
