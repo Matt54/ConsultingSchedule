@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
  *
  * @author macbook
  */
+
+//Only time you should use TimeStamp is when you are inserting to DB
+//Otherwise LocalDateTime
+
 public class Appointment {
     private Integer appointmentId;
     private Integer customerId;
@@ -42,8 +46,8 @@ public class Appointment {
                         String _contact,
                         String _type,
                         String _url,
-                        Date _start,
-                        Date _end,
+                        Date _start, //make it LocalDateTime
+                        Date _end, //make it LocalDateTime
                         Date date,
                         String creater,
                         Timestamp time){
@@ -58,7 +62,7 @@ public class Appointment {
         url = _url;
         start = new java.sql.Timestamp(_start.getTime()).toLocalDateTime();
         end = new java.sql.Timestamp(_end.getTime()).toLocalDateTime();
-        createDate = new java.sql.Date(date.getTime()).toLocalDate();
+        createDate = new java.sql.Date(date.getTime()).toLocalDate(); //Who cares about this in business logic of app?
         createdBy = creater;
         lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
         lastUpdateBy = creater;

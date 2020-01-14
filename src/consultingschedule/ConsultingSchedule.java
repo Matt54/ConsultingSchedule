@@ -31,6 +31,7 @@ public class ConsultingSchedule extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        
         MainWindow mainWindow = new MainWindow();
         
         Connection dbConnection = connectToDB();
@@ -71,9 +72,11 @@ public class ConsultingSchedule extends Application {
         Locale  france = new Locale("fr");
         System.out.println(languageConvert(france,"Hello"));
         
+        
         SignInWindow signInWindow = new SignInWindow();
         //signInWindow.show();
-       
+        
+        
         SignInWindow.btnSignIn.setDefaultButton(true);
         SignInWindow.btnSignIn.setOnAction(e -> {       
             String name = SignInWindow.getName();
@@ -95,6 +98,15 @@ public class ConsultingSchedule extends Application {
             mainWindow.hide();
         });
 
+    }
+    
+    public ResourceBundle GetMyResourceBundle(Locale locale){
+        ResourceBundle rb;
+        Locale  france = new Locale("fr");
+        //Locale  english = new Locale("en_us");
+        if (locale.equals(france) ) rb = ResourceBundle.getBundle("resources/fr");
+        else rb = ResourceBundle.getBundle("resources/en_US");
+        return rb;
     }
 
     public boolean handleSignIn(String name, String pw)

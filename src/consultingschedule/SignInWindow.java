@@ -5,8 +5,12 @@
  */
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.languageConvert;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -18,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -35,6 +40,11 @@ public class SignInWindow extends VBox {
         //header image
         Image image = new Image("LogoDraft1.png");
         ImageView imageView = new ImageView(image);
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        //double AspectRatio = imageView.getFitWidth() / imageView.getFitHeight();
+        
+        //imageView.setFitHeight(200);
+        
         Image gif = new Image("globe_small.gif");
         ImageView gifView = new ImageView(gif);
         gifView.setX(55);
@@ -44,8 +54,19 @@ public class SignInWindow extends VBox {
         gifView.setFitHeight(width);
         Pane stackPane = new Pane(imageView,gifView);
         
+        //Locale  locale = new Locale("fr");
+        //Locale  locale = new Locale("en_US");
+        Locale locale = Locale.getDefault();
+        ResourceBundle rb = GetMyResourceBundle(locale);
+        //ResourceBundle rb = ResourceBundle.getBundle("resources/fr");
+        //ResourceBundle rb = ResourceBundle.getBundle("resources/en_US");
+        
+        //rb.getString("prompt");
+        //String userNamePrompt = languageConvert(france,"Hello");
+        
         //name
-        labelName = new Label("User Name: ");
+        labelName = new Label(rb.getString("UserPrompt"));
+        //labelName = new Label("User Name: ");
         TextField tfName = new TextField("");
         tfName.setPromptText("UserName");
         tfName.textProperty().addListener((obs, oldText, newText) -> {
@@ -53,7 +74,7 @@ public class SignInWindow extends VBox {
         });
         
         //password
-        labelPw = new Label("Password: ");
+        labelPw = new Label(rb.getString("PwPrompt"));
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Password");
         passwordField.textProperty().addListener((obs, oldText, newText) -> {
@@ -62,7 +83,7 @@ public class SignInWindow extends VBox {
         
         //button
         btnSignIn = new Button();
-        btnSignIn.setText("Sign In");
+        btnSignIn.setText(rb.getString("SignIn"));
         SignInWindow.btnSignIn.setOnAction(e -> {   
             stage.hide();
         });
@@ -75,15 +96,17 @@ public class SignInWindow extends VBox {
         gridPane.add(labelPw, 0,1,1,1);
         gridPane.setHalignment(labelPw,HPos.RIGHT);
         gridPane.add(passwordField, 1,1,1,1);
-        gridPane.add(btnSignIn,1,2,1,1);
+        gridPane.add(btnSignIn,0,2,2,1);
+        gridPane.setHalignment(btnSignIn,HPos.CENTER);
         gridPane.getStyleClass().add("grid-pane");
         gridPane.setAlignment(Pos.CENTER);
 
         //copyright label set at full width
-        Label copyrightLabel = new Label("Copyright ® 2019 Matt Pfeiffer Consulting");
+        Label copyrightLabel = new Label(rb.getString("Copyright"));
         copyrightLabel.setId("copyright-label");
         copyrightLabel.setAlignment(Pos.CENTER);
         copyrightLabel.setMaxWidth(Double.MAX_VALUE);
+        
         
         //vbox combines into one view to display
         view = new VBox(stackPane, gridPane, copyrightLabel);
@@ -97,8 +120,24 @@ public class SignInWindow extends VBox {
         stage.show();
         stage.setResizable(false);
         stage.sizeToScene();
-        stage.setScene(scene);
-        show();
+        //stage.setScene(scene);
+        //show();
+        
+
+        imageView.setFitWidth(view.getWidth());
+        imageView.setPreserveRatio(true);
+        stage.sizeToScene();
+        //stage.setScene(scene);
+        //show();
+    }
+    
+    public ResourceBundle GetMyResourceBundle(Locale locale){
+        ResourceBundle rb;
+        Locale  france = new Locale("fr");
+        //Locale  english = new Locale("en_us");
+        if (locale.equals(france) ) rb = ResourceBundle.getBundle("resources/fr");
+        else rb = ResourceBundle.getBundle("resources/en_US");
+        return rb;
     }
     
     public Stage getStage(){
