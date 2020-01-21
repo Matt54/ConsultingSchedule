@@ -19,12 +19,15 @@ import java.time.LocalDateTime;
 //Otherwise LocalDateTime
 
 public class Appointment {
+    private String title;
+    private String location;
+    
     private Integer appointmentId;
     private Integer customerId;
     private Integer userId;
-    private String title;
+    
     private String description;
-    private String location;
+    
     private String contact;
     private String type;
     private String url;

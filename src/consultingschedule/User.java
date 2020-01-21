@@ -19,29 +19,30 @@ public class User {
     private Integer userId;
     private String userName;
     private String password;
-    private boolean active;
-    private LocalDate createDate;
-    private String createdBy;
-    private LocalDateTime lastUpdate;
-    private String lastUpdateBy;
+    //private boolean active;
+    //private LocalDate createDate;
+    //private String createdBy;
+    //private LocalDateTime lastUpdate;
+    //private String lastUpdateBy;
     
     public User(){}
     
     public User(Integer id,
                 String name,
-                String pw,
-                boolean isActive,
-                Date date,
-                String creater,
-                Timestamp time){
+                String pw//,
+                //boolean isActive,
+                //Date date,
+                //String creater,
+                //Timestamp time
+                ){
         userId = id;
         userName = name;
         password = pw;
-        active = isActive;
-        createDate = new java.sql.Date(date.getTime()).toLocalDate();
-        createdBy = creater;
-        lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
-        lastUpdateBy = creater;
+        //active = isActive;
+        //createDate = new java.sql.Date(date.getTime()).toLocalDate();
+        //createdBy = creater;
+        //lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
+        //lastUpdateBy = creater;
     }
     
     public Integer getUserId(){
@@ -53,6 +54,7 @@ public class User {
     public String getPassword(){
         return password;
     }
+    /*
     public boolean getStatus(){
         return active;
     }
@@ -68,6 +70,7 @@ public class User {
     public String getLastUpdateBy(){
         return lastUpdateBy;
     }
+    */
     
     public void setUserId(Integer id){
         userId = id;
@@ -78,6 +81,7 @@ public class User {
     public void setPassword(String pw){
         password = pw;
     }
+    /*
     public void setStatus(boolean isActive){
         active = isActive;
     }
@@ -93,5 +97,6 @@ public class User {
     public void setUpdatedBy(String updatedBy){
         lastUpdateBy = updatedBy;
     }
+    */
     
 }

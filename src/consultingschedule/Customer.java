@@ -18,29 +18,35 @@ public class Customer {
     protected Integer customerId;
     protected String customerName;
     protected Integer addressId;
+    /*
     protected boolean active;
     protected LocalDate createDate;
     protected String createdBy;
     protected LocalDateTime lastUpdate;
     protected String lastUpdateBy;
+*/
     
     Customer () {}
     
     public Customer(Integer id,
                     String name,
-                    Integer addId,
+                    Integer addId
+            /*,
                     boolean isActive,
                     Date date,
                     String creater,
-                    Timestamp time){
+                    Timestamp time*/
+                    ){
         customerId = id;
         customerName = name;
         addressId = addId;
+        /*
         active = isActive;
         createDate = new java.sql.Date(date.getTime()).toLocalDate();
         createdBy = creater;
         lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
         lastUpdateBy = creater;
+        */
     }
     
     public Integer getCustomerId(){
@@ -52,6 +58,8 @@ public class Customer {
     public Integer getAddressId(){
         return addressId;
     }
+    
+    /*
     public boolean getStatus(){
         return active;
     }
@@ -67,6 +75,7 @@ public class Customer {
     public String getLastUpdateBy(){
         return lastUpdateBy;
     }
+    */
     
     public void setId(Integer id){
         customerId = id;
@@ -77,6 +86,8 @@ public class Customer {
     public void setAddressId(Integer id){
         addressId = id;
     }
+    
+    /*
     public void setStatus(boolean isActive){
         active = isActive;
     }
@@ -92,4 +103,6 @@ public class Customer {
     public void setUpdatedBy(String updatedBy){
         lastUpdateBy = updatedBy;
     }
+    */
+    
 }

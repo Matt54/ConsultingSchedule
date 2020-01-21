@@ -37,13 +37,12 @@ public class ConsultingSchedule extends Application {
         Connection dbConnection = connectToDB();
         System.out.println(dbConnection);
         
-        User testUser = new User(1,
-                "name",
-                "password",
+        User testUser = new User(1, "name", "password");
+                /*,
                 true,
                 java.sql.Date.valueOf(LocalDate.now()),
                 "name",
-                java.sql.Timestamp.valueOf(LocalDateTime.now()));
+                java.sql.Timestamp.valueOf(LocalDateTime.now()));*/
         
         //Insert tested and works
         insertUser(testUser);
@@ -194,11 +193,11 @@ public class ConsultingSchedule extends Application {
         user.setUserId( rs.getInt("userId") );
         user.setUserName( rs.getString("userName") );
         user.setPassword( rs.getString("password") );
-        user.setStatus(rs.getBoolean("active"));
-        user.setDateAdded(rs.getDate("createDate"));
-        user.setCreator(rs.getString("createdBy"));
-        user.setUpdateTime(rs.getTimestamp("lastUpdate"));
-        user.setUpdatedBy(rs.getString("lastUpdateBy"));
+        //user.setStatus(rs.getBoolean("active"));
+        //user.setDateAdded(rs.getDate("createDate"));
+        //user.setCreator(rs.getString("createdBy"));
+        //user.setUpdateTime(rs.getTimestamp("lastUpdate"));
+        //user.setUpdatedBy(rs.getString("lastUpdateBy"));
         return user;
     }
     
@@ -250,11 +249,11 @@ public class ConsultingSchedule extends Application {
         statement.setInt(1, user.getUserId());
         statement.setString(2, user.getUserName());
         statement.setString(3, user.getPassword());
-        statement.setBoolean(4, user.getStatus());
-        statement.setDate(5, java.sql.Date.valueOf(user.getDateAdded()));
-        statement.setString(6, user.getCreator());
-        statement.setTimestamp(7, java.sql.Timestamp.valueOf(user.getLastUpdate()));
-        statement.setString(8, user.getLastUpdateBy());
+        statement.setBoolean(4, true); //statement.setBoolean(4, user.getStatus());
+        statement.setDate(5, java.sql.Date.valueOf( LocalDate.now() ) ); //statement.setDate(5, java.sql.Date.valueOf(user.getDateAdded()));
+        statement.setString(6, "Admin");
+        statement.setTimestamp(7, java.sql.Timestamp.valueOf( LocalDateTime.now() ) ); //statement.setTimestamp(7, java.sql.Timestamp.valueOf(user.getLastUpdate()));
+        statement.setString(8, "Admin");
         if(isUpdate) statement.setInt(9, user.getUserId());
         int success = statement.executeUpdate();
         return success;
