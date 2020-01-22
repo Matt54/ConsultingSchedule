@@ -13,35 +13,37 @@ import javafx.collections.ObservableList;
  * @author matthewp
  */
 public class Consultant {
-    ObservableList<Customer> allCustomers;
+    ObservableList<CustomerView> allCustomers;
     
     Consultant(){
        allCustomers = FXCollections.observableArrayList();
     }
     
-    public void addCustomer(Customer customer){
+    public void addCustomer(CustomerView customer){
         allCustomers.add(customer);
     }
     
+    /*
     public Customer lookupCustomer(int customerId){
         for(Customer customer : allCustomers){
             if(customer.getCustomerId() == customerId) return customer;
         }
         return null;
     }
+    */
     
-    public Customer lookupCustomer(String customerName){
-        for(Customer customer : allCustomers){
-            if(customer.getCustomerName().equals(customerName)) return customer;
+    public CustomerView lookupCustomer(String customerName){
+        for(CustomerView customer : allCustomers){
+            if(customer.getName().equals(customerName)) return customer;
         }
         return null;
     }
     
-    public void updateCustomer(int index, Customer selectedCustomer){
+    public void updateCustomer(int index, CustomerView selectedCustomer){
         allCustomers.set(index, selectedCustomer);
     }
     
-    public boolean deleteCustomer(Customer selectedCustomer){
+    public boolean deleteCustomer(CustomerView selectedCustomer){
         if(allCustomers.contains(selectedCustomer)){
             allCustomers.remove(selectedCustomer);
             return true;
@@ -51,7 +53,7 @@ public class Consultant {
         }
     }
     
-    public ObservableList<Customer> getAllCustomers(){
+    public ObservableList<CustomerView> getAllCustomers(){
         return allCustomers;
     }
     

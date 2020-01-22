@@ -27,6 +27,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -43,14 +44,35 @@ public class MainWindow {
         stage = new Stage();
         scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         labelName.setId("big-label");
+        hboxGreeting = new HBox(labelName);
+        hboxGreeting.setAlignment(Pos.CENTER);
+        //hboxGreeting.setId("greeting-hbox");
+        hboxGreeting.setBackground(new Background(new BackgroundFill(
+               Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
         
         HBox categoryHeader = CreateCategoryHeader();
         interactionHeader = CreateTableInteractionHeader();
         
-        Image image = new Image("LogoDraft1.png");
-        ImageView imageView = new ImageView(image);
-        hboxImage = new HBox(imageView);
+        
+        Image gif = new Image("Arrows.gif");
+        ImageView gifView = new ImageView(gif);
+        gifView.setFitWidth(615);
+        gifView.setFitHeight(100);
+        //gifView.setPreserveRatio(true);
+        //Pane stackPane = new Pane(gifView);
+        //gifView.setX(55);
+        //gifView.setY(80);
+        //double width = 75;
+        //gifView.setFitWidth(width);
+        //gifView.setFitHeight(width);
+        //Pane stackPane = new Pane(imageView,gifView);
+        
+        //Image image = new Image("LogoDraft1.png");
+        //ImageView imageView = new ImageView(image);
+        hboxImage = new HBox(gifView);
         hboxImage.setAlignment(Pos.CENTER);
+        hboxImage.setBackground(new Background(new BackgroundFill(
+               Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
         
         //copyright label set at full width
         copyrightLabel = new Label("Copyright ® 2019 Matt Pfeiffer Consulting");
@@ -58,7 +80,7 @@ public class MainWindow {
         copyrightLabel.setAlignment(Pos.CENTER);
         copyrightLabel.setMaxWidth(Double.MAX_VALUE);
         
-        view = new VBox(labelName,categoryHeader,hboxImage,copyrightLabel);
+        view = new VBox(hboxGreeting,categoryHeader,hboxImage,copyrightLabel);
         view.setAlignment(Pos.CENTER);
         view.setId("main-window");
         root.getChildren().add(view);
@@ -67,10 +89,10 @@ public class MainWindow {
         
         consultant = new Consultant();
         //createDefaultCustomers();
-        Customer customer = new Customer(1, //ID
-                "name", //name
-                1 //addressID
-                );
+        //Customer customer = new Customer(1, //ID
+          //      "name", //name
+            //    1 //addressID
+              //  );
         
                 /*
                 true, //isActive
@@ -78,22 +100,51 @@ public class MainWindow {
                 "name", //Creater
                 java.sql.Timestamp.valueOf(LocalDateTime.now())); //timestamp
                 */
+                
+        CustomerView customer = new CustomerView("Matt",
+                    "111-222-3333",
+                    "123 Silly Lane",
+                    "Kansas City",
+                    "123456",
+                    "USA");
         
         consultant.addCustomer(customer);
         
         tvCustomers = new TableView<>(consultant.getAllCustomers());
         
-        TableColumn<Customer, String> customerId = new TableColumn<>("Customer ID");
-        customerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-        tvCustomers.getColumns().add(customerId);
+        TableColumn<Customer, String> customerName = new TableColumn<>("Name");
+        customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tvCustomers.getColumns().add(customerName);
+        
+        TableColumn<Customer, String> customerPhone = new TableColumn<>("Phone #");
+        customerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tvCustomers.getColumns().add(customerPhone);
+        
+        TableColumn<Customer, String> customerAddress = new TableColumn<>("Address");
+        customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tvCustomers.getColumns().add(customerAddress);
+        
+        TableColumn<Customer, String> customerCity = new TableColumn<>("City");
+        customerCity.setCellValueFactory(new PropertyValueFactory<>("city"));
+        tvCustomers.getColumns().add(customerCity);
+        
+        TableColumn<Customer, String> customerZip = new TableColumn<>("Zip Code");
+        customerZip.setCellValueFactory(new PropertyValueFactory<>("zip"));
+        tvCustomers.getColumns().add(customerZip);
+        
+        TableColumn<Customer, String> customerCountry = new TableColumn<>("Country");
+        customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        tvCustomers.getColumns().add(customerCountry);
 
+        /*
         TableColumn<Customer, String> customerName = new TableColumn<>("Customer Name");
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         tvCustomers.getColumns().add(customerName);
+        */
         
         tvCustomers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
-        tvCustomers.setPrefWidth(355);
+        tvCustomers.setPrefWidth(615);
         tvCustomers.setPrefHeight(300);
         
         //TableView.TableViewSelectionModel<Customer> tvSelCustomer = tvCustomers.getSelectionModel();
@@ -103,7 +154,7 @@ public class MainWindow {
     {
         CurrentUser currentUser = CurrentUser.getInstance();
         user = currentUser.getUser().getUserName();
-        labelName.setText("Welcome back " + user);
+        labelName.setText("Hello, " + user + ". Select from the options below.");
     }
 
     public HBox CreateCategoryHeader()
@@ -142,15 +193,20 @@ public class MainWindow {
     public HBox CreateTableInteractionHeader()
     {
         Button btnAdd = new Button("Add");
+        btnAdd.setId("interaction-button");
         Button btnDelete = new Button("Delete");
+        btnDelete.setId("interaction-button");
         Button btnModify = new Button("Modify");
+        btnModify.setId("interaction-button");
         Button btnSearch = new Button("Search");
+        btnSearch.setId("interaction-button");
         TextField tfSearch = new TextField();
+        tfSearch.setId("search-tf");
         btnSearch.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     String searchTerm = tfSearch.getText();
-                    Customer foundCustomer = consultant.lookupCustomer(searchTerm);
+                    CustomerView foundCustomer = consultant.lookupCustomer(searchTerm);
                     if(foundCustomer != null)
                     {
                         tvCustomers.getSelectionModel().select(foundCustomer);
@@ -166,7 +222,7 @@ public class MainWindow {
         HBox hbox = new HBox(btnAdd, btnDelete, btnModify, btnSearch, tfSearch);
         
         hbox.setBackground(new Background(new BackgroundFill(
-               Color.gray(0.865), CornerRadii.EMPTY, Insets.EMPTY)));
+               Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
         
         return hbox;
     }
@@ -175,6 +231,8 @@ public class MainWindow {
     {
         if(selectedCategory != Selected.CUSTOMERS)
         {
+            //labelName.setText("Customer View - Search and Modify Customers");
+            view.getChildren().remove(hboxGreeting);
             view.getChildren().remove(hboxImage);
             view.getChildren().remove(hboxImage);
             view.getChildren().remove(copyrightLabel);
@@ -228,6 +286,7 @@ public class MainWindow {
     Consultant consultant;
     TableView tvCustomers;
     VBox view;
+    HBox hboxGreeting;
     HBox hboxImage;
     HBox interactionHeader;
     Label labelName = new Label();

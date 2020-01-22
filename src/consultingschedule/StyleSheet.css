@@ -28,7 +28,7 @@ and open the template in the editor.
   -fx-background-radius: 16px;
   -fx-padding: 15px;
   -fx-border-insets: 5px;
-  
+  -fx-pref-width: 125px;
   -fx-background-insets: 10px;
 }
 #header-button {
@@ -40,6 +40,9 @@ and open the template in the editor.
   -fx-background-insets: 0px;
 }
 
+#interaction-button {
+    -fx-pref-width: 100px;
+}
 
 .label
 {
@@ -76,9 +79,18 @@ and open the template in the editor.
    -fx-font-size: 24px;
 }
 
+#greeting-hbox {
+   
+}
+
+#search-tf{
+    -fx-background-color: #e6e6e6;
+}
+
 .text-field {
   -fx-padding: 5px;
   -fx-border-insets: 10px;
   -fx-background-insets: 5px;
   -fx-border-color: black;
+  
 }
