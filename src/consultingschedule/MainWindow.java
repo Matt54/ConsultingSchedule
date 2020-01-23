@@ -54,7 +54,7 @@ public class MainWindow {
         interactionHeader = CreateTableInteractionHeader();
         
         
-        Image gif = new Image("Arrows.gif");
+        Image gif = new Image("arrows_2.gif");
         ImageView gifView = new ImageView(gif);
         gifView.setFitWidth(615);
         gifView.setFitHeight(100);
@@ -116,25 +116,25 @@ public class MainWindow {
         customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tvCustomers.getColumns().add(customerName);
         
-        TableColumn<Customer, String> customerPhone = new TableColumn<>("Phone #");
-        customerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        tvCustomers.getColumns().add(customerPhone);
-        
-        TableColumn<Customer, String> customerAddress = new TableColumn<>("Address");
-        customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        tvCustomers.getColumns().add(customerAddress);
+        TableColumn<Customer, String> customerCountry = new TableColumn<>("Country");
+        customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        tvCustomers.getColumns().add(customerCountry);
         
         TableColumn<Customer, String> customerCity = new TableColumn<>("City");
         customerCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tvCustomers.getColumns().add(customerCity);
         
+        TableColumn<Customer, String> customerAddress = new TableColumn<>("Address");
+        customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tvCustomers.getColumns().add(customerAddress);
+        
         TableColumn<Customer, String> customerZip = new TableColumn<>("Zip Code");
         customerZip.setCellValueFactory(new PropertyValueFactory<>("zip"));
         tvCustomers.getColumns().add(customerZip);
         
-        TableColumn<Customer, String> customerCountry = new TableColumn<>("Country");
-        customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
-        tvCustomers.getColumns().add(customerCountry);
+        TableColumn<Customer, String> customerPhone = new TableColumn<>("Phone #");
+        customerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tvCustomers.getColumns().add(customerPhone);
 
         /*
         TableColumn<Customer, String> customerName = new TableColumn<>("Customer Name");
@@ -187,7 +187,7 @@ public class MainWindow {
             
         });
         
-        return new HBox(btnCustomers,btnAppointments,btnCalendar,btnReports, btnSignOut); 
+        return new HBox(btnCalendar,btnAppointments,btnCustomers,btnReports, btnSignOut); 
     }
     
     public HBox CreateTableInteractionHeader()
