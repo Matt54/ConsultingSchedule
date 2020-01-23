@@ -28,21 +28,55 @@ import javafx.stage.Stage;
  */
 public class CustomerWindow {
     
+    CustomerWindow(MainWindow main)
+    {
+        labelHeader = new Label("Add Customer");
+        gridPane = new GridPane();
+        CreatePromptField(gridPane, "Name: ", "",0 );
+        CreatePromptField(gridPane, "Phone: ", "",1 );
+        CreatePromptField(gridPane, "Address: ", "",2 );
+        CreatePromptField(gridPane, "City: ", "",3 );
+        CreatePromptField(gridPane, "ZIP Code: ", "",4 );
+        CreatePromptField(gridPane, "Country: ", "",5 );
+        SetupWindow(main);
+    }
+
     CustomerWindow(MainWindow main, CustomerView customer)
+    {
+        isModify = true;
+        customerView = customer;
+        labelHeader = new Label("Modify Customer");
+        gridPane = new GridPane();
+        CreatePromptField(gridPane, "Name: ", customerView.getName(),0 );
+        CreatePromptField(gridPane, "Phone: ", customerView.getPhone(),1 );
+        CreatePromptField(gridPane, "Address: ", customerView.getAddress(),2 );
+        CreatePromptField(gridPane, "City: ", customerView.getCity(),3 );
+        CreatePromptField(gridPane, "ZIP Code: ", customerView.getZip(),4 );
+        CreatePromptField(gridPane, "Country: ", customerView.getCountry(),5 );
+        SetupWindow(main);
+    }
+    
+    public void SetupWindow(MainWindow main)
     {
         mainWindow = main;
         mainWindow.hide();
-        customerView = customer;
-        
-        Label labelHeader = new Label("Modify Customer");
         labelHeader.setId("big-label");
-        
         stage = new Stage();
         scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         
         Button btnSave = new Button("Save");
         btnSave.setOnAction(e -> { 
-
+            //TODO: Add or Modify Customer
+            if(isModify)
+            {
+            
+            }
+            else
+            {
+                
+            }
+            mainWindow.show();
+            stage.hide();
         });
         
         Button btnCancel = new Button("Cancel");
@@ -51,32 +85,13 @@ public class CustomerWindow {
             stage.hide();
         });
 
-        GridPane gridPane = new GridPane();
-
-        CreatePromptField(gridPane, "Name: ", customerView.getName(),0 );
-        CreatePromptField(gridPane, "Phone: ", customerView.getPhone(),1 );
-        CreatePromptField(gridPane, "Address: ", customerView.getAddress(),2 );
-        CreatePromptField(gridPane, "City: ", customerView.getCity(),3 );
-        CreatePromptField(gridPane, "ZIP Code: ", customerView.getZip(),4 );
-        CreatePromptField(gridPane, "Country: ", customerView.getCountry(),5 );
-        
-        //gridPane.add(btnSave, 0, 6, 2, 1);
-        //gridPane.add(btnCancel, 0, 7, 2, 1);
-        //gridPane.setHalignment(btnSave,HPos.CENTER);
-        //gridPane.setHalignment(btnCancel,HPos.CENTER);
-        
         HBox btnHBox = new HBox(btnSave,btnCancel);
-       
-        
+
         VBox view = new VBox(labelHeader,gridPane,btnHBox);
         view.setAlignment(Pos.CENTER);
         view.setBackground(new Background(new BackgroundFill(
                Color.rgb(255, 255, 255), CornerRadii.EMPTY, Insets.EMPTY)));
         
-        
-        //GridPane view = new GridPane(nameField,phoneField,addressField,cityField,zipField,countryField, btn);
-        //view.setAlignment(Pos.CENTER);
-        //view.setId("main-window");
         root.getChildren().add(view);
         
         stage.setScene(scene);
@@ -86,7 +101,6 @@ public class CustomerWindow {
 
     public void CreatePromptField(GridPane gridPane, String prompt, String name, int index)
     {
-        
         Label label = new Label(prompt);
         TextField textField = new TextField(name);
         gridPane.add(label, 0,index,1,1);
@@ -94,6 +108,9 @@ public class CustomerWindow {
         gridPane.add(textField, 1,index,1,1);
     }
     
+    boolean isModify = false;
+    GridPane gridPane;
+    Label labelHeader;
     CustomerView customerView;
     MainWindow mainWindow;
     StackPane root = new StackPane();

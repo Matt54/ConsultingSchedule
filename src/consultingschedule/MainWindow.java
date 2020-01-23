@@ -194,8 +194,16 @@ public class MainWindow {
     {
         Button btnAdd = new Button("Add");
         btnAdd.setId("interaction-button");
+        btnAdd.setOnAction(e -> { 
+            customerWindow = new CustomerWindow(this);
+        });
+        
         Button btnDelete = new Button("Delete");
         btnDelete.setId("interaction-button");
+        btnDelete.setOnAction(e -> { 
+            //TODO: Add "are you sure??" and then delete customer and all corrosponding appointments
+        });
+        
         Button btnModify = new Button("Modify");
         
         btnModify.setId("interaction-button");
