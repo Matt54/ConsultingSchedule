@@ -197,7 +197,16 @@ public class MainWindow {
         Button btnDelete = new Button("Delete");
         btnDelete.setId("interaction-button");
         Button btnModify = new Button("Modify");
+        
         btnModify.setId("interaction-button");
+        btnModify.setOnAction(e -> { 
+            selectedCustomer = (CustomerView) tvCustomers.getSelectionModel().getSelectedItem();
+            if(selectedCustomer != null)
+            {
+                customerWindow = new CustomerWindow(this, selectedCustomer);
+            }
+        });
+        
         Button btnSearch = new Button("Search");
         btnSearch.setId("interaction-button");
         TextField tfSearch = new TextField();
@@ -283,6 +292,9 @@ public class MainWindow {
     }
     Selected selectedCategory = Selected.NONE;
     
+    CustomerView selectedCustomer;
+    
+    CustomerWindow customerWindow;
     Consultant consultant;
     TableView tvCustomers;
     VBox view;
