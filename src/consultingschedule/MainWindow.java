@@ -110,6 +110,7 @@ public class MainWindow {
         
         consultant.addCustomer(customer);
         
+        
         tvCustomers = new TableView<>(consultant.getAllCustomers());
         
         TableColumn<Customer, String> customerName = new TableColumn<>("Name");
@@ -147,6 +148,12 @@ public class MainWindow {
         tvCustomers.setPrefWidth(615);
         tvCustomers.setPrefHeight(300);
         
+        calendarView = new CalendarView();
+        calendarView.isWeeklyCheck.setOnAction((e) -> {
+            calendarView.UpdateCalendarView();
+            stage.sizeToScene();
+        });
+        
         //TableView.TableViewSelectionModel<Customer> tvSelCustomer = tvCustomers.getSelectionModel();
     } 
     
@@ -178,7 +185,7 @@ public class MainWindow {
         Button btnCalendar = new Button("Calendar");
         btnCalendar.setId("header-button");
         btnCalendar.setOnAction(e -> { 
-            
+            selectCategoryCalendar();
         });
         
         Button btnReports = new Button("Reports");
@@ -251,14 +258,35 @@ public class MainWindow {
             //labelName.setText("Customer View - Search and Modify Customers");
             view.getChildren().remove(hboxGreeting);
             view.getChildren().remove(hboxImage);
-            view.getChildren().remove(hboxImage);
+            //view.getChildren().remove(hboxImage);
             view.getChildren().remove(copyrightLabel);
+            view.getChildren().remove(calendarView);
             view.getChildren().add(tvCustomers);
             view.getChildren().add(interactionHeader);
             view.getChildren().add(copyrightLabel);
             stage.sizeToScene();
         }
         selectedCategory = Selected.CUSTOMERS;
+    }
+    
+    public void selectCategoryCalendar()
+    {
+        if(selectedCategory != Selected.CALENDAR)
+        {
+            //labelName.setText("Customer View - Search and Modify Customers");
+            view.getChildren().remove(hboxGreeting);
+            view.getChildren().remove(hboxImage);
+            //view.getChildren().remove(hboxImage);
+            view.getChildren().remove(copyrightLabel);
+            view.getChildren().remove(tvCustomers);
+            view.getChildren().remove(interactionHeader);
+            view.getChildren().add(calendarView);
+            //view.getChildren().add(tvCustomers);
+            //view.getChildren().add(interactionHeader);
+            view.getChildren().add(copyrightLabel);
+            stage.sizeToScene();
+        }
+        selectedCategory = Selected.CALENDAR;
     }
 
     /*
@@ -301,6 +329,7 @@ public class MainWindow {
     Selected selectedCategory = Selected.NONE;
     
     CustomerView selectedCustomer;
+    CalendarView calendarView;
     
     CustomerWindow customerWindow;
     Consultant consultant;
