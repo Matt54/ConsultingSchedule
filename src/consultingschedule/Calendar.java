@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -18,10 +19,29 @@ import javafx.scene.layout.VBox;
  */
 public class Calendar extends GridPane {
     
+    int numColumns = 7;
+    int numRows = 6;
+    
+    Cell[] cells = new Cell[numColumns * numRows];
+    
+    Calendar(){
+        
+        HBox[] rows = new HBox[numRows];
+        
+        for (int i = 0; i < 7; i++) {
+            cells[1] = new Cell();
+        }
+        
+    }
+    
+
+    
+    
     public class Cell{
         
         Cell(){
             view = new VBox();
+            SetupCell();
         }
         
         Cell(String dayName){
@@ -29,6 +49,7 @@ public class Calendar extends GridPane {
             label = new Label(dayName);
             label.setId("big-label");
             view = new VBox(label);
+            SetupCell();
             //view.setAlignment(Pos.CENTER);
         }
         
@@ -38,6 +59,7 @@ public class Calendar extends GridPane {
             
             label = new Label( Integer.toString(dayIndex) );
             view = new VBox(label);
+            SetupCell();
             //view.setAlignment(Pos.TOP_LEFT);
         }
 
@@ -46,7 +68,13 @@ public class Calendar extends GridPane {
             hasAppointment = true;
             dayIndex = _dayIndex;
             numAppointments = _numAppointments;
-            
+            Button btn = new Button(numAppointments + " Appointments");
+            SetupCell();
+        }
+        
+        private void SetupCell()
+        {
+            view.setPrefSize(100, 100);
         }
         
         public VBox getView ()
