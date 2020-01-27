@@ -8,8 +8,10 @@ package consultingschedule;
 import java.time.LocalDate;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -32,6 +34,8 @@ public class CalendarView extends VBox {
     Cell[] cells;
     HBox[] rows;
     HBox header;
+
+    ObservableList<Appointment> allAppointments;
     
     public CheckBox isWeeklyCheck;
     ComboBox weeksComboBox;
@@ -69,7 +73,9 @@ public class CalendarView extends VBox {
     int yearNumber = 2020;
     int weekNumber = 0;
     
-    CalendarView(){
+    CalendarView(ObservableList<Appointment> Appointments){
+        
+        allAppointments = Appointments;
         
         Button updateBtn = new Button("Refresh");
         updateBtn.setOnAction((e) -> {
@@ -184,6 +190,11 @@ public class CalendarView extends VBox {
         getChildren().clear();
         //getChildren().add(header);
         
+        int[] dayArr = new int[allAppointments.size()];
+        
+        //int year = allAppointments.get(0).getStartTime().getYear();
+        //int month = allAppointments.get(0).getStartTime().getMonthValue();
+        int day = allAppointments.get(0).getStartTime().getDayOfYear();
         
         int numColumns = 7;
         int numRows = 6;
@@ -223,7 +234,9 @@ public class CalendarView extends VBox {
                     else{
                         if(dayNum < daysInMonth + 1)
                         {
-                            cells[index] = new Cell(dayNum);
+                            LocalDate thisDay = LocalDate.of(yearNumber, monthNumber, dayNum);
+                            if(day == thisDay.getDayOfYear() ) cells[index] = new Cell(dayNum, 1, new int[]{1});
+                            else cells[index] = new Cell(dayNum);
                             dayNum++;
                         }
                         else cells[index] = new Cell();
@@ -240,6 +253,7 @@ public class CalendarView extends VBox {
     {
         getChildren().clear();
         
+        int day = allAppointments.get(0).getStartTime().getDayOfYear();
         
         int numColumns = 7;
         int numRows = 2;
@@ -299,7 +313,10 @@ public class CalendarView extends VBox {
                     else{
                         if(dayNum < daysInMonth + 1)
                         {
-                            cells[index] = new Cell(dayNum);
+                            LocalDate thisDay = LocalDate.of(yearNumber, monthNumber, dayNum);
+                            if(day == thisDay.getDayOfYear() ) cells[index] = new Cell(dayNum, 1, new int[]{1});
+                            else cells[index] = new Cell(dayNum);
+                            //cells[index] = new Cell(dayNum);
                             dayNum++;
                         }
                         else cells[index] = new Cell();
@@ -345,11 +362,23 @@ public class CalendarView extends VBox {
         {
             hasAppointment = true;
             dayIndex = _dayIndex;
+            label = new Label( Integer.toString(dayIndex) );
             numAppointments = _numAppointments;
             appointmentID = _appointmentID;
-            Button btn = new Button(numAppointments + " Appointments");
+            Button btn = new Button(numAppointments + " appt");
+            btn.setId("button-appointment");
+            btn.setOnAction(e -> { 
+                Alert appointmentInformation = new Alert(Alert.AlertType.INFORMATION);
+                appointmentInformation.setTitle("Appointment Information");
+                appointmentInformation.setHeaderText("Appointment");
+                appointmentInformation.setContentText("The appointmentID is " + appointmentID[0]);
+                appointmentInformation.showAndWait();
+            });
+            
+            view = new VBox(label,btn);
             view.setId("cell");
             SetupCell();
+            view.setAlignment(Pos.TOP_LEFT);
         }
         
         private void SetupCell()
@@ -365,7 +394,7 @@ public class CalendarView extends VBox {
         }
         
         Label label;
-        Button btn;
+        //Button btn;
         
         int dayIndex;
         int numAppointments;

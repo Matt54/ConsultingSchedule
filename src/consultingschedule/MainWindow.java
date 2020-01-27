@@ -88,87 +88,47 @@ public class MainWindow {
         stage.setScene(scene);
         
         consultant = new Consultant();
-        //createDefaultCustomers();
-        //Customer customer = new Customer(1, //ID
-          //      "name", //name
-            //    1 //addressID
-              //  );
-        
-                /*
-                true, //isActive
-                java.sql.Date.valueOf(LocalDate.now()), //Date
-                "name", //Creater
-                java.sql.Timestamp.valueOf(LocalDateTime.now())); //timestamp
-                */
-                
-        CustomerView customer = new CustomerView("Matt",
-                    "111-222-3333",
-                    "123 Silly Lane",
-                    "Kansas City",
-                    "123456",
-                    "USA");
-        
-        AppointmentView appointment = new AppointmentView("Test Appointment",
-                                                            "Matt",
-                                                            "123 Silly Lane",
-                                                            "On-Site",
-                                                            "02-01-2020 10:00", //"MM-dd-yyyy HH:mm"
-                                                            "02-01-2020 11:00");
-        
-        consultant.addCustomer(customer);
+
+        Appointment appointment = new Appointment(1,
+                                                1,
+                                                "title",
+                                                "description",
+                                                "location",
+                                                "type",
+                                                LocalDateTime.now(),
+                                                LocalDateTime.now());
         consultant.addAppointment(appointment);
         
+        Customer customer = new Customer(1,"Matt",1);
+        consultant.addCustomer(customer);
+        
+        Address address = new  Address(1,
+                                        "add 1",
+                                        "add 2",
+                                        1,
+                                        "123456",
+                                        "111-222-3333");
+        consultant.addAddress(address);
+                
+        City city = new City(1,
+                            "Kansas City",
+                            1);
+        consultant.addCity(city);
+        
+        Country country = new Country(1,
+                                        "Merica");
+        consultant.addCountry(country);
+        
+
         tvCustomers = CreateCustomerTV();
         tvAppointments = CreateAppointmentTV();
-        
-                /*
-                new TableView<>(consultant.getAllCustomers());
-        
-        TableColumn<Customer, String> customerName = new TableColumn<>("Name");
-        customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tvCustomers.getColumns().add(customerName);
-        
-        TableColumn<Customer, String> customerCountry = new TableColumn<>("Country");
-        customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
-        tvCustomers.getColumns().add(customerCountry);
-        
-        TableColumn<Customer, String> customerCity = new TableColumn<>("City");
-        customerCity.setCellValueFactory(new PropertyValueFactory<>("city"));
-        tvCustomers.getColumns().add(customerCity);
-        
-        TableColumn<Customer, String> customerAddress = new TableColumn<>("Address");
-        customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        tvCustomers.getColumns().add(customerAddress);
-        
-        TableColumn<Customer, String> customerZip = new TableColumn<>("Zip Code");
-        customerZip.setCellValueFactory(new PropertyValueFactory<>("zip"));
-        tvCustomers.getColumns().add(customerZip);
-        
-        TableColumn<Customer, String> customerPhone = new TableColumn<>("Phone #");
-        customerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        tvCustomers.getColumns().add(customerPhone);
-        
-        tvCustomers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
-        tvCustomers.setPrefWidth(615);
-        tvCustomers.setPrefHeight(300);
-        */
 
-        /*
-        TableColumn<Customer, String> customerName = new TableColumn<>("Customer Name");
-        customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        tvCustomers.getColumns().add(customerName);
-        */
-        
-        
-        
-        calendarView = new CalendarView();
+        calendarView = new CalendarView(consultant.getAllAppointments());
         calendarView.isWeeklyCheck.setOnAction((e) -> {
             calendarView.UpdateCalendarView();
             stage.sizeToScene();
         });
-        
-        //TableView.TableViewSelectionModel<Customer> tvSelCustomer = tvCustomers.getSelectionModel();
+
     } 
     
     public void handleSignIn()
@@ -180,29 +140,29 @@ public class MainWindow {
     
     public TableView CreateCustomerTV()
     {
-        TableView tv = new TableView<>(consultant.getAllCustomers());
+        TableView tv = new TableView<>(consultant.getAllCustomerViews());
         
-        TableColumn<Customer, String> customerName = new TableColumn<>("Name");
+        TableColumn<CustomerView, String> customerName = new TableColumn<>("Name");
         customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tv.getColumns().add(customerName);
         
-        TableColumn<Customer, String> customerCountry = new TableColumn<>("Country");
+        TableColumn<CustomerView, String> customerCountry = new TableColumn<>("Country");
         customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         tv.getColumns().add(customerCountry);
         
-        TableColumn<Customer, String> customerCity = new TableColumn<>("City");
+        TableColumn<CustomerView, String> customerCity = new TableColumn<>("City");
         customerCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tv.getColumns().add(customerCity);
         
-        TableColumn<Customer, String> customerAddress = new TableColumn<>("Address");
+        TableColumn<CustomerView, String> customerAddress = new TableColumn<>("Address");
         customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         tv.getColumns().add(customerAddress);
         
-        TableColumn<Customer, String> customerZip = new TableColumn<>("Zip Code");
+        TableColumn<CustomerView, String> customerZip = new TableColumn<>("Zip Code");
         customerZip.setCellValueFactory(new PropertyValueFactory<>("zip"));
         tv.getColumns().add(customerZip);
         
-        TableColumn<Customer, String> customerPhone = new TableColumn<>("Phone #");
+        TableColumn<CustomerView, String> customerPhone = new TableColumn<>("Phone #");
         customerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         tv.getColumns().add(customerPhone);
         
@@ -216,28 +176,9 @@ public class MainWindow {
     
     public TableView CreateAppointmentTV()
     {
-        /*
-        private String start;
-        private String end;
-        private String location;
-        private String title;
-        private String type;
-        private String customerName;
-        */
         
-        TableView tv = new TableView<>(consultant.getAllAppointments());
+        TableView tv = new TableView<>(consultant.getAllAppointmentViews());
         
-        TableColumn<AppointmentView, String> start = new TableColumn<>("Start");
-        start.setCellValueFactory(new PropertyValueFactory<>("start"));
-        tv.getColumns().add(start);
-        
-        TableColumn<AppointmentView, String> endTime = new TableColumn<>("End Time");
-        endTime.setCellValueFactory(new PropertyValueFactory<>("end"));
-        tv.getColumns().add(endTime);
-        
-        TableColumn<AppointmentView, String> aptLocation = new TableColumn<>("Location");
-        aptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        tv.getColumns().add(aptLocation);
         
         TableColumn<AppointmentView, String> aptTitle = new TableColumn<>("Title");
         aptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -247,10 +188,22 @@ public class MainWindow {
         aptType.setCellValueFactory(new PropertyValueFactory<>("type"));
         tv.getColumns().add(aptType);
         
+        TableColumn<AppointmentView, String> start = new TableColumn<>("Start Time");
+        start.setCellValueFactory(new PropertyValueFactory<>("start"));
+        tv.getColumns().add(start);
+        
+        TableColumn<AppointmentView, String> endTime = new TableColumn<>("End Time");
+        endTime.setCellValueFactory(new PropertyValueFactory<>("end"));
+        tv.getColumns().add(endTime);
+        
         TableColumn<AppointmentView, String> customerName = new TableColumn<>("Customer");
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         tv.getColumns().add(customerName);
         
+        TableColumn<AppointmentView, String> aptLocation = new TableColumn<>("Location");
+        aptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        tv.getColumns().add(aptLocation);
+
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         tv.setPrefWidth(615);
@@ -330,7 +283,7 @@ public class MainWindow {
                 @Override
                 public void handle(ActionEvent event) {
                     String searchTerm = tfSearch.getText();
-                    CustomerView foundCustomer = consultant.lookupCustomer(searchTerm);
+                    CustomerView foundCustomer = consultant.lookupCustomerView(searchTerm);
                     if(foundCustomer != null)
                     {
                         tvCustomers.getSelectionModel().select(foundCustomer);

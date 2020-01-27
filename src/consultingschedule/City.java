@@ -1,43 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package consultingschedule;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-/**
- *
- * @author macbook
- */
 public class City {
     private Integer cityId;
     private String city;
     private Integer countryId;
-    private LocalDate createDate;
-    private String createdBy;
-    private LocalDateTime lastUpdate;
-    private String lastUpdateBy;
-    
+
     public City(){}
     
     public City(Integer id,
                     String name,
-                    Integer _countryId,
-                    Date date,
-                    String creater,
-                    Timestamp time){
+                    Integer _countryId){
         cityId = id;
         city = name;
         countryId = _countryId;
-        createDate = new java.sql.Date(date.getTime()).toLocalDate();
-        createdBy = creater;
-        lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
-        lastUpdateBy = creater;
     }
     
     public Integer getCityId(){
@@ -49,6 +24,32 @@ public class City {
     public Integer getCountryId(){
         return countryId;
     }
+
+    public void setCityId(Integer id){
+        cityId = id;
+    }
+    public void setUserName(String name){
+        city = name;
+    }
+    public void setCountryId(Integer id){
+        countryId = id;
+    }
+    
+    /*
+    private LocalDate createDate;
+    private String createdBy;
+    private LocalDateTime lastUpdate;
+    private String lastUpdateBy;
+    */
+    
+    /*
+    createDate = new java.sql.Date(date.getTime()).toLocalDate();
+    createdBy = creater;
+    lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
+    lastUpdateBy = creater;
+    */
+    
+    /*
     public LocalDate getDateAdded(){
         return createDate;
     }
@@ -61,16 +62,9 @@ public class City {
     public String getLastUpdateBy(){
         return lastUpdateBy;
     }
+    */
     
-    public void setCityId(Integer id){
-        cityId = id;
-    }
-    public void setUserName(String name){
-        city = name;
-    }
-    public void setCountryId(Integer id){
-        countryId = id;
-    }
+    /*
     public void setDateAdded(Date date){
         createDate = new java.sql.Date(date.getTime()).toLocalDate();
     }
@@ -83,5 +77,6 @@ public class City {
     public void setUpdatedBy(String updatedBy){
         lastUpdateBy = updatedBy;
     }
+    */
     
 }
