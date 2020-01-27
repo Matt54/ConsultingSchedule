@@ -12,6 +12,10 @@ and open the template in the editor.
   -fx-alignment: CENTER;
 }
 
+.table-view .table-cell{
+    -fx-font-size:10px;
+}
+
 .grid-pane{
   /*-fx-padding: 10px;*/
   -fx-min-height: 170px ;
@@ -46,19 +50,27 @@ and open the template in the editor.
     -fx-padding: 12px;
     -fx-border-insets: 5px;
     -fx-background-insets: 10px;
+    -fx-pref-width: 140px;
+}
+
+#combobox-years{
     -fx-pref-width: 120px;
 }
 
 #header-button {
    -fx-background-radius: 0px;
    -fx-font-size: 16px;
-  -fx-padding: 10px;
-  -fx-border-insets: 0px;
-  -fx-border-color: white;
-  -fx-background-insets: 0px;
+    -fx-padding: 10px;
+    -fx-border-insets: 0px;
+    -fx-border-color: white;
+    -fx-background-insets: 0px;
 }
 
 #interaction-button {
+    -fx-pref-width: 100px;
+}
+
+#refresh-button{
     -fx-pref-width: 100px;
 }
 
@@ -107,16 +119,26 @@ and open the template in the editor.
    -fx-font-size: 12px;
 }
 
+#header-label {
+   -fx-font-size: 22px;
+}
+
 #greeting-hbox {
    
 }
 
 #search-tf{
     -fx-background-color: #e6e6e6;
+    -fx-pref-width: 120px;
 }
 
 #cell{
-    -fx-border-color: black;
+    -fx-border-color: #a0a0a0;
+}
+
+#cell-header{
+    /*-fx-border-color: black;*/
+    -fx-border-color: #a0a0a0;
 }
 
 .text-field {
@@ -124,5 +146,4 @@ and open the template in the editor.
   -fx-border-insets: 10px;
   -fx-background-insets: 5px;
   -fx-border-color: black;
-  
 }

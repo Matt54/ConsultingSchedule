@@ -108,10 +108,21 @@ public class MainWindow {
                     "123456",
                     "USA");
         
+        AppointmentView appointment = new AppointmentView("Test Appointment",
+                                                            "Matt",
+                                                            "123 Silly Lane",
+                                                            "On-Site",
+                                                            "02-01-2020 10:00", //"MM-dd-yyyy HH:mm"
+                                                            "02-01-2020 11:00");
+        
         consultant.addCustomer(customer);
+        consultant.addAppointment(appointment);
         
+        tvCustomers = CreateCustomerTV();
+        tvAppointments = CreateAppointmentTV();
         
-        tvCustomers = new TableView<>(consultant.getAllCustomers());
+                /*
+                new TableView<>(consultant.getAllCustomers());
         
         TableColumn<Customer, String> customerName = new TableColumn<>("Name");
         customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -136,6 +147,12 @@ public class MainWindow {
         TableColumn<Customer, String> customerPhone = new TableColumn<>("Phone #");
         customerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         tvCustomers.getColumns().add(customerPhone);
+        
+        tvCustomers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        tvCustomers.setPrefWidth(615);
+        tvCustomers.setPrefHeight(300);
+        */
 
         /*
         TableColumn<Customer, String> customerName = new TableColumn<>("Customer Name");
@@ -143,10 +160,7 @@ public class MainWindow {
         tvCustomers.getColumns().add(customerName);
         */
         
-        tvCustomers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
-        tvCustomers.setPrefWidth(615);
-        tvCustomers.setPrefHeight(300);
         
         calendarView = new CalendarView();
         calendarView.isWeeklyCheck.setOnAction((e) -> {
@@ -162,6 +176,87 @@ public class MainWindow {
         CurrentUser currentUser = CurrentUser.getInstance();
         user = currentUser.getUser().getUserName();
         labelName.setText("Hello, " + user + ". Select from the options below.");
+    }
+    
+    public TableView CreateCustomerTV()
+    {
+        TableView tv = new TableView<>(consultant.getAllCustomers());
+        
+        TableColumn<Customer, String> customerName = new TableColumn<>("Name");
+        customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tv.getColumns().add(customerName);
+        
+        TableColumn<Customer, String> customerCountry = new TableColumn<>("Country");
+        customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        tv.getColumns().add(customerCountry);
+        
+        TableColumn<Customer, String> customerCity = new TableColumn<>("City");
+        customerCity.setCellValueFactory(new PropertyValueFactory<>("city"));
+        tv.getColumns().add(customerCity);
+        
+        TableColumn<Customer, String> customerAddress = new TableColumn<>("Address");
+        customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tv.getColumns().add(customerAddress);
+        
+        TableColumn<Customer, String> customerZip = new TableColumn<>("Zip Code");
+        customerZip.setCellValueFactory(new PropertyValueFactory<>("zip"));
+        tv.getColumns().add(customerZip);
+        
+        TableColumn<Customer, String> customerPhone = new TableColumn<>("Phone #");
+        customerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tv.getColumns().add(customerPhone);
+        
+        tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        tv.setPrefWidth(615);
+        tv.setPrefHeight(300);
+        
+        return tv;
+    }
+    
+    public TableView CreateAppointmentTV()
+    {
+        /*
+        private String start;
+        private String end;
+        private String location;
+        private String title;
+        private String type;
+        private String customerName;
+        */
+        
+        TableView tv = new TableView<>(consultant.getAllAppointments());
+        
+        TableColumn<AppointmentView, String> start = new TableColumn<>("Start");
+        start.setCellValueFactory(new PropertyValueFactory<>("start"));
+        tv.getColumns().add(start);
+        
+        TableColumn<AppointmentView, String> endTime = new TableColumn<>("End Time");
+        endTime.setCellValueFactory(new PropertyValueFactory<>("end"));
+        tv.getColumns().add(endTime);
+        
+        TableColumn<AppointmentView, String> aptLocation = new TableColumn<>("Location");
+        aptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        tv.getColumns().add(aptLocation);
+        
+        TableColumn<AppointmentView, String> aptTitle = new TableColumn<>("Title");
+        aptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        tv.getColumns().add(aptTitle);
+        
+        TableColumn<AppointmentView, String> aptType = new TableColumn<>("Type");
+        aptType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        tv.getColumns().add(aptType);
+        
+        TableColumn<AppointmentView, String> customerName = new TableColumn<>("Customer");
+        customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        tv.getColumns().add(customerName);
+        
+        tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        tv.setPrefWidth(615);
+        tv.setPrefHeight(300);
+        
+        return tv;
     }
 
     public HBox CreateCategoryHeader()
@@ -179,7 +274,7 @@ public class MainWindow {
         Button btnAppointments = new Button("Appointments");
         btnAppointments.setId("header-button");
         btnAppointments.setOnAction(e -> { 
-            
+            selectCategoryAppointment();
         });
         
         Button btnCalendar = new Button("Calendar");
@@ -199,6 +294,10 @@ public class MainWindow {
     
     public HBox CreateTableInteractionHeader()
     {
+        headerLabel = new Label();
+        headerLabel.setId("header-label");
+        
+        
         Button btnAdd = new Button("Add");
         btnAdd.setId("interaction-button");
         btnAdd.setOnAction(e -> { 
@@ -224,7 +323,8 @@ public class MainWindow {
         
         Button btnSearch = new Button("Search");
         btnSearch.setId("interaction-button");
-        TextField tfSearch = new TextField();
+        
+        tfSearch = new TextField();
         tfSearch.setId("search-tf");
         btnSearch.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
@@ -243,11 +343,11 @@ public class MainWindow {
             });
         
         
-        HBox hbox = new HBox(btnAdd, btnDelete, btnModify, btnSearch, tfSearch);
+        HBox hbox = new HBox(headerLabel, btnAdd, btnDelete, btnModify, btnSearch, tfSearch);
         
         hbox.setBackground(new Background(new BackgroundFill(
                Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
-        
+        hbox.setAlignment(Pos.CENTER);
         return hbox;
     }
     
@@ -255,12 +355,15 @@ public class MainWindow {
     {
         if(selectedCategory != Selected.CUSTOMERS)
         {
-            //labelName.setText("Customer View - Search and Modify Customers");
             view.getChildren().remove(hboxGreeting);
             view.getChildren().remove(hboxImage);
-            //view.getChildren().remove(hboxImage);
             view.getChildren().remove(copyrightLabel);
             view.getChildren().remove(calendarView);
+            view.getChildren().remove(tvAppointments);
+            view.getChildren().remove(interactionHeader);
+            tfSearch.setPromptText("search name");
+            headerLabel.setText("Customers:");
+            
             view.getChildren().add(tvCustomers);
             view.getChildren().add(interactionHeader);
             view.getChildren().add(copyrightLabel);
@@ -273,21 +376,42 @@ public class MainWindow {
     {
         if(selectedCategory != Selected.CALENDAR)
         {
-            //labelName.setText("Customer View - Search and Modify Customers");
             view.getChildren().remove(hboxGreeting);
             view.getChildren().remove(hboxImage);
-            //view.getChildren().remove(hboxImage);
             view.getChildren().remove(copyrightLabel);
             view.getChildren().remove(tvCustomers);
+            view.getChildren().remove(tvAppointments);
             view.getChildren().remove(interactionHeader);
+            
             view.getChildren().add(calendarView);
-            //view.getChildren().add(tvCustomers);
-            //view.getChildren().add(interactionHeader);
             view.getChildren().add(copyrightLabel);
             stage.sizeToScene();
         }
         selectedCategory = Selected.CALENDAR;
     }
+    
+    public void selectCategoryAppointment()
+    {
+        if(selectedCategory != Selected.APPOINTMENTS)
+        {
+            view.getChildren().remove(hboxGreeting);
+            view.getChildren().remove(hboxImage);
+            view.getChildren().remove(copyrightLabel);
+            view.getChildren().remove(calendarView);
+            view.getChildren().remove(tvCustomers);
+            view.getChildren().remove(interactionHeader);
+            tfSearch.setPromptText("search title");
+            headerLabel.setText("Appointments:");
+            
+            view.getChildren().add(tvAppointments);
+            view.getChildren().add(interactionHeader);
+            view.getChildren().add(copyrightLabel);
+            stage.sizeToScene();
+        }
+        selectedCategory = Selected.APPOINTMENTS;
+    }
+    
+    
 
     /*
     public void StageSwap(Stage otherStage)
@@ -334,6 +458,10 @@ public class MainWindow {
     CustomerWindow customerWindow;
     Consultant consultant;
     TableView tvCustomers;
+    TableView tvAppointments;
+    
+    Label headerLabel;
+    TextField tfSearch;
     VBox view;
     HBox hboxGreeting;
     HBox hboxImage;

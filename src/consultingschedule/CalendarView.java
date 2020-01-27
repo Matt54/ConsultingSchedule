@@ -8,19 +8,26 @@ package consultingschedule;
 import java.time.LocalDate;
 
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 /**
  *
  * @author matthewp
  */
 public class CalendarView extends VBox {
+
+    //TODO: There's a problem with the weekly view for week 1 when sunday is day 1
     
     Cell[] cells;
     HBox[] rows;
@@ -64,10 +71,11 @@ public class CalendarView extends VBox {
     
     CalendarView(){
         
-        Button updateBtn = new Button("Update Calendar");
+        Button updateBtn = new Button("Refresh");
         updateBtn.setOnAction((e) -> {
             UpdateCalendarView();
         });
+        updateBtn.setId("refresh-button");
         
         ComboBox monthsComboBox = new ComboBox(FXCollections.observableArrayList(months)); 
         monthsComboBox.getSelectionModel().selectFirst();
@@ -78,6 +86,7 @@ public class CalendarView extends VBox {
         
         ComboBox yearsComboBox = new ComboBox(FXCollections.observableArrayList(years)); 
         yearsComboBox.getSelectionModel().selectFirst();
+        yearsComboBox.setId("combobox-years");
         
         yearsComboBox.valueProperty().addListener((obs, oldText, newText) -> {
             yearNumber = Integer.parseInt((String)newText);
@@ -98,7 +107,11 @@ public class CalendarView extends VBox {
         isWeeklyLabel.setId("label-week");
       
         header = new HBox(updateBtn, monthsComboBox, yearsComboBox, isWeeklyLabel , isWeeklyCheck,  weeksComboBox);
-
+        
+        header.setAlignment(Pos.CENTER);
+        header.setBackground(new Background(new BackgroundFill(
+                    Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
+        
         CreateMonthlyCalendar();
     }
     
@@ -169,7 +182,7 @@ public class CalendarView extends VBox {
     private void CreateMonthlyCalendar()
     {
         getChildren().clear();
-        getChildren().add(header);
+        //getChildren().add(header);
         
         
         int numColumns = 7;
@@ -197,6 +210,8 @@ public class CalendarView extends VBox {
                 cells[5] = new Cell("Friday");
                 cells[6] = new Cell("Saturday");
                 for (int i = 0; i < 7; i++) rows[r].getChildren().add( cells[i].getView() );
+                rows[r].setBackground(new Background(new BackgroundFill(
+                    Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
             }
             else
             {
@@ -218,12 +233,13 @@ public class CalendarView extends VBox {
             }
             getChildren().add(rows[r]);
         }
+        getChildren().add(header);
     }
     
     private void CreateWeeklyCalendar()
     {
         getChildren().clear();
-        getChildren().add(header);
+        
         
         int numColumns = 7;
         int numRows = 2;
@@ -248,6 +264,7 @@ public class CalendarView extends VBox {
         
         java.time.DayOfWeek dayOfWeek = localDate.getDayOfWeek();
         int firstDayValue = dayOfWeek.getValue();
+        if(firstDayValue == 7) firstDayValue = 0;
         int daysInMonth = localDate.lengthOfMonth();
             
         
@@ -269,6 +286,8 @@ public class CalendarView extends VBox {
                 cells[5] = new Cell("Friday");
                 cells[6] = new Cell("Saturday");
                 for (int i = 0; i < 7; i++) rows[r].getChildren().add( cells[i].getView() );
+                rows[r].setBackground(new Background(new BackgroundFill(
+                    Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
             }
             else
             {
@@ -290,12 +309,14 @@ public class CalendarView extends VBox {
             }
             getChildren().add(rows[r]);
         }
+        getChildren().add(header);
     }
 
     public class Cell{
         
         Cell(){
             view = new VBox();
+            view.setId("cell");
             SetupCell();
         }
         
@@ -304,6 +325,7 @@ public class CalendarView extends VBox {
             label = new Label(dayName);
             label.setId("day-label");
             view = new VBox(label);
+            view.setId("cell-header");
             SetupCell();
             view.setPrefHeight(25);
             view.setAlignment(Pos.CENTER);
@@ -312,9 +334,9 @@ public class CalendarView extends VBox {
         Cell(int _dayIndex){
             isDayOfMonth = true;
             dayIndex = _dayIndex;
-            
             label = new Label( Integer.toString(dayIndex) );
             view = new VBox(label);
+            view.setId("cell");
             SetupCell();
             view.setAlignment(Pos.TOP_LEFT);
         }
@@ -326,6 +348,7 @@ public class CalendarView extends VBox {
             numAppointments = _numAppointments;
             appointmentID = _appointmentID;
             Button btn = new Button(numAppointments + " Appointments");
+            view.setId("cell");
             SetupCell();
         }
         
@@ -333,7 +356,7 @@ public class CalendarView extends VBox {
         {
             int cw = 100;
             view.setPrefSize(cw, cw);
-            view.setId("cell");
+            
         }
         
         public VBox getView ()
