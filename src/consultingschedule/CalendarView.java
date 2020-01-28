@@ -5,7 +5,13 @@
  */
 package consultingschedule;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -188,13 +194,6 @@ public class CalendarView extends VBox {
     private void CreateMonthlyCalendar()
     {
         getChildren().clear();
-        //getChildren().add(header);
-        
-        int[] dayArr = new int[allAppointments.size()];
-        
-        //int year = allAppointments.get(0).getStartTime().getYear();
-        //int month = allAppointments.get(0).getStartTime().getMonthValue();
-        int day = allAppointments.get(0).getStartTime().getDayOfYear();
         
         int numColumns = 7;
         int numRows = 6;
@@ -235,7 +234,21 @@ public class CalendarView extends VBox {
                         if(dayNum < daysInMonth + 1)
                         {
                             LocalDate thisDay = LocalDate.of(yearNumber, monthNumber, dayNum);
-                            if(day == thisDay.getDayOfYear() ) cells[index] = new Cell(dayNum, 1, new int[]{1});
+                            int numAppointments = 0;
+                            String displayText = "";
+                            DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                            for (int a = 0; a < allAppointments.size(); a++) {
+                                if( (allAppointments.get(a).getStartTime().getDayOfYear() == thisDay.getDayOfYear() )
+                                        & (allAppointments.get(a).getStartTime().getYear() == yearNumber) )
+                                {
+                                    displayText += allAppointments.get(a).getTitle() + " (" + allAppointments.get(a).getType() + ") " + ": " 
+                                            + dateFormat.format(Date.from( allAppointments.get(a).getStartTime().atZone( ZoneId.systemDefault()).toInstant()))
+                                            + "\n";
+                                    numAppointments++;
+                                }
+                            }
+                            
+                            if( numAppointments > 0 ) cells[index] = new Cell(dayNum, numAppointments, displayText);
                             else cells[index] = new Cell(dayNum);
                             dayNum++;
                         }
@@ -254,6 +267,7 @@ public class CalendarView extends VBox {
         getChildren().clear();
         
         int day = allAppointments.get(0).getStartTime().getDayOfYear();
+        int year = allAppointments.get(0).getStartTime().getYear();
         
         int numColumns = 7;
         int numRows = 2;
@@ -314,9 +328,22 @@ public class CalendarView extends VBox {
                         if(dayNum < daysInMonth + 1)
                         {
                             LocalDate thisDay = LocalDate.of(yearNumber, monthNumber, dayNum);
-                            if(day == thisDay.getDayOfYear() ) cells[index] = new Cell(dayNum, 1, new int[]{1});
+                            int numAppointments = 0;
+                            String displayText = "";
+                            DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                            for (int a = 0; a < allAppointments.size(); a++) {
+                                if( (allAppointments.get(a).getStartTime().getDayOfYear() == thisDay.getDayOfYear() )
+                                        & (allAppointments.get(a).getStartTime().getYear() == yearNumber) )
+                                {
+                                    displayText += allAppointments.get(a).getTitle() + " (" + allAppointments.get(a).getType() + ") " + ": " 
+                                            + dateFormat.format(Date.from( allAppointments.get(a).getStartTime().atZone( ZoneId.systemDefault()).toInstant()))
+                                            + "\n";
+                                    numAppointments++;
+                                }
+                            }
+                            
+                            if( numAppointments > 0 ) cells[index] = new Cell(dayNum, numAppointments, displayText);
                             else cells[index] = new Cell(dayNum);
-                            //cells[index] = new Cell(dayNum);
                             dayNum++;
                         }
                         else cells[index] = new Cell();
@@ -358,20 +385,22 @@ public class CalendarView extends VBox {
             view.setAlignment(Pos.TOP_LEFT);
         }
 
-        Cell(int _dayIndex, int _numAppointments, int _appointmentID[])
+        Cell(int _dayIndex, int _numAppointments, String displayText)
         {
             hasAppointment = true;
             dayIndex = _dayIndex;
             label = new Label( Integer.toString(dayIndex) );
             numAppointments = _numAppointments;
-            appointmentID = _appointmentID;
+            //listIds = list;
             Button btn = new Button(numAppointments + " appt");
             btn.setId("button-appointment");
+
             btn.setOnAction(e -> { 
                 Alert appointmentInformation = new Alert(Alert.AlertType.INFORMATION);
-                appointmentInformation.setTitle("Appointment Information");
-                appointmentInformation.setHeaderText("Appointment");
-                appointmentInformation.setContentText("The appointmentID is " + appointmentID[0]);
+                appointmentInformation.setTitle("Daily Schedule Information");
+                if(numAppointments == 1) appointmentInformation.setHeaderText("You have 1 Appointment on this day");
+                else appointmentInformation.setHeaderText("You have " + numAppointments + " Appointments on this day");
+                appointmentInformation.setContentText(displayText);
                 appointmentInformation.showAndWait();
             });
             
@@ -398,7 +427,9 @@ public class CalendarView extends VBox {
         
         int dayIndex;
         int numAppointments;
-        int[] appointmentID;
+        List<Integer> listIds;
+        //int[] appointmentID;
+        
         String dayName;
         
         VBox view;

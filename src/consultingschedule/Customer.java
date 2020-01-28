@@ -1,5 +1,12 @@
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.connectToDB;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Customer {
     protected Integer customerId;
     protected String customerName;
@@ -36,6 +43,40 @@ public class Customer {
     public void setAddressId(Integer id){
         addressId = id;
     }
+    
+    public boolean addToDB()
+    {
+        Connection connection = connectToDB();
+        try {
+            int success = executeCountrySQLStatement(this,
+                    connection,
+                    "INSERT INTO customer (customerName,addressId,active,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    false);
+          if(success == 1) {
+            return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public int executeCountrySQLStatement(Customer myCustomer, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(sqlStatement);
+        //statement.setInt(1, myCountry.getCountryId());
+        statement.setString(1, myCustomer.getCustomerName());
+        statement.setInt(2, myCustomer.getAddressId());
+        statement.setBoolean(3, true);
+        statement.setDate(4, java.sql.Date.valueOf( LocalDate.now() ) );
+        statement.setString(5, "Admin");
+        statement.setTimestamp(6, java.sql.Timestamp.valueOf( LocalDateTime.now() ) );
+        statement.setString(7, "Admin" );
+        if(isUpdate) statement.setInt(7, myCustomer.getCustomerId());
+        int success = statement.executeUpdate();
+        return success;
+    }
+
+}
     
     /*
     protected boolean active;
@@ -89,4 +130,4 @@ public class Customer {
     }
     */
     
-}
+

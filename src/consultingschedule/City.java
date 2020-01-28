@@ -1,5 +1,12 @@
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.connectToDB;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class City {
     private Integer cityId;
     private String city;
@@ -28,12 +35,46 @@ public class City {
     public void setCityId(Integer id){
         cityId = id;
     }
-    public void setUserName(String name){
+    public void setCityName(String name){
         city = name;
     }
     public void setCountryId(Integer id){
         countryId = id;
     }
+ 
+    
+    public boolean addToDB()
+    {
+        Connection connection = connectToDB();
+        try {
+            int success = executeCountrySQLStatement(this,
+                    connection,
+                    "INSERT INTO city (city,countryId,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES (?, ?, ?, ?, ?, ?)",
+                    false);
+          if(success == 1) {
+            return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public int executeCountrySQLStatement(City myCity, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(sqlStatement);
+        //statement.setInt(1, myCountry.getCountryId());
+        statement.setString(1, myCity.getCityName());
+        statement.setInt(2, myCity.getCountryId());
+        statement.setDate(3, java.sql.Date.valueOf( LocalDate.now() ) );
+        statement.setString(4, "Admin");
+        statement.setTimestamp(5, java.sql.Timestamp.valueOf( LocalDateTime.now() ) );
+        statement.setString(6, "Admin" );
+        if(isUpdate) statement.setInt(7, myCity.getCityId());
+        int success = statement.executeUpdate();
+        return success;
+    }
+    
+}
     
     /*
     private LocalDate createDate;
@@ -79,4 +120,4 @@ public class City {
     }
     */
     
-}
+

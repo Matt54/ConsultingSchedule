@@ -1,48 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package consultingschedule;
-
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-/**
- *
- * @author matthewp
- */
 
 public class User {
     private Integer userId;
     private String userName;
     private String password;
-    //private boolean active;
-    //private LocalDate createDate;
-    //private String createdBy;
-    //private LocalDateTime lastUpdate;
-    //private String lastUpdateBy;
     
     public User(){}
     
-    public User(Integer id,
-                String name,
-                String pw//,
-                //boolean isActive,
-                //Date date,
-                //String creater,
-                //Timestamp time
-                ){
+    public User(Integer id, String name, String pw){
         userId = id;
         userName = name;
         password = pw;
-        //active = isActive;
-        //createDate = new java.sql.Date(date.getTime()).toLocalDate();
-        //createdBy = creater;
-        //lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
-        //lastUpdateBy = creater;
     }
     
     public Integer getUserId(){
@@ -54,6 +22,29 @@ public class User {
     public String getPassword(){
         return password;
     }
+
+    public void setUserId(Integer id){
+        userId = id;
+    }
+    public void setUserName(String name){
+        userName = name;
+    }
+    public void setPassword(String pw){
+        password = pw;
+    }
+}
+
+    //private boolean active;
+    //private LocalDate createDate;
+    //private String createdBy;
+    //private LocalDateTime lastUpdate;
+    //private String lastUpdateBy;
+    //active = isActive;
+    //createDate = new java.sql.Date(date.getTime()).toLocalDate();
+    //createdBy = creater;
+    //lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
+    //lastUpdateBy = creater;
+    
     /*
     public boolean getStatus(){
         return active;
@@ -72,15 +63,6 @@ public class User {
     }
     */
     
-    public void setUserId(Integer id){
-        userId = id;
-    }
-    public void setUserName(String name){
-        userName = name;
-    }
-    public void setPassword(String pw){
-        password = pw;
-    }
     /*
     public void setStatus(boolean isActive){
         active = isActive;
@@ -99,4 +81,4 @@ public class User {
     }
     */
     
-}
+

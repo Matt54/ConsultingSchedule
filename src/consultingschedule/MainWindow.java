@@ -5,10 +5,23 @@
  */
 package consultingschedule;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -58,17 +71,7 @@ public class MainWindow {
         ImageView gifView = new ImageView(gif);
         gifView.setFitWidth(615);
         gifView.setFitHeight(100);
-        //gifView.setPreserveRatio(true);
-        //Pane stackPane = new Pane(gifView);
-        //gifView.setX(55);
-        //gifView.setY(80);
-        //double width = 75;
-        //gifView.setFitWidth(width);
-        //gifView.setFitHeight(width);
-        //Pane stackPane = new Pane(imageView,gifView);
-        
-        //Image image = new Image("LogoDraft1.png");
-        //ImageView imageView = new ImageView(image);
+
         hboxImage = new HBox(gifView);
         hboxImage.setAlignment(Pos.CENTER);
         hboxImage.setBackground(new Background(new BackgroundFill(
@@ -91,16 +94,35 @@ public class MainWindow {
 
         Appointment appointment = new Appointment(1,
                                                 1,
+                                                1,
                                                 "title",
                                                 "description",
                                                 "location",
+                                                "contact",
                                                 "type",
+                                                "url",
                                                 LocalDateTime.now(),
                                                 LocalDateTime.now());
-        consultant.addAppointment(appointment);
+        
+        Appointment appointment2 = new Appointment(2,
+                                                2,
+                                                2,
+                                                "title2",
+                                                "description2",
+                                                "location2",
+                                                "contact2",
+                                                "type2",
+                                                "url2",
+                                                LocalDateTime.now(),
+                                                LocalDateTime.now());
+
+        //consultant.addAppointment(appointment);
+        //consultant.addAppointment(appointment2);
         
         Customer customer = new Customer(1,"Matt",1);
-        consultant.addCustomer(customer);
+        Customer customer2 = new Customer(2,"Ben",2);
+        //consultant.addCustomer(customer);
+        //consultant.addCustomer(customer2);
         
         Address address = new  Address(1,
                                         "add 1",
@@ -108,34 +130,113 @@ public class MainWindow {
                                         1,
                                         "123456",
                                         "111-222-3333");
-        consultant.addAddress(address);
+        Address address2 = new  Address(2,
+                                        "add 1",
+                                        "add 2",
+                                        2,
+                                        "123456",
+                                        "111-222-3333");
+        //consultant.addAddress(address);
+        //consultant.addAddress(address2);
                 
         City city = new City(1,
                             "Kansas City",
                             1);
-        consultant.addCity(city);
+        City city2 = new City(2,
+                            "Kansas City",
+                            2);
+        //consultant.addCity(city);
+        //consultant.addCity(city2);
         
         Country country = new Country(1,
                                         "Merica");
-        consultant.addCountry(country);
-        
-
-        tvCustomers = CreateCustomerTV();
+        Country country2 = new Country(2,
+                                        "Merica");
+        //consultant.addCountry(country);
+        //consultant.addCountry(country2);
+    } 
+    
+    public void LoadDataAndGenerateWindow()
+    {
+        //AppointmentView must be created before customers
+        //this is because the customerView is populated using the customerId
+        //provided in the appointments
         tvAppointments = CreateAppointmentTV();
+        tvCustomers = CreateCustomerTV();
 
         calendarView = new CalendarView(consultant.getAllAppointments());
         calendarView.isWeeklyCheck.setOnAction((e) -> {
             calendarView.UpdateCalendarView();
             stage.sizeToScene();
         });
-
-    } 
+    }
     
     public void handleSignIn()
     {
         CurrentUser currentUser = CurrentUser.getInstance();
         user = currentUser.getUser().getUserName();
+        
+        //all data pulling happens here
+        consultant.setUserId(currentUser.getUser().getUserId());
+        consultant.PopulateFromDB(currentUser.getUser().getUserId());
+        LoadDataAndGenerateWindow();
+        
         labelName.setText("Hello, " + user + ". Select from the options below.");
+        
+        CheckUpcomingAppointments();
+        //write to text file
+        try{
+            WriteToActivityLog();
+        }
+        catch(IOException e)
+        {
+            Alert ioAlert = new Alert(Alert.AlertType.WARNING);
+            ioAlert.setTitle("ALERT");
+            ioAlert.setHeaderText("Exception!");
+            ioAlert.setContentText(e.getMessage());
+            ioAlert.showAndWait();
+        }
+    }
+    
+    public void WriteToActivityLog() throws IOException{
+        File directory = new File("C:/temp/ConsultingApp");
+        directory.mkdir();
+        Path path = Paths.get("C:/temp/ConsultingApp/LogFile.txt");
+ 
+        String pathString = "C:/temp/ConsultingApp/LogFile.txt";
+        FileWriter fileWriter;
+        if(Files.notExists(path)) fileWriter = new FileWriter(pathString, false);
+        else fileWriter = new FileWriter(pathString, true);
+            
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        printWriter.println(LocalDateTime.now().toString());
+        printWriter.close();
+        fileWriter.close();
+
+    }
+    
+    public void CheckUpcomingAppointments(){
+        LocalDateTime now = LocalDateTime.now();
+        for(Appointment appointment : consultant.getAllAppointments())
+        {
+            LocalDateTime aptTime = appointment.getStartTime();
+            if(now.getYear() == aptTime.getYear())
+            {
+                if(now.getDayOfYear() == aptTime.getDayOfYear())
+                {
+                    if(now.getMinute() - aptTime.getMinute() < 15)
+                    {
+                        DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                        Alert appointmentInformation = new Alert(Alert.AlertType.WARNING);
+                        appointmentInformation.setTitle("Appointment Reminder");
+                        appointmentInformation.setHeaderText("You have an appointment within 15 minutes!");
+                        appointmentInformation.setContentText(appointment.getTitle() + " (" + appointment.getType() + ") " + ": " 
+                                                + dateFormat.format(java.util.Date.from( appointment.getStartTime().atZone( ZoneId.systemDefault()).toInstant())));
+                        appointmentInformation.showAndWait();
+                    }
+                }
+            }
+        }
     }
     
     public TableView CreateCustomerTV()

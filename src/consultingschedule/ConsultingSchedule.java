@@ -66,6 +66,37 @@ public class ConsultingSchedule extends Application {
         //delete tested and works
         //deleteUser(1);
         
+        Country usa = new Country(1, "USA");
+        usa.addToDB();
+        
+        City kc = new City(1,"Kansas City",1);
+        kc.addToDB();
+        
+        Address fakeAddress1 = new  Address(1,
+                                        "123 Silly Lane",
+                                        "Apt. 1",
+                                        1,
+                                        "123456",
+                                        "111-222-3333");
+        fakeAddress1.addToDB();
+        
+        Customer matt = new Customer(1,"Matt",1);
+        matt.addToDB();
+        
+        Appointment appt1 = new Appointment(1,
+                                            2,
+                                            1,
+                                            "title",
+                                            "description",
+                                            "location",
+                                            "contact",
+                                            "type",
+                                            "url",
+                                            LocalDateTime.now(),
+                                            LocalDateTime.now());
+        appt1.addToDB();
+        
+        
         Locale locale = Locale.getDefault();
         System.out.println(locale);
         Locale  france = new Locale("fr");

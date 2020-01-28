@@ -1,5 +1,12 @@
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.connectToDB;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Address {
     private Integer addressId;
     private String address;
@@ -7,6 +14,8 @@ public class Address {
     private Integer cityId;
     private String postalCode;
     private String phone;
+    
+    public Address(){}
     
     public Address(Integer id,
                     String add,
@@ -28,11 +37,12 @@ public class Address {
     public String getAddress(){
         return address + address2;
     }
-    /*
+    public String getAddress1(){
+        return address;
+    }
     public String getAddress2(){
         return address2;
     }
-    */
     
     public Integer getCityId(){
         return cityId;
@@ -63,6 +73,47 @@ public class Address {
         phone = _phone;
     }
     
+    public boolean addToDB()
+    {
+        Connection connection = connectToDB();
+        try {
+            int success = executeCountrySQLStatement(this,
+                    connection,
+                    "INSERT INTO address (address,address2,cityId,postalCode,phone,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    false);
+          if(success == 1) {
+            return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public int executeCountrySQLStatement(Address myAddress, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(sqlStatement);
+        statement.setString(1, myAddress.getAddress1());
+        statement.setString(2, myAddress.getAddress2());
+        statement.setInt(3, myAddress.getCityId());
+        statement.setString(4, myAddress.getPostalCode());
+        statement.setString(5, myAddress.getPhone());
+        statement.setDate(6, java.sql.Date.valueOf( LocalDate.now() ) );
+        statement.setString(7, "Admin");
+        statement.setTimestamp(8, java.sql.Timestamp.valueOf( LocalDateTime.now() ) );
+        statement.setString(9, "Admin" );
+        if(isUpdate) statement.setInt(10, myAddress.getAddressId());
+        int success = statement.executeUpdate();
+        return success;
+    }
+    
+    
+}
+    
+    /*
+    public String getAddress2(){
+        return address2;
+    }
+    */
     /*
     private LocalDate createDate;
     private String createdBy;
@@ -106,4 +157,4 @@ public class Address {
         lastUpdateBy = updatedBy;
     }
     */
-}
+
