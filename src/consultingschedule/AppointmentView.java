@@ -18,6 +18,7 @@ public class AppointmentView {
     protected String title;
     protected String type;
     protected String customerName;
+    protected int appointmentId;
     
     public AppointmentView(
                         String _title,
@@ -52,6 +53,9 @@ public class AppointmentView {
     public String getEnd(){
         return end;
     }
+    public Integer getAppointmentId(){
+        return appointmentId;
+    }
     
     public void setTitle(String _title){
         title = _title;
@@ -70,6 +74,9 @@ public class AppointmentView {
     }
     public void setEndTime(String updateTime){
         end = updateTime;
+    }
+    public void setAppointmentId(Integer id){
+        appointmentId = id;
     }
     
 }

@@ -80,11 +80,12 @@ public class ConsultingSchedule extends Application {
                                         "111-222-3333");
         fakeAddress1.addToDB();
         
-        Customer matt = new Customer(1,"Matt",1);
+        Customer matt = new Customer(1,"DELETEME",1);
         matt.addToDB();
         
+        
         Appointment appt1 = new Appointment(1,
-                                            2,
+                                            matt.getCustomerId(),
                                             1,
                                             "title",
                                             "description",

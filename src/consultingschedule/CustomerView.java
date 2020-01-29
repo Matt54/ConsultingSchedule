@@ -7,6 +7,7 @@ public class CustomerView {
     protected String city;
     protected String zip;
     protected String country;
+    protected Integer customerId;
     
     public CustomerView(String _name,
                     String _phone,
@@ -40,6 +41,9 @@ public class CustomerView {
     public String getCountry(){
         return country;
     }
+    public Integer getCustomerId(){
+        return customerId;
+    }
     
     public void setName(String input){
         name = input;
@@ -58,6 +62,9 @@ public class CustomerView {
     }
     public void setCountry(String input){
         country = input;
+    }
+    public void setCustomerId(Integer id){
+        customerId = id;
     }
     
 }

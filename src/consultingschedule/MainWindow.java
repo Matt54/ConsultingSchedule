@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Math.abs;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,13 +23,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -163,12 +168,17 @@ public class MainWindow {
         //provided in the appointments
         tvAppointments = CreateAppointmentTV();
         tvCustomers = CreateCustomerTV();
-
-        calendarView = new CalendarView(consultant.getAllAppointments());
-        calendarView.isWeeklyCheck.setOnAction((e) -> {
-            calendarView.UpdateCalendarView();
+        calendarView = CreateCalendarView();
+    }
+    
+    public CalendarView CreateCalendarView(){
+        view.getChildren().remove(calendarView);
+        CalendarView cv = new CalendarView(consultant.getAllAppointments());
+        cv.isWeeklyCheck.setOnAction((e) -> {
+            cv.UpdateCalendarView();
             stage.sizeToScene();
         });
+        return cv;
     }
     
     public void handleSignIn()
@@ -224,7 +234,7 @@ public class MainWindow {
             {
                 if(now.getDayOfYear() == aptTime.getDayOfYear())
                 {
-                    if(now.getMinute() - aptTime.getMinute() < 15)
+                    if(abs(now.getMinute() - aptTime.getMinute()) < 15)
                     {
                         DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
                         Alert appointmentInformation = new Alert(Alert.AlertType.WARNING);
@@ -241,7 +251,7 @@ public class MainWindow {
     
     public TableView CreateCustomerTV()
     {
-        TableView tv = new TableView<>(consultant.getAllCustomerViews());
+        TableView tv = new TableView<CustomerView>(consultant.getAllCustomerViews());
         
         TableColumn<CustomerView, String> customerName = new TableColumn<>("Name");
         customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -355,13 +365,32 @@ public class MainWindow {
         Button btnAdd = new Button("Add");
         btnAdd.setId("interaction-button");
         btnAdd.setOnAction(e -> { 
-            customerWindow = new CustomerWindow(this);
+            customerWindow = new CustomerWindow(this,consultant);
         });
         
         Button btnDelete = new Button("Delete");
         btnDelete.setId("interaction-button");
         btnDelete.setOnAction(e -> { 
             //TODO: Add "are you sure??" and then delete customer and all corrosponding appointments
+            selectedCustomer = (CustomerView) tvCustomers.getSelectionModel().getSelectedItem();
+            if(selectedCustomer != null)
+            {
+                ButtonType yes = new ButtonType("yes", ButtonBar.ButtonData.OK_DONE);
+                ButtonType no = new ButtonType("no", ButtonBar.ButtonData.CANCEL_CLOSE);
+                Alert alert = new Alert(AlertType.WARNING,
+                        "Are you sure you want to delete the customer and all his/her appointments?",
+                        yes,
+                        no);
+
+                alert.setTitle("Date format warning");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.orElse(no) == yes) {
+                    consultant.deleteCustomer(consultant.lookupCustomer(selectedCustomer.getName()));
+                    //LoadDataAndGenerateWindow();
+                }
+                
+            }
         });
         
         Button btnModify = new Button("Modify");
@@ -371,7 +400,7 @@ public class MainWindow {
             selectedCustomer = (CustomerView) tvCustomers.getSelectionModel().getSelectedItem();
             if(selectedCustomer != null)
             {
-                customerWindow = new CustomerWindow(this, selectedCustomer);
+                customerWindow = new CustomerWindow(this, selectedCustomer,consultant);
             }
         });
         
@@ -430,6 +459,7 @@ public class MainWindow {
     {
         if(selectedCategory != Selected.CALENDAR)
         {
+            calendarView = CreateCalendarView(); //to ensure that we have updated the calendar
             view.getChildren().remove(hboxGreeting);
             view.getChildren().remove(hboxImage);
             view.getChildren().remove(copyrightLabel);

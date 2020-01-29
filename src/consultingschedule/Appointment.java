@@ -3,7 +3,9 @@ package consultingschedule;
 import static consultingschedule.ConsultingSchedule.connectToDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -137,7 +139,7 @@ public class Appointment {
     {
         Connection connection = connectToDB();
         try {
-            int success = executeCountrySQLStatement(this,
+            int success = executeAppointmentSQLStatement(this,
                     connection,
                     "INSERT INTO appointment (customerId,userId,title,description,location,"
                             + "contact,type,url,start,end,"
@@ -153,8 +155,24 @@ public class Appointment {
         return false;
     }
     
-    public int executeCountrySQLStatement(Appointment myAppointment, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(sqlStatement);
+    public boolean updateDB(){
+        Connection connection = connectToDB();
+        try {
+            int success = executeAppointmentSQLStatement(this,
+                    connection,
+                    "UPDATE user SET city=?, countryId=?, createDate=?, createdBy=?, lastUpdate=?, lastUpdateBy=? WHERE appointmentId=?",
+                    true);
+          if(success == 1) {
+            return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public int executeAppointmentSQLStatement(Appointment myAppointment, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, myAppointment.getCustomerId());
         statement.setInt(2, myAppointment.getUserId());
         statement.setString(3, myAppointment.getTitle());
@@ -171,7 +189,28 @@ public class Appointment {
         statement.setString(14, "Admin" );
         if(isUpdate) statement.setInt(15, myAppointment.getAppointmentId());
         int success = statement.executeUpdate();
+        
+        if(!isUpdate)
+        {
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()) myAppointment.setAppointmentId(rs.getInt(1));
+        }
+        
         return success;
+    }
+    
+    public boolean deleteAppointmentFromDB() {
+        Connection connection = connectToDB();
+        try {
+            Statement stmt = connection.createStatement();
+            int success = stmt.executeUpdate("DELETE FROM appointment WHERE appointmentId=" + this.getAppointmentId());
+          if(success == 1) {
+        return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
     
 }

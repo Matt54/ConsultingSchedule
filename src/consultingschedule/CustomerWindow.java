@@ -8,7 +8,9 @@ package consultingschedule;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -28,8 +30,9 @@ import javafx.stage.Stage;
  */
 public class CustomerWindow {
     
-    CustomerWindow(MainWindow main)
+    CustomerWindow(MainWindow main, Consultant _consultant)
     {
+        consultant = _consultant;
         labelHeader = new Label("Add Customer");
         gridPane = new GridPane();
         CreatePromptField(gridPane, "Name: ", "",0 );
@@ -41,8 +44,9 @@ public class CustomerWindow {
         SetupWindow(main);
     }
 
-    CustomerWindow(MainWindow main, CustomerView customer)
+    CustomerWindow(MainWindow main, CustomerView customer, Consultant _consultant)
     {
+        consultant = _consultant;
         isModify = true;
         customerView = customer;
         labelHeader = new Label("Modify Customer");
@@ -67,16 +71,9 @@ public class CustomerWindow {
         Button btnSave = new Button("Save");
         btnSave.setOnAction(e -> { 
             //TODO: Add or Modify Customer
-            if(isModify)
-            {
+            if(isModify) ModifyExistingCustomer();
+            else CreateNewCustomer();
             
-            }
-            else
-            {
-                
-            }
-            mainWindow.show();
-            stage.hide();
         });
         
         Button btnCancel = new Button("Cancel");
@@ -108,6 +105,101 @@ public class CustomerWindow {
         gridPane.add(textField, 1,index,1,1);
     }
     
+    public void ModifyExistingCustomer()
+    {
+        mainWindow.show();
+        stage.hide();
+    }
+    
+    public void CreateNewCustomer()
+    {
+        Boolean emptyInput = false;
+        
+        for (Node child : gridPane.getChildren()) {
+            if (child instanceof TextField){
+                TextField tf = (TextField)child;
+                if(tf.getText().equals(""))emptyInput = true;
+            }
+        }
+        
+        if(emptyInput){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You can't have an empty input.");
+            alert.showAndWait();
+        }
+        else{
+            Customer newCustomer = new Customer();
+            Address newAddress = new Address();
+            City newCity = new City();
+            Country newCountry = new Country();
+            int index = 0;
+            for (Node child : gridPane.getChildren()) {
+                if (child instanceof TextField){
+                    TextField tf = (TextField)child;
+                    switch (index){
+                            case 0:
+                                newCustomer.setName(tf.getText());
+                                break;
+                            case 1:
+                                newAddress.setPhone(tf.getText());
+                                break;
+                            case 2:
+                                newAddress.setAddress(tf.getText());
+                                newAddress.setAddress2("");
+                                break;
+                            case 3:
+                                newCity.setCityName(tf.getText());
+                                break;
+                            case 4:
+                                newAddress.setPostalCode(tf.getText());
+                                break;
+                            case 5:
+                                newCountry.setCountryName(tf.getText());
+                                break;
+                    }
+                    index++;
+                }
+            }
+            
+            newCountry.addToDB();
+            newCity.setCountryId(newCountry.getCountryId());
+            
+            newCity.addToDB();
+            newAddress.setCityId(newCity.getCityId());
+            
+            newAddress.addToDB();
+            newCustomer.setAddressId(newAddress.getAddressId());
+            
+            newCustomer.addToDB();
+            
+            consultant.addCountry(newCountry);
+            consultant.addCity(newCity);
+            consultant.addAddress(newAddress);
+            consultant.addCustomer(newCustomer);
+            consultant.AddCustomerToView(newCustomer);
+            
+            mainWindow.show();
+            stage.hide();
+        }
+        
+        
+        /*
+            if(tfID.getText().equals(""))emptyInput = true;
+            if(tfName.getText().equals(""))emptyInput = true;
+            if(tfCost.getText().equals(""))emptyInput = true;
+            if(tfInv.getText().equals(""))emptyInput = true;
+            if(tfMax.getText().equals(""))emptyInput = true;
+            if(tfMin.getText().equals(""))emptyInput = true;
+            if(tfMachineID.getText().equals(""))emptyInput = true;
+            if(emptyInput){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "You can't have an empty input.");
+                alert.showAndWait();
+                return false;
+            }
+        */
+    }
+    
+    
+    Consultant consultant;
     boolean isModify = false;
     GridPane gridPane;
     Label labelHeader;

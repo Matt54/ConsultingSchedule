@@ -3,7 +3,9 @@ package consultingschedule;
 import static consultingschedule.ConsultingSchedule.connectToDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -42,7 +44,23 @@ public class Country {
                     "INSERT INTO country (country,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES ( ?, ?, ?, ?, ?)",
                     false);
           if(success == 1) {
-            return true;
+                return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean updateDB(){
+        Connection connection = connectToDB();
+        try {
+            int success = executeCountrySQLStatement(this,
+                    connection,
+                    "UPDATE user SET country=?, createDate=?,createdBy=?,lastUpdate=?, lastUpdateBy=? WHERE countryId=?",
+                    true);
+          if(success == 1) {
+                return true;
           }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -51,7 +69,7 @@ public class Country {
     }
     
     public int executeCountrySQLStatement(Country myCountry, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(sqlStatement);
+        PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
         //statement.setInt(1, myCountry.getCountryId());
         statement.setString(1, myCountry.getCountryName());
         statement.setDate(2, java.sql.Date.valueOf( LocalDate.now() ) );
@@ -60,10 +78,31 @@ public class Country {
         statement.setString(5, "Admin" );
         if(isUpdate) statement.setInt(7, myCountry.getCountryId());
         int success = statement.executeUpdate();
+        
+        if(!isUpdate)
+        {
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()) myCountry.setCountryId(rs.getInt(1));
+        }
+        
         return success;
     }
     
-    
+    public boolean deleteCountryFromDB() {
+        Connection connection = connectToDB();
+        try {
+            Statement stmt = connection.createStatement();
+            int success = stmt.executeUpdate("DELETE FROM country WHERE countryId=" + this.getCountryId());
+          if(success == 1) {
+        return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+}
     
     /*
     private LocalDate createDate;
@@ -109,4 +148,4 @@ public class Country {
     }
     */
     
-}
+

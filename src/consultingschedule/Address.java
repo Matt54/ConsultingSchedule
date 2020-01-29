@@ -3,7 +3,9 @@ package consultingschedule;
 import static consultingschedule.ConsultingSchedule.connectToDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -79,7 +81,8 @@ public class Address {
         try {
             int success = executeCountrySQLStatement(this,
                     connection,
-                    "INSERT INTO address (address,address2,cityId,postalCode,phone,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO address (address,address2,cityId,postalCode,phone,"
+                            + "createDate,createdBy,lastUpdate,lastUpdateBy) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     false);
           if(success == 1) {
             return true;
@@ -90,8 +93,25 @@ public class Address {
         return false;
     }
     
+    public boolean updateDB(){
+        Connection connection = connectToDB();
+        try {
+            int success = executeCountrySQLStatement(this,
+                    connection,
+                    "UPDATE user SET address=?, address2=?, cityId=?, postalCode=?, phone=?, "
+                            + "createDate=?,createdBy=?,lastUpdate=?, lastUpdateBy=? WHERE addressId=?",
+                    true);
+          if(success == 1) {
+            return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
     public int executeCountrySQLStatement(Address myAddress, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(sqlStatement);
+        PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, myAddress.getAddress1());
         statement.setString(2, myAddress.getAddress2());
         statement.setInt(3, myAddress.getCityId());
@@ -103,9 +123,29 @@ public class Address {
         statement.setString(9, "Admin" );
         if(isUpdate) statement.setInt(10, myAddress.getAddressId());
         int success = statement.executeUpdate();
+        
+        if(!isUpdate)
+        {
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()) myAddress.setAddressId(rs.getInt(1));
+        }
+        
         return success;
     }
     
+    public boolean deleteAddressFromDB() {
+        Connection connection = connectToDB();
+        try {
+            Statement stmt = connection.createStatement();
+            int success = stmt.executeUpdate("DELETE FROM address WHERE addressId=" + this.getAddressId());
+          if(success == 1) {
+        return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
     
 }
     

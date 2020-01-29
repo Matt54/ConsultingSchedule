@@ -3,7 +3,9 @@ package consultingschedule;
 import static consultingschedule.ConsultingSchedule.connectToDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -48,7 +50,7 @@ public class Customer {
     {
         Connection connection = connectToDB();
         try {
-            int success = executeCountrySQLStatement(this,
+            int success = executeCustomerSQLStatement(this,
                     connection,
                     "INSERT INTO customer (customerName,addressId,active,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     false);
@@ -61,8 +63,24 @@ public class Customer {
         return false;
     }
     
-    public int executeCountrySQLStatement(Customer myCustomer, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(sqlStatement);
+    public boolean updateDB(){
+        Connection connection = connectToDB();
+        try {
+            int success = executeCustomerSQLStatement(this,
+                    connection,
+                    "UPDATE user SET customerName=?, addressId=?, active=?, active=?,createDate=?,createdBy=?,lastUpdate=?, lastUpdateBy=? WHERE customerId=?",
+                    true);
+          if(success == 1) {
+            return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public int executeCustomerSQLStatement(Customer myCustomer, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
         //statement.setInt(1, myCountry.getCountryId());
         statement.setString(1, myCustomer.getCustomerName());
         statement.setInt(2, myCustomer.getAddressId());
@@ -73,7 +91,28 @@ public class Customer {
         statement.setString(7, "Admin" );
         if(isUpdate) statement.setInt(7, myCustomer.getCustomerId());
         int success = statement.executeUpdate();
+        
+        if(!isUpdate)
+        {
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()) myCustomer.setId(rs.getInt(1));
+        }
+
         return success;
+    }
+    
+    public boolean deleteCustomerFromDB() {
+        Connection connection = connectToDB();
+        try {
+            Statement stmt = connection.createStatement();
+            int success = stmt.executeUpdate("DELETE FROM customer WHERE customerId=" + this.getCustomerId());
+          if(success == 1) {
+        return true;
+          }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
 }

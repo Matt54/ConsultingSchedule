@@ -29,6 +29,7 @@ public class Consultant {
     ObservableList<Customer> allCustomers;
     ObservableList<CustomerView> allCustomerViews;
     ObservableList<Appointment> allAppointments;
+    ObservableList<AppointmentView> allAppointmentViews;
     
     int userId;
     
@@ -39,6 +40,7 @@ public class Consultant {
         allCustomers = FXCollections.observableArrayList();
         allCustomerViews = FXCollections.observableArrayList();
         allAppointments = FXCollections.observableArrayList();
+        allAppointmentViews = FXCollections.observableArrayList();
     }
     
     public void setUserId(Integer id){
@@ -59,7 +61,7 @@ public class Consultant {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM customer");
-            if(rs.next())
+            while(rs.next())
             {
                 addCustomer( extractCustomerData(rs) );
             }
@@ -81,7 +83,7 @@ public class Consultant {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM address");
-            if(rs.next())
+            while(rs.next())
             {
                 addAddress( extractAddressData(rs) );
             }
@@ -106,7 +108,7 @@ public class Consultant {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM city");
-            if(rs.next())
+            while(rs.next())
             {
                 addCity( extractCityData(rs) );
             }
@@ -128,7 +130,7 @@ public class Consultant {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM country");
-            if(rs.next())
+            while(rs.next())
             {
                 addCountry( extractCountryData(rs) );
             }
@@ -149,7 +151,7 @@ public class Consultant {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM appointment");
-            if(rs.next())
+            while(rs.next())
             {
                 addAppointment( extractAppointmentData(rs) );
             }
@@ -191,6 +193,7 @@ public class Consultant {
     }
     public boolean deleteCountry(Country selectedCountry){
         if(allCountries.contains(selectedCountry)){
+            selectedCountry.deleteCountryFromDB();
             allCountries.remove(selectedCountry);
             return true;
         }
@@ -200,6 +203,18 @@ public class Consultant {
     }
     public ObservableList<Country> getAllCountries(){
         return allCountries;
+    }
+    public void SweepForUnusedCountries(){
+        Country deleteThisCountry = null;
+        for(Country country : allCountries)
+        {
+            boolean found = false;
+            for(City city : allCities){
+                if(country.getCountryId() == city.getCountryId()) found = true;
+            }
+            if(!found) deleteThisCountry = country;
+        }
+        if(deleteThisCountry != null) deleteCountry(deleteThisCountry);
     }
     
     public void addCity(City city){
@@ -216,7 +231,9 @@ public class Consultant {
     }
     public boolean deleteCity(City selectedCity){
         if(allCities.contains(selectedCity)){
+            selectedCity.deleteCityFromDB();
             allCities.remove(selectedCity);
+            SweepForUnusedCountries();
             return true;
         }
         else{
@@ -225,6 +242,18 @@ public class Consultant {
     }
     public ObservableList<City> getAllCities(){
         return allCities;
+    }
+    public void SweepForUnusedCities(){
+        City deleteThisCity = null;
+        for(City city : allCities)
+        {
+            boolean found = false;
+            for(Address address : allAddresses){
+                if(city.getCityId() == address.getCityId()) found = true;
+            }
+            if(!found) deleteThisCity = city;
+        }
+        if(deleteThisCity != null) deleteCity(deleteThisCity);
     }
 
     public void addAddress(Address address){
@@ -241,7 +270,9 @@ public class Consultant {
     }
     public boolean deleteAddress(Address selectedAddress){
         if(allAddresses.contains(selectedAddress)){
+            selectedAddress.deleteAddressFromDB();
             allAddresses.remove(selectedAddress);
+            SweepForUnusedCities();
             return true;
         }
         else{
@@ -250,6 +281,18 @@ public class Consultant {
     }
     public ObservableList<Address> getAllAddresses(){
         return allAddresses;
+    }
+    public void SweepForUnusedAddresses(){
+        Address deleteThisAddress = null;
+        for(Address address : allAddresses)
+        {
+            boolean found = false;
+            for(Customer customer : allCustomers){
+                if(address.getAddressId() == customer.getAddressId()) found = true;
+            }
+            if(!found) deleteThisAddress = address;
+        }
+        if(deleteThisAddress != null) deleteAddress(deleteThisAddress);
     }
     
     public void addCustomer(Customer customer){
@@ -272,15 +315,60 @@ public class Consultant {
     }
     public boolean deleteCustomer(Customer selectedCustomer){
         if(allCustomers.contains(selectedCustomer)){
+            deleteAppointmentsForCustomerId(selectedCustomer.getCustomerId());
+            selectedCustomer.deleteCustomerFromDB();
             allCustomers.remove(selectedCustomer);
+            deleteCustomerView(selectedCustomer.getCustomerName());
+            SweepForUnusedAddresses(); 
             return true;
         }
         else{
             return false;
         }
     }
+    public void deleteCustomerView(String name){
+        CustomerView deleteThisCustomerView = null;
+        for(CustomerView cv : allCustomerViews){
+            if(cv.getName().equals(name)) deleteThisCustomerView = cv;
+        }
+        if(deleteThisCustomerView != null) allCustomerViews.remove(deleteThisCustomerView);
+    }
     public ObservableList<Customer> getAllCustomers(){
         return allCustomers;
+    }
+    
+    
+    
+    
+    
+    //need another method to search for any appointment with constomer id to delete
+    //that other method will run over and over until it loops without finding any appointments to delete
+    public boolean searchAndDestoryAppointment(int id)
+    {
+        Appointment deleteThisAppointment = null;
+        for(Appointment appointment : allAppointments){
+            if(appointment.getCustomerId() == id) deleteThisAppointment = appointment;
+        }
+        if(deleteThisAppointment != null)
+        {
+            deleteAppointment(deleteThisAppointment);
+            return true;
+        }
+        return false;
+    }
+    
+    public void deleteAppointmentsForCustomerId(int id){
+        int numAppointmentsRemoved = 0;
+        while( searchAndDestoryAppointment(id) ) numAppointmentsRemoved++;
+        
+        if(numAppointmentsRemoved > 0)
+        {
+            Alert appointmentInformation = new Alert(Alert.AlertType.INFORMATION);
+            appointmentInformation.setTitle("Removed Appointments");
+            appointmentInformation.setHeaderText("Appointments associated with the customer were removed.");
+            appointmentInformation.setContentText(numAppointmentsRemoved + " appointment(s) have been deleted.");
+            appointmentInformation.showAndWait();
+        }
     }
     
     public void addAppointment(Appointment appointment){
@@ -298,12 +386,21 @@ public class Consultant {
     
     public boolean deleteAppointment(Appointment selectedAppointment){
         if(allAppointments.contains(selectedAppointment)){
+            selectedAppointment.deleteAppointmentFromDB();
             allAppointments.remove(selectedAppointment);
+            deleteAppointmentView(selectedAppointment.getAppointmentId());
             return true;
         }
         else{
             return false;
         }
+    }
+    public void deleteAppointmentView(Integer id){
+        AppointmentView deleteThisAppointmentView = null;
+        for(AppointmentView av : allAppointmentViews){
+            if(av.getAppointmentId().equals(id)) deleteThisAppointmentView = av;
+        }
+        if(deleteThisAppointmentView != null) allAppointmentViews.remove(deleteThisAppointmentView);
     }
     public ObservableList<Appointment> getAllAppointments(){
         return allAppointments;
@@ -311,7 +408,7 @@ public class Consultant {
     
     public ObservableList<AppointmentView> getAllAppointmentViews(){
         //Here we will convert the appointments to their views
-        ObservableList<AppointmentView> allAppointmentViews = FXCollections.observableArrayList();
+        //ObservableList<AppointmentView> allAppointmentViews = FXCollections.observableArrayList();
         
         for (Appointment apt : getAllAppointments()) 
         { 
@@ -325,8 +422,9 @@ public class Consultant {
                                                                 apt.getType(),
                                                                 dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())), //"MM-dd-yyyy HH:mm"
                                                                 dateFormat.format(Date.from( apt.getEndTime().atZone( ZoneId.systemDefault()).toInstant())));
+                aptView.setAppointmentId(apt.getAppointmentId());
                 allAppointmentViews.add(aptView);
-                PopulateCustomerView(apt.getCustomerId());
+                //PopulateCustomerView(apt.getCustomerId());
             }
         }
         return allAppointmentViews;
@@ -348,6 +446,17 @@ public class Consultant {
                                                             lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCityName(),
                                                             lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
+        customerView.setCustomerId(customer.getCustomerId());
+        allCustomerViews.add(customerView);
+    }
+    
+    public void AddCustomerToView(Customer customer){
+        CustomerView customerView = new CustomerView(customer.getCustomerName(),
+                                                            lookupAddress( customer.getAddressId() ).getPhone(),
+                                                            lookupAddress( customer.getAddressId() ).getAddress(),
+                                                            lookupAddress( customer.getAddressId() ).getPostalCode(),
+                                                            lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCityName(),
+                                                            lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
         allCustomerViews.add(customerView);
     }
             
@@ -355,7 +464,7 @@ public class Consultant {
     public ObservableList<CustomerView> getAllCustomerViews(){
         //Here we will convert the appointments to their views
         //ObservableList<CustomerView> allCustomerViews = FXCollections.observableArrayList();
-        /*
+        
         for (Customer customer : getAllCustomers()) 
         { 
             CustomerView customerView = new CustomerView(customer.getCustomerName(),
@@ -366,7 +475,7 @@ public class Consultant {
                                                             lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
             allCustomerViews.add(customerView);
         }
-        */
+        
         return allCustomerViews;
     }
     
