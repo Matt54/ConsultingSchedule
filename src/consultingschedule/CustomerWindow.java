@@ -71,8 +71,14 @@ public class CustomerWindow {
         Button btnSave = new Button("Save");
         btnSave.setOnAction(e -> { 
             //TODO: Add or Modify Customer
-            if(isModify) ModifyExistingCustomer();
-            else CreateNewCustomer();
+            if( ValidateInput() ){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "You can't have an empty input.");
+                alert.showAndWait();
+            }
+            else{
+                if(isModify) ModifyExistingCustomer();
+                else CreateNewCustomer();
+            }
             
         });
         
@@ -107,99 +113,163 @@ public class CustomerWindow {
     
     public void ModifyExistingCustomer()
     {
+        Customer newCustomer = new Customer();
+        Address newAddress = new Address();
+        City newCity = new City();
+        Country newCountry = new Country();
+        
+        int index = 0;
+        for (Node child : gridPane.getChildren()) {
+            if (child instanceof TextField){
+                TextField tf = (TextField)child;
+                switch (index){
+                        case 0:
+                            newCustomer.setName(tf.getText());
+                            break;
+                        case 1:
+                            newAddress.setPhone(tf.getText());
+                            break;
+                        case 2:
+                            newAddress.setAddress(tf.getText());
+                            newAddress.setAddress2("");
+                            break;
+                        case 3:
+                            newCity.setCityName(tf.getText());
+                            break;
+                        case 4:
+                            newAddress.setPostalCode(tf.getText());
+                            break;
+                        case 5:
+                            newCountry.setCountryName(tf.getText());
+                            break;
+                }
+                index++;
+            }
+        }
+        
+        //boolean requiresUpdate = false;
+        
+        if( !newCountry.getCountryName().equals(customerView.getCountry()) )
+        {
+            Country modifiedCountry = consultant.lookupCountry(customerView.getCountry());
+            modifiedCountry.setCountryName(newCountry.getCountryName());
+            modifiedCountry.addToDB();
+            newCity.setCountryId(modifiedCountry.getCountryId());
+            //modifiedCountry.updateDB();
+        }
+        
+        if( !newCity.getCityName().equals(customerView.getCity()) 
+                || !newCity.getCountryId().equals(consultant.lookupCity(customerView.getCity()).getCountryId()) )
+        {
+            City modifiedCity = consultant.lookupCity(customerView.getCity());
+            modifiedCity.setCityName(newCity.getCityName());
+            modifiedCity.setCountryId(newCity.getCountryId());
+            modifiedCity.addToDB();
+            newAddress.setCityId(modifiedCity.getCityId());
+        }
+        
+        if( (!newAddress.getPhone().equals(customerView.getPhone()) ) 
+                || (!newAddress.getAddress().equals(customerView.getAddress())) 
+                || (!newAddress.getPostalCode().equals(customerView.getZip()))
+                || !newAddress.getCityId().equals(consultant.lookupAddress(customerView.getAddress()).getCityId()) )
+        {
+            Address modifiedAddress = consultant.lookupAddress(customerView.getAddress());
+            modifiedAddress.setPhone(newAddress.getPhone());
+            modifiedAddress.setAddress(newAddress.getAddress());
+            modifiedAddress.setPostalCode(newAddress.getPostalCode());
+            modifiedAddress.setCityId(newAddress.getCityId());
+            modifiedAddress.addToDB();
+            newCustomer.setAddressId(modifiedAddress.getAddressId());
+        }
+
+        if( !newCustomer.getCustomerName().equals(customerView.getName()) 
+                || !newCustomer.getAddressId().equals(consultant.lookupCustomer(customerView.getName()).getAddressId()) )
+        {
+            Customer modifiedCustomer = consultant.lookupCustomer(customerView.getName());
+            modifiedCustomer.setName(newCustomer.getCustomerName());
+            modifiedCustomer.setAddressId(newCustomer.getAddressId());
+            modifiedCustomer.updateDB();
+            
+            consultant.deleteCustomerView(customerView);
+            consultant.AddCustomerToView(modifiedCustomer);
+        }
+        
+        
+        
+        
         mainWindow.show();
         stage.hide();
     }
     
     public void CreateNewCustomer()
     {
-        Boolean emptyInput = false;
-        
+        Customer newCustomer = new Customer();
+        Address newAddress = new Address();
+        City newCity = new City();
+        Country newCountry = new Country();
+        int index = 0;
         for (Node child : gridPane.getChildren()) {
             if (child instanceof TextField){
                 TextField tf = (TextField)child;
-                if(tf.getText().equals(""))emptyInput = true;
-            }
-        }
-        
-        if(emptyInput){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "You can't have an empty input.");
-            alert.showAndWait();
-        }
-        else{
-            Customer newCustomer = new Customer();
-            Address newAddress = new Address();
-            City newCity = new City();
-            Country newCountry = new Country();
-            int index = 0;
-            for (Node child : gridPane.getChildren()) {
-                if (child instanceof TextField){
-                    TextField tf = (TextField)child;
-                    switch (index){
-                            case 0:
-                                newCustomer.setName(tf.getText());
-                                break;
-                            case 1:
-                                newAddress.setPhone(tf.getText());
-                                break;
-                            case 2:
-                                newAddress.setAddress(tf.getText());
-                                newAddress.setAddress2("");
-                                break;
-                            case 3:
-                                newCity.setCityName(tf.getText());
-                                break;
-                            case 4:
-                                newAddress.setPostalCode(tf.getText());
-                                break;
-                            case 5:
-                                newCountry.setCountryName(tf.getText());
-                                break;
-                    }
-                    index++;
+                switch (index){
+                        case 0:
+                            newCustomer.setName(tf.getText());
+                            break;
+                        case 1:
+                            newAddress.setPhone(tf.getText());
+                            break;
+                        case 2:
+                            newAddress.setAddress(tf.getText());
+                            newAddress.setAddress2("");
+                            break;
+                        case 3:
+                            newCity.setCityName(tf.getText());
+                            break;
+                        case 4:
+                            newAddress.setPostalCode(tf.getText());
+                            break;
+                        case 5:
+                            newCountry.setCountryName(tf.getText());
+                            break;
                 }
+                index++;
             }
-            
-            newCountry.addToDB();
-            newCity.setCountryId(newCountry.getCountryId());
-            
-            newCity.addToDB();
-            newAddress.setCityId(newCity.getCityId());
-            
-            newAddress.addToDB();
-            newCustomer.setAddressId(newAddress.getAddressId());
-            
-            newCustomer.addToDB();
-            
-            consultant.addCountry(newCountry);
-            consultant.addCity(newCity);
-            consultant.addAddress(newAddress);
-            consultant.addCustomer(newCustomer);
-            consultant.AddCustomerToView(newCustomer);
-            
-            mainWindow.show();
-            stage.hide();
         }
-        
-        
-        /*
-            if(tfID.getText().equals(""))emptyInput = true;
-            if(tfName.getText().equals(""))emptyInput = true;
-            if(tfCost.getText().equals(""))emptyInput = true;
-            if(tfInv.getText().equals(""))emptyInput = true;
-            if(tfMax.getText().equals(""))emptyInput = true;
-            if(tfMin.getText().equals(""))emptyInput = true;
-            if(tfMachineID.getText().equals(""))emptyInput = true;
-            if(emptyInput){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "You can't have an empty input.");
-                alert.showAndWait();
-                return false;
-            }
-        */
+
+        newCountry.addToDB();
+        newCity.setCountryId(newCountry.getCountryId());
+
+        newCity.addToDB();
+        newAddress.setCityId(newCity.getCityId());
+
+        newAddress.addToDB();
+        newCustomer.setAddressId(newAddress.getAddressId());
+
+        newCustomer.addToDB();
+
+        consultant.addCountry(newCountry);
+        consultant.addCity(newCity);
+        consultant.addAddress(newAddress);
+        consultant.addCustomer(newCustomer);
+        consultant.AddCustomerToView(newCustomer);
+
+        mainWindow.show();
+        stage.hide();
     }
     
-    
+    private boolean ValidateInput(){
+        for (Node child : gridPane.getChildren()) {
+            if (child instanceof TextField){
+                TextField tf = (TextField)child;
+                if(tf.getText().equals("")) return true;
+            }
+        }
+        return false;
+    }
+
     Consultant consultant;
+    
+    
     boolean isModify = false;
     GridPane gridPane;
     Label labelHeader;

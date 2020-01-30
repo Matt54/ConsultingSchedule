@@ -68,7 +68,7 @@ public class Customer {
         try {
             int success = executeCustomerSQLStatement(this,
                     connection,
-                    "UPDATE user SET customerName=?, addressId=?, active=?, active=?,createDate=?,createdBy=?,lastUpdate=?, lastUpdateBy=? WHERE customerId=?",
+                    "UPDATE customer SET customerName=?, addressId=?, active=?,createDate=?,createdBy=?,lastUpdate=?, lastUpdateBy=? WHERE customerId=?",
                     true);
           if(success == 1) {
             return true;
@@ -89,7 +89,7 @@ public class Customer {
         statement.setString(5, "Admin");
         statement.setTimestamp(6, java.sql.Timestamp.valueOf( LocalDateTime.now() ) );
         statement.setString(7, "Admin" );
-        if(isUpdate) statement.setInt(7, myCustomer.getCustomerId());
+        if(isUpdate) statement.setInt(8, myCustomer.getCustomerId());
         int success = statement.executeUpdate();
         
         if(!isUpdate)

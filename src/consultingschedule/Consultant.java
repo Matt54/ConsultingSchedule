@@ -188,6 +188,12 @@ public class Consultant {
         }
         return null;
     }
+    public Country lookupCountry(String countryName){
+        for(Country country : allCountries){
+            if(country.getCountryName().equals(countryName)) return country;
+        }
+        return null;
+    }
     public void updateCountry(int index, Country selectedCountry){
         allCountries.set(index, selectedCountry);
     }
@@ -223,6 +229,12 @@ public class Consultant {
     public City lookupCity(Integer cityId){
         for(City city : allCities){
             if(city.getCityId().equals(cityId)) return city;
+        }
+        return null;
+    }
+    public City lookupCity(String cityName){
+        for(City city : allCities){
+            if(city.getCityName().equals(cityName)) return city;
         }
         return null;
     }
@@ -262,6 +274,12 @@ public class Consultant {
     public Address lookupAddress(Integer addressId){
         for(Address address : allAddresses){
             if(address.getAddressId().equals(addressId)) return address;
+        }
+        return null;
+    }
+    public Address lookupAddress(String addressString){
+        for(Address address : allAddresses){
+            if(address.getAddress1().equals(addressString)) return address;
         }
         return null;
     }
@@ -332,6 +350,16 @@ public class Consultant {
             if(cv.getName().equals(name)) deleteThisCustomerView = cv;
         }
         if(deleteThisCustomerView != null) allCustomerViews.remove(deleteThisCustomerView);
+    }
+    public void deleteCustomerView(int id){
+        CustomerView deleteThisCustomerView = null;
+        for(CustomerView cv : allCustomerViews){
+            if(cv.getCustomerId().equals(id)) deleteThisCustomerView = cv;
+        }
+        if(deleteThisCustomerView != null) allCustomerViews.remove(deleteThisCustomerView);
+    }
+    public void deleteCustomerView(CustomerView cv){
+        if(allCustomerViews.contains(cv)) allCustomerViews.remove(cv);
     }
     public ObservableList<Customer> getAllCustomers(){
         return allCustomers;
@@ -443,8 +471,8 @@ public class Consultant {
         CustomerView customerView = new CustomerView(customer.getCustomerName(),
                                                             lookupAddress( customer.getAddressId() ).getPhone(),
                                                             lookupAddress( customer.getAddressId() ).getAddress(),
-                                                            lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCityName(),
+                                                            lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
         customerView.setCustomerId(customer.getCustomerId());
         allCustomerViews.add(customerView);
@@ -454,8 +482,8 @@ public class Consultant {
         CustomerView customerView = new CustomerView(customer.getCustomerName(),
                                                             lookupAddress( customer.getAddressId() ).getPhone(),
                                                             lookupAddress( customer.getAddressId() ).getAddress(),
-                                                            lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCityName(),
+                                                            lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
         allCustomerViews.add(customerView);
     }
@@ -470,8 +498,8 @@ public class Consultant {
             CustomerView customerView = new CustomerView(customer.getCustomerName(),
                                                             lookupAddress( customer.getAddressId() ).getPhone(),
                                                             lookupAddress( customer.getAddressId() ).getAddress(),
-                                                            lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCityName(),
+                                                            lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
             allCustomerViews.add(customerView);
         }

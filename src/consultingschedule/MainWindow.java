@@ -382,7 +382,7 @@ public class MainWindow {
                         yes,
                         no);
 
-                alert.setTitle("Date format warning");
+                alert.setTitle("Confirm Customer Delete");
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.orElse(no) == yes) {
