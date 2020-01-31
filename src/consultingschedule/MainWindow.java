@@ -10,19 +10,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Math.abs;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -45,7 +39,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -64,7 +57,7 @@ public class MainWindow {
         labelName.setId("big-label");
         hboxGreeting = new HBox(labelName);
         hboxGreeting.setAlignment(Pos.CENTER);
-        //hboxGreeting.setId("greeting-hbox");
+
         hboxGreeting.setBackground(new Background(new BackgroundFill(
                Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
         
@@ -97,75 +90,10 @@ public class MainWindow {
         
         consultant = new Consultant();
 
-        Appointment appointment = new Appointment(1,
-                                                1,
-                                                1,
-                                                "title",
-                                                "description",
-                                                "location",
-                                                "contact",
-                                                "type",
-                                                "url",
-                                                LocalDateTime.now(),
-                                                LocalDateTime.now());
-        
-        Appointment appointment2 = new Appointment(2,
-                                                2,
-                                                2,
-                                                "title2",
-                                                "description2",
-                                                "location2",
-                                                "contact2",
-                                                "type2",
-                                                "url2",
-                                                LocalDateTime.now(),
-                                                LocalDateTime.now());
-
-        //consultant.addAppointment(appointment);
-        //consultant.addAppointment(appointment2);
-        
-        Customer customer = new Customer(1,"Matt",1);
-        Customer customer2 = new Customer(2,"Ben",2);
-        //consultant.addCustomer(customer);
-        //consultant.addCustomer(customer2);
-        
-        Address address = new  Address(1,
-                                        "add 1",
-                                        "add 2",
-                                        1,
-                                        "123456",
-                                        "111-222-3333");
-        Address address2 = new  Address(2,
-                                        "add 1",
-                                        "add 2",
-                                        2,
-                                        "123456",
-                                        "111-222-3333");
-        //consultant.addAddress(address);
-        //consultant.addAddress(address2);
-                
-        City city = new City(1,
-                            "Kansas City",
-                            1);
-        City city2 = new City(2,
-                            "Kansas City",
-                            2);
-        //consultant.addCity(city);
-        //consultant.addCity(city2);
-        
-        Country country = new Country(1,
-                                        "Merica");
-        Country country2 = new Country(2,
-                                        "Merica");
-        //consultant.addCountry(country);
-        //consultant.addCountry(country2);
     } 
     
     public void LoadDataAndGenerateWindow()
     {
-        //AppointmentView must be created before customers
-        //this is because the customerView is populated using the customerId
-        //provided in the appointments
         tvAppointments = CreateAppointmentTV();
         tvCustomers = CreateCustomerTV();
         calendarView = CreateCalendarView();
@@ -193,7 +121,8 @@ public class MainWindow {
         
         labelName.setText("Hello, " + user + ". Select from the options below.");
         
-        CheckUpcomingAppointments();
+        //CheckUpcomingAppointments();
+        
         //write to text file
         try{
             WriteToActivityLog();
@@ -206,6 +135,7 @@ public class MainWindow {
             ioAlert.setContentText(e.getMessage());
             ioAlert.showAndWait();
         }
+        
     }
     
     public void WriteToActivityLog() throws IOException{
@@ -365,13 +295,15 @@ public class MainWindow {
         Button btnAdd = new Button("Add");
         btnAdd.setId("interaction-button");
         btnAdd.setOnAction(e -> { 
-            customerWindow = new CustomerWindow(this,consultant);
+            //customerWindow = new CustomerWindow(this,consultant);
+            if(selectedCategory == Selected.CUSTOMERS) OpenCustomerWindow();
+            else OpenAppointmentWindow();
         });
         
         Button btnDelete = new Button("Delete");
         btnDelete.setId("interaction-button");
         btnDelete.setOnAction(e -> { 
-            //TODO: Add "are you sure??" and then delete customer and all corrosponding appointments
+
             selectedCustomer = (CustomerView) tvCustomers.getSelectionModel().getSelectedItem();
             if(selectedCustomer != null)
             {
@@ -385,10 +317,7 @@ public class MainWindow {
                 alert.setTitle("Confirm Customer Delete");
                 Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.orElse(no) == yes) {
-                    consultant.deleteCustomer(consultant.lookupCustomer(selectedCustomer.getName()));
-                    //LoadDataAndGenerateWindow();
-                }
+                if (result.orElse(no) == yes) consultant.deleteCustomer(consultant.lookupCustomer(selectedCustomer.getName()));
                 
             }
         });
@@ -432,6 +361,14 @@ public class MainWindow {
                Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
         hbox.setAlignment(Pos.CENTER);
         return hbox;
+    }
+    
+    public void OpenCustomerWindow(){
+        customerWindow = new CustomerWindow(this,consultant);
+    }
+    
+    public void OpenAppointmentWindow(){
+        appointmentWindow = new AppointmentWindow(this,consultant);
     }
     
     public void selectCategoryCustomer()
@@ -539,6 +476,7 @@ public class MainWindow {
     CustomerView selectedCustomer;
     CalendarView calendarView;
     
+    AppointmentWindow appointmentWindow;
     CustomerWindow customerWindow;
     Consultant consultant;
     TableView tvCustomers;

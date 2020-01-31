@@ -64,13 +64,18 @@ public class CustomerWindow {
     {
         mainWindow = main;
         mainWindow.hide();
-        labelHeader.setId("big-label");
+        labelHeader.setId("big-header-label");
+        
+        HBox headerHBox = new HBox(labelHeader);
+        headerHBox.setAlignment(Pos.CENTER);
+        headerHBox.setBackground(new Background(new BackgroundFill(
+               Color.rgb(0, 0, 0), CornerRadii.EMPTY, Insets.EMPTY)));
+        
         stage = new Stage();
         scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         
         Button btnSave = new Button("Save");
         btnSave.setOnAction(e -> { 
-            //TODO: Add or Modify Customer
             if( ValidateInput() ){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "You can't have an empty input.");
                 alert.showAndWait();
@@ -79,7 +84,6 @@ public class CustomerWindow {
                 if(isModify) ModifyExistingCustomer();
                 else CreateNewCustomer();
             }
-            
         });
         
         Button btnCancel = new Button("Cancel");
@@ -89,16 +93,21 @@ public class CustomerWindow {
         });
 
         HBox btnHBox = new HBox(btnSave,btnCancel);
+        
+        
+        Label copyrightLabel = new Label("Copyright ® 2019 Matt Pfeiffer Consulting");
+        copyrightLabel.setId("copyright-label");
+        copyrightLabel.setAlignment(Pos.CENTER);
+        copyrightLabel.setMaxWidth(Double.MAX_VALUE);
+        
 
-        VBox view = new VBox(labelHeader,gridPane,btnHBox);
+        VBox view = new VBox(headerHBox,gridPane,btnHBox,copyrightLabel);
         view.setAlignment(Pos.CENTER);
         view.setBackground(new Background(new BackgroundFill(
                Color.rgb(255, 255, 255), CornerRadii.EMPTY, Insets.EMPTY)));
         
         root.getChildren().add(view);
-        
         stage.setScene(scene);
-        
         stage.show();
     }
 
@@ -193,10 +202,7 @@ public class CustomerWindow {
             consultant.deleteCustomerView(customerView);
             consultant.AddCustomerToView(modifiedCustomer);
         }
-        
-        
-        
-        
+
         mainWindow.show();
         stage.hide();
     }
@@ -268,8 +274,6 @@ public class CustomerWindow {
     }
 
     Consultant consultant;
-    
-    
     boolean isModify = false;
     GridPane gridPane;
     Label labelHeader;

@@ -118,6 +118,11 @@ and open the template in the editor.
 #big-label {
    -fx-font-size: 24px;
 }
+#big-header-label {
+   -fx-font-size: 24px;
+   -fx-text-fill: white;
+}
+
 
 #day-label {
    -fx-font-size: 12px;
@@ -150,4 +155,25 @@ and open the template in the editor.
   -fx-border-insets: 10px;
   -fx-background-insets: 5px;
   -fx-border-color: black;
+}
+
+#type-textfield{
+    -fx-pref-width: 100px;
+}
+
+.date-picker .text-field {
+    -fx-border-insets: 0px;
+    -fx-background-insets: 0px;
+    -fx-background-color: white;
+    /*-fx-background-color: #e6e6e6;*/
+}
+
+.text-area{
+    -fx-pref-width: 300px;
+    -fx-pref-height: 100px;
+    -fx-padding: 0px;
+    -fx-border-insets: 10px;
+    -fx-background-insets: 5px;
+    -fx-border-color: black;
+    -fx-background-color: white;
 }
