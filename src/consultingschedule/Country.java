@@ -70,7 +70,6 @@ public class Country {
     
     public int executeCountrySQLStatement(Country myCountry, Connection connection, String sqlStatement, boolean isUpdate) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
-        //statement.setInt(1, myCountry.getCountryId());
         statement.setString(1, myCountry.getCountryName());
         statement.setDate(2, java.sql.Date.valueOf( LocalDate.now() ) );
         statement.setString(3, "Admin");
@@ -101,51 +100,4 @@ public class Country {
         }
         return false;
     }
-
 }
-    
-    /*
-    private LocalDate createDate;
-    private String createdBy;
-    private LocalDateTime lastUpdate;
-    private String lastUpdateBy;
-    */
-    
-    /*
-    createDate = new java.sql.Date(date.getTime()).toLocalDate();
-    createdBy = creater;
-    lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
-    lastUpdateBy = creater;
-    */
-    
-    /*
-    public LocalDate getDateAdded(){
-        return createDate;
-    }
-    public String getCreator(){
-        return createdBy;
-    }
-    public LocalDateTime getLastUpdate(){
-        return lastUpdate;
-    }
-    public String getLastUpdateBy(){
-        return lastUpdateBy;
-    }
-    */
-    
-    /*
-    public void setDateAdded(Date date){
-        createDate = new java.sql.Date(date.getTime()).toLocalDate();
-    }
-    public void setCreator(String creator){
-        createdBy = creator;
-    }
-    public void setUpdateTime(Timestamp updateTime){
-        lastUpdate = new java.sql.Timestamp(updateTime.getTime()).toLocalDateTime();
-    }
-    public void setUpdatedBy(String updatedBy){
-        lastUpdateBy = updatedBy;
-    }
-    */
-    
-

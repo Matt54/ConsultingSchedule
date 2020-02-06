@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package consultingschedule;
 
 import javafx.geometry.HPos;
@@ -24,10 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-/**
- *
- * @author macbook
- */
 public class CustomerWindow {
     
     CustomerWindow(MainWindow main, Consultant _consultant)
@@ -156,15 +147,12 @@ public class CustomerWindow {
             }
         }
         
-        //boolean requiresUpdate = false;
-        
         if( !newCountry.getCountryName().equals(customerView.getCountry()) )
         {
             Country modifiedCountry = consultant.lookupCountry(customerView.getCountry());
             modifiedCountry.setCountryName(newCountry.getCountryName());
             modifiedCountry.addToDB();
             newCity.setCountryId(modifiedCountry.getCountryId());
-            //modifiedCountry.updateDB();
         }
         
         if( !newCity.getCityName().equals(customerView.getCity()) 

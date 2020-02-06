@@ -52,15 +52,6 @@ public class Appointment {
         url = _url;
         start = _start;
         end = _end;
-
-        // new java.sql.Timestamp(_start.getTime()).toLocalDateTime();
-        //new java.sql.Timestamp(_end.getTime()).toLocalDateTime();
-        /*
-        createDate = new java.sql.Date(date.getTime()).toLocalDate(); //Who cares about this in business logic of app?
-        createdBy = creater;
-        lastUpdate = new java.sql.Timestamp(time.getTime()).toLocalDateTime();
-        lastUpdateBy = creater;
-        */
     }
     
     public Integer getAppointmentId(){
@@ -160,7 +151,9 @@ public class Appointment {
         try {
             int success = executeAppointmentSQLStatement(this,
                     connection,
-                    "UPDATE user SET city=?, countryId=?, createDate=?, createdBy=?, lastUpdate=?, lastUpdateBy=? WHERE appointmentId=?",
+                    "UPDATE appointment SET customerId=?, userId=?, title=?, description=?, location=?,"
+                            + " contact=?, type=?, url=?, start=?, end=?,"
+                            + " createDate=?, createdBy=?, lastUpdate=?, lastUpdateBy=? WHERE appointmentId=?",
                     true);
           if(success == 1) {
             return true;
@@ -214,55 +207,3 @@ public class Appointment {
     }
     
 }
-
-
-    /*
-    
-    */
-
-    /*
-    
-    */
-
-    /*
-    
-    public LocalDate getDateAdded(){
-        return createDate;
-    }
-    public String getCreator(){
-        return createdBy;
-    }
-    public LocalDateTime getLastUpdate(){
-        return lastUpdate;
-    }
-    public String getLastUpdateBy(){
-        return lastUpdateBy;
-    }
-    */
-
-    /*
-    
-    */
-
-    /*
-    
-    */
-
-    /*
-    
-    
-    public void setDateAdded(Date date){
-        createDate = new java.sql.Date(date.getTime()).toLocalDate();
-    }
-    public void setCreator(String creator){
-        createdBy = creator;
-    }
-    public void setUpdateTime(Timestamp updateTime){
-        lastUpdate = new java.sql.Timestamp(updateTime.getTime()).toLocalDateTime();
-    }
-    public void setUpdatedBy(String updatedBy){
-        lastUpdateBy = updatedBy;
-    }
-    */
-    
-

@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package consultingschedule;
 
 import static consultingschedule.ConsultingSchedule.connectToDB;
+import static java.lang.Math.abs;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,15 +9,16 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
-/**
- *
- * @author matthewp
- */
 public class Consultant {
     ObservableList<Country> allCountries;
     ObservableList<City> allCities;
@@ -30,7 +27,10 @@ public class Consultant {
     ObservableList<CustomerView> allCustomerViews;
     ObservableList<Appointment> allAppointments;
     ObservableList<AppointmentView> allAppointmentViews;
+    ObservableList<ReportTypeView> allReportTypeViews;
+    ObservableList<User> allUsers;
     
+
     int userId;
     
     Consultant(){
@@ -41,6 +41,8 @@ public class Consultant {
         allCustomerViews = FXCollections.observableArrayList();
         allAppointments = FXCollections.observableArrayList();
         allAppointmentViews = FXCollections.observableArrayList();
+        allReportTypeViews = FXCollections.observableArrayList();
+        allUsers = FXCollections.observableArrayList();
     }
     
     public void setUserId(Integer id){
@@ -54,6 +56,33 @@ public class Consultant {
         PopulateAddressesFromDB();
         PopulateCustomersFromDB();
         PopulateAppointmentsFromDB();
+        PopulateUsersFromDB();
+    }
+    
+    public void PopulateUsersFromDB() {
+        Connection connection = connectToDB();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM user");
+            while(rs.next())
+            {
+                AddUser( ExtractUserData(rs) );
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private User ExtractUserData(ResultSet rs) throws SQLException {
+        User user = new User();
+        user.setUserId(rs.getInt("userId") );
+        user.setUserName(rs.getString("userName") );
+        user.setPassword(rs.getString("password") );
+        return user;
+    }
+    
+    public void AddUser(User user){
+        allUsers.add(user);
     }
     
     public void PopulateCustomersFromDB() {
@@ -261,7 +290,7 @@ public class Consultant {
         {
             boolean found = false;
             for(Address address : allAddresses){
-                if(city.getCityId() == address.getCityId()) found = true;
+                if(Objects.equals(city.getCityId(), address.getCityId())) found = true;
             }
             if(!found) deleteThisCity = city;
         }
@@ -306,7 +335,7 @@ public class Consultant {
         {
             boolean found = false;
             for(Customer customer : allCustomers){
-                if(address.getAddressId() == customer.getAddressId()) found = true;
+                if(Objects.equals(address.getAddressId(), customer.getAddressId())) found = true;
             }
             if(!found) deleteThisAddress = address;
         }
@@ -365,10 +394,6 @@ public class Consultant {
         return allCustomers;
     }
     
-    
-    
-    
-    
     //need another method to search for any appointment with constomer id to delete
     //that other method will run over and over until it loops without finding any appointments to delete
     public boolean searchAndDestoryAppointment(int id)
@@ -408,6 +433,24 @@ public class Consultant {
         }
         return null;
     }
+    public Appointment lookupAppointment(Integer appointmentId){
+        for(Appointment appointment : allAppointments){
+            if(appointment.getAppointmentId().equals(appointmentId)) return appointment;
+        }
+        return null;
+    }
+    public void AddAppointmentToView(Appointment apt){
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+
+        AppointmentView aptView = new AppointmentView(apt.getTitle(),
+                                                        lookupCustomer(apt.getCustomerId()).getCustomerName(),
+                                                        apt.getLocation(),
+                                                        apt.getType(),
+                                                        dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())), //"MM-dd-yyyy HH:mm"
+                                                        dateFormat.format(Date.from( apt.getEndTime().atZone( ZoneId.systemDefault()).toInstant())));
+        allAppointmentViews.add(aptView);
+    }
+    
     public void updateAppointment(int index, Appointment selectedAppointment){
         allAppointments.set(index, selectedAppointment);
     }
@@ -458,6 +501,13 @@ public class Consultant {
         return allAppointmentViews;
     }
     
+    public AppointmentView lookupAppointmentView(String appointmentTitle){
+        for(AppointmentView appointmentView : allAppointmentViews){
+            if(appointmentView.getTitle().equals(appointmentTitle)) return appointmentView;
+        }
+        return null;
+    }
+    
     public CustomerView lookupCustomerView(String customerName){
         for(CustomerView customerView : allCustomerViews){
             if(customerView.getName().equals(customerName)) return customerView;
@@ -505,6 +555,116 @@ public class Consultant {
         }
         
         return allCustomerViews;
+    }
+    
+    public void populateReportTypeViews(){
+
+        
+        List<String> appointmentTypes = new ArrayList<>();
+        
+        //Determine how many appointment types there are
+        for (Appointment appointment : getAllAppointments()) 
+        { 
+            if(!appointmentTypes.contains(appointment.getType())) appointmentTypes.add(appointment.getType());
+        }
+
+        //Determine how many dates there are for each appointment and count the appointments at each date
+        for(String type : appointmentTypes)
+        {
+            List<String> dates = new ArrayList<>();
+            List<Integer> numberOfTypeAtDates = new ArrayList<>();
+            
+            for (Appointment appointment : getAllAppointments()) 
+            { 
+                if(appointment.getType().equals(type))
+                {
+                    String month = appointment.getStartTime().getMonth().toString();
+                    String year = Integer.toString(appointment.getStartTime().getYear());
+                    String date = month + " , " + year;
+                    if(!dates.contains(date)) 
+                    {
+                        dates.add(date);
+                        numberOfTypeAtDates.add(1);
+                    }
+                    else
+                    {
+                        numberOfTypeAtDates.set(dates.indexOf(date), 
+                        numberOfTypeAtDates.get(dates.indexOf(date)) + 1);
+                    }
+                }
+            }
+            
+            for (int i = 0; i < dates.size(); i++) {
+                ReportTypeView reportTypeView = new ReportTypeView(type,dates.get(i),Integer.toString(numberOfTypeAtDates.get(i)));
+                allReportTypeViews.add(reportTypeView);
+            }
+        }
+    }
+    
+    public ObservableList<ReportTypeView> getAllReportTypeViews(){
+        return allReportTypeViews;
+    }
+    
+    public String GetConsultantReport(){
+        DateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm a");
+        String consultantReport = "Consultant Schedule Report";
+
+        for(User user : allUsers)
+        {
+            consultantReport += System.getProperty("line.separator");
+            consultantReport += System.getProperty("line.separator");
+            consultantReport += "Upcoming Appointments for " + user.getUserName() + ":";
+
+            Collections.sort(allAppointments, (Appointment m1, Appointment m2) -> m1.getStartTime().compareTo(m2.getStartTime())); // 1 line llamda expression vs 4 lines with anonymous inner class creation
+            
+            for (Appointment apt : getAllAppointments()) 
+            { 
+                if( user.getUserId().equals(apt.getUserId()) )
+                {
+                    consultantReport += System.getProperty("line.separator");
+                    consultantReport += dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())) + ": "
+                            + apt.getTitle() + " (" + apt.getType() + ") "
+                            + " with " + lookupCustomer(apt.getCustomerId()).getCustomerName()
+                            + " at " + apt.getLocation();       
+                }
+            }
+        }
+        
+        return consultantReport;
+    }
+    
+    public String GetHoursReport(){
+        String hoursReport = "Number of Hours Scheduled by Consultant";
+        
+        int hoursTotal = 0;
+        int minutesTotal = 0;
+        
+        for(User user : allUsers)
+        {
+            for (Appointment apt : getAllAppointments()) 
+            { 
+                int hours = apt.getEndTime().getHour() - apt.getStartTime().getHour();
+                int minutes = apt.getEndTime().getMinute() - apt.getStartTime().getMinute();
+                if(minutes < 0)
+                {
+                    hours -= 1;
+                    minutes = 60 - minutes;
+                }
+                hoursTotal += hours;
+                minutesTotal += minutes;
+                if(minutes > 60)
+                {
+                    hoursTotal++;
+                    minutesTotal = 0;
+                }
+            }
+            hoursReport += System.getProperty("line.separator");
+            hoursReport += System.getProperty("line.separator");
+            hoursReport += user.getUserName() + " total time: "
+                    + hoursTotal + " hours " + minutesTotal + " minutes.";
+            
+        }
+        return hoursReport;
     }
     
 }

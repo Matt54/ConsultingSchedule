@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package consultingschedule;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
@@ -21,23 +16,26 @@ import javafx.scene.input.KeyCode;
 
 import javax.sql.DataSource;
 
-/**
- *
- * @author matthewp
- */
 
 public class ConsultingSchedule extends Application {
+    
+    MainWindow mainWindow;
+    SignInWindow signInWindow;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         
-        MainWindow mainWindow = new MainWindow();
         
+        
+        //MainWindow mainWindow = new MainWindow();
+        
+        /*
         Connection dbConnection = connectToDB();
         System.out.println(dbConnection);
+        */
         
-        User testUser = new User(1, "name", "password");
+        //User testUser = new User(1, "name", "password");
                 /*,
                 true,
                 java.sql.Date.valueOf(LocalDate.now()),
@@ -45,7 +43,7 @@ public class ConsultingSchedule extends Application {
                 java.sql.Timestamp.valueOf(LocalDateTime.now()));*/
         
         //Insert tested and works
-        insertUser(testUser);
+        //insertUser(testUser);
         
         ///update tested and works
         //testUser.setCreator("GOD");
@@ -66,6 +64,7 @@ public class ConsultingSchedule extends Application {
         //delete tested and works
         //deleteUser(1);
         
+        /*
         Country usa = new Country(1, "USA");
         usa.addToDB();
         
@@ -96,17 +95,21 @@ public class ConsultingSchedule extends Application {
                                             LocalDateTime.now(),
                                             LocalDateTime.now());
         appt1.addToDB();
+        */
         
         
         Locale locale = Locale.getDefault();
-        System.out.println(locale);
         Locale  france = new Locale("fr");
-        System.out.println(languageConvert(france,"Hello"));
         
+        //System.out.println(locale);
+        //System.out.println(languageConvert(france,"Hello"));
         
-        SignInWindow signInWindow = new SignInWindow();
+        mainWindow = new MainWindow();
+        
+        //SignInWindow signInWindow = new SignInWindow();
+        signInWindow = new SignInWindow();
+        
         //signInWindow.show();
-        
         
         SignInWindow.btnSignIn.setDefaultButton(true);
         SignInWindow.btnSignIn.setOnAction(e -> {       
@@ -120,6 +123,11 @@ public class ConsultingSchedule extends Application {
             }
         });
         
+        SetupMainWindow();
+
+    }
+    
+    public void SetupMainWindow(){
         MainWindow.btnSignOut.setOnKeyPressed(event -> {
         if (event.getCode().equals(KeyCode.ENTER)) MainWindow.btnSignOut.fire();
         });
@@ -127,8 +135,8 @@ public class ConsultingSchedule extends Application {
         MainWindow.btnSignOut.setOnAction(e -> { 
             signInWindow.show();
             mainWindow.hide();
+            handleSignOut();
         });
-
     }
     
     public ResourceBundle GetMyResourceBundle(Locale locale){
@@ -145,11 +153,8 @@ public class ConsultingSchedule extends Application {
         CurrentUser currentUser = CurrentUser.getInstance();
         currentUser.setUser(getUserByNameAndPassword(name, pw));
         if (currentUser.getUser() == null) SignInError();
-        else{
-            System.out.println(currentUser.getUser().getUserName());
-            return true;
-        }
-        return false;
+        else return true;
+        return false;   //TODO: we should probably use a thrown exception for the sign in error
     }
     
     void SignInError()
@@ -160,6 +165,14 @@ public class ConsultingSchedule extends Application {
         errorAlert.showAndWait();
     }
     
+    public void handleSignOut()
+    {
+        mainWindow = new MainWindow();
+        SetupMainWindow();
+    }
+    
+    
+    /*
     public interface UserDao{
         User getUser();
         Set<User> getAllUsers();
@@ -168,6 +181,7 @@ public class ConsultingSchedule extends Application {
         boolean updateUser();
         boolean deleteUser();
     }
+    */
     
     public User getUserByNameAndPassword(String name, String pw) {
         Connection connection = connectToDB();
@@ -225,28 +239,12 @@ public class ConsultingSchedule extends Application {
         user.setUserId( rs.getInt("userId") );
         user.setUserName( rs.getString("userName") );
         user.setPassword( rs.getString("password") );
-        //user.setStatus(rs.getBoolean("active"));
-        //user.setDateAdded(rs.getDate("createDate"));
-        //user.setCreator(rs.getString("createdBy"));
-        //user.setUpdateTime(rs.getTimestamp("lastUpdate"));
-        //user.setUpdatedBy(rs.getString("lastUpdateBy"));
         return user;
     }
     
     public boolean insertUser(User user){
         Connection connection = connectToDB();
         try {
-            /*
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO user VALUES (NULL, ?, ?, ?)");
-            statement.setInt(1, user.getUserId());
-            statement.setString(2, user.getUserName());
-            statement.setString(3, user.getPassword());
-            statement.setBoolean(4, user.getStatus());
-            statement.setDate(5, java.sql.Date.valueOf(user.getDateAdded()));
-            statement.setString(6, user.getCreator());
-            statement.setTimestamp(7, java.sql.Timestamp.valueOf(user.getLastUpdate()));
-            statement.setString(8, user.getLastUpdateBy());
-            */
             int success = executeUserSQLStatement(user,
                     connection,
                     "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
@@ -281,10 +279,10 @@ public class ConsultingSchedule extends Application {
         statement.setInt(1, user.getUserId());
         statement.setString(2, user.getUserName());
         statement.setString(3, user.getPassword());
-        statement.setBoolean(4, true); //statement.setBoolean(4, user.getStatus());
-        statement.setDate(5, java.sql.Date.valueOf( LocalDate.now() ) ); //statement.setDate(5, java.sql.Date.valueOf(user.getDateAdded()));
+        statement.setBoolean(4, true); 
+        statement.setDate(5, java.sql.Date.valueOf( LocalDate.now() ) );
         statement.setString(6, "Admin");
-        statement.setTimestamp(7, java.sql.Timestamp.valueOf( LocalDateTime.now() ) ); //statement.setTimestamp(7, java.sql.Timestamp.valueOf(user.getLastUpdate()));
+        statement.setTimestamp(7, java.sql.Timestamp.valueOf( LocalDateTime.now() ) );
         statement.setString(8, "Admin");
         if(isUpdate) statement.setInt(9, user.getUserId());
         int success = statement.executeUpdate();

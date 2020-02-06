@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package consultingschedule;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,13 +23,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-/**
- *
- * @author matthewp
- */
 public class CalendarView extends VBox {
 
     //TODO: There's a problem with the weekly view for week 1 when sunday is day 1
+    //^^^ I think this is no longer a problem
     
     Cell[] cells;
     HBox[] rows;
@@ -81,6 +72,11 @@ public class CalendarView extends VBox {
     
     CalendarView(ObservableList<Appointment> Appointments){
         
+        LocalDate dateToday = LocalDate.now();
+        
+        yearNumber = dateToday.getYear();
+        monthNumber = dateToday.getMonthValue();
+        
         allAppointments = Appointments;
         
         Button updateBtn = new Button("Refresh");
@@ -90,7 +86,7 @@ public class CalendarView extends VBox {
         updateBtn.setId("refresh-button");
         
         ComboBox monthsComboBox = new ComboBox(FXCollections.observableArrayList(months)); 
-        monthsComboBox.getSelectionModel().selectFirst();
+        monthsComboBox.getSelectionModel().select(monthNumber - 1);
         
         monthsComboBox.valueProperty().addListener((obs, oldText, newText) -> {
             monthNumber = GetMonthNumber((String)newText);
@@ -121,8 +117,6 @@ public class CalendarView extends VBox {
         header = new HBox(updateBtn, monthsComboBox, yearsComboBox, isWeeklyLabel , isWeeklyCheck,  weeksComboBox);
         
         header.setAlignment(Pos.CENTER);
-        header.setBackground(new Background(new BackgroundFill(
-                    Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
         
         CreateMonthlyCalendar();
     }
@@ -391,7 +385,6 @@ public class CalendarView extends VBox {
             dayIndex = _dayIndex;
             label = new Label( Integer.toString(dayIndex) );
             numAppointments = _numAppointments;
-            //listIds = list;
             Button btn = new Button(numAppointments + " appt");
             btn.setId("button-appointment");
 
@@ -423,15 +416,10 @@ public class CalendarView extends VBox {
         }
         
         Label label;
-        //Button btn;
-        
         int dayIndex;
         int numAppointments;
         List<Integer> listIds;
-        //int[] appointmentID;
-        
         String dayName;
-        
         VBox view;
         Boolean hasAppointment = false;
         Boolean isHeader = false;

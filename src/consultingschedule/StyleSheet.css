@@ -1,13 +1,3 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Dec 13, 2019, 2:06:26 PM
-    Author     : matthewp
-*/
-
 .table-column {
   -fx-alignment: CENTER;
 }
@@ -17,7 +7,6 @@ and open the template in the editor.
 }
 
 .grid-pane{
-  /*-fx-padding: 10px;*/
   -fx-min-height: 170px ;
 }
 
@@ -59,6 +48,10 @@ and open the template in the editor.
 
 #combobox-years{
     -fx-pref-width: 120px;
+}
+
+#combobox-reports{
+    -fx-pref-width: 330px;
 }
 
 #header-button {
@@ -165,7 +158,6 @@ and open the template in the editor.
     -fx-border-insets: 0px;
     -fx-background-insets: 0px;
     -fx-background-color: white;
-    /*-fx-background-color: #e6e6e6;*/
 }
 
 .text-area{
@@ -176,4 +168,9 @@ and open the template in the editor.
     -fx-background-insets: 5px;
     -fx-border-color: black;
     -fx-background-color: white;
+}
+
+#textarea-reports{
+    -fx-pref-width: 615px;
+    -fx-pref-height: 300px;
 }
