@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,8 +33,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -51,28 +50,10 @@ public class MainWindow {
         stage.setTitle("Consulting Schedule Application By Matt Pfeiffer");
         scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         labelName.setId("big-label");
-        hboxGreeting = new HBox(labelName);
-        hboxGreeting.setAlignment(Pos.CENTER);
-
-        hboxGreeting.setBackground(new Background(new BackgroundFill(
-               Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
         
-        HBox categoryHeader = CreateCategoryHeader();
+        categoryHeader = CreateCategoryHeader();
         interactionHeader = CreateTableInteractionHeader();
         reportsHeader = CreateReportsHeader();
-        
-        
-        /*
-        Image gif = new Image("arrows_2.gif");
-        ImageView gifView = new ImageView(gif);
-        gifView.setFitWidth(615);
-        gifView.setFitHeight(100);
-
-        hboxImage = new HBox(gifView);
-        hboxImage.setAlignment(Pos.CENTER);
-        hboxImage.setBackground(new Background(new BackgroundFill(
-               Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
-        */
         
         //copyright label set at full width
         copyrightLabel = new Label("Copyright ® 2019 Matt Pfeiffer Consulting");
@@ -80,8 +61,6 @@ public class MainWindow {
         copyrightLabel.setAlignment(Pos.CENTER);
         copyrightLabel.setMaxWidth(Double.MAX_VALUE);
         
-        //view = new VBox(hboxGreeting,categoryHeader,hboxImage,copyrightLabel);
-        //view = new VBox(hboxGreeting,categoryHeader,copyrightLabel);
         view = new VBox(categoryHeader,copyrightLabel);
         
         view.setAlignment(Pos.CENTER);
@@ -89,7 +68,7 @@ public class MainWindow {
         root.getChildren().add(view);
         
         stage.setScene(scene);
-        
+        stage.setResizable(false);
         consultant = new Consultant();
 
     } 
@@ -249,6 +228,8 @@ public class MainWindow {
         tv.setPrefWidth(615);
         tv.setPrefHeight(300);
         
+        
+        
         return tv;
     }
     
@@ -332,10 +313,9 @@ public class MainWindow {
         
         Button btn = new Button("Run Report");
         btn.setOnAction(e -> { 
-            view.getChildren().remove(reportsHeader);
-            view.getChildren().remove(tvReportType);
-            view.getChildren().remove(copyrightLabel);
-            view.getChildren().remove(taReports);
+            
+            view.getChildren().clear();
+            view.getChildren().add(categoryHeader);
             
             if(comboBox.getSelectionModel().getSelectedItem().equals("Number of Hours Scheduled by Consultant")) 
             {
@@ -357,11 +337,6 @@ public class MainWindow {
         
         HBox hbox = new HBox(headerLabel, comboBox, btn);
         
-        /*
-        hbox.setBackground(new Background(new BackgroundFill(
-               Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
-        */
-        
         hbox.setAlignment(Pos.CENTER);
         return hbox;
     }
@@ -381,7 +356,6 @@ public class MainWindow {
         Button btnAdd = new Button("Add");
         btnAdd.setId("interaction-button");
         btnAdd.setOnAction(e -> { 
-            //customerWindow = new CustomerWindow(this,consultant);
             if(selectedCategory == Selected.CUSTOMERS) OpenCustomerWindow();
             else OpenAppointmentWindow();
         });
@@ -504,96 +478,54 @@ public class MainWindow {
     
     public void selectCategoryCustomer()
     {
-        if(selectedCategory != Selected.CUSTOMERS)
-        {
-            view.getChildren().remove(hboxGreeting);
-            view.getChildren().remove(hboxImage);
-            view.getChildren().remove(copyrightLabel);
-            view.getChildren().remove(calendarView);
-            view.getChildren().remove(tvAppointments);
-            view.getChildren().remove(interactionHeader);
-            view.getChildren().remove(tvReportType);
-            view.getChildren().remove(reportsHeader);
-            view.getChildren().remove(taReports);
-            tfSearch.setText("");
-            tfSearch.setPromptText("search name");
-            headerLabel.setText("Customers:");
-            
-            view.getChildren().add(tvCustomers);
-            view.getChildren().add(interactionHeader);
-            view.getChildren().add(copyrightLabel);
-            stage.sizeToScene();
-        }
+        view.getChildren().clear();
+        tfSearch.setText("");
+        tfSearch.setPromptText("search for customer name");
+        headerLabel.setText("Customers:");
+        view.getChildren().add(categoryHeader);
+        view.getChildren().add(tvCustomers);
+        Platform.runLater(()->tvCustomers.refresh()); //this llambda fixes a misalignment bug between the rows and header of the tableview
+        view.getChildren().add(interactionHeader);
+        view.getChildren().add(copyrightLabel);
+        stage.sizeToScene();
         selectedCategory = Selected.CUSTOMERS;
     }
     
     public void selectCategoryCalendar()
     {
-        if(selectedCategory != Selected.CALENDAR)
-        {
-            calendarView = CreateCalendarView(); //to ensure that we have updated the calendar
-            view.getChildren().remove(hboxGreeting);
-            view.getChildren().remove(hboxImage);
-            view.getChildren().remove(copyrightLabel);
-            view.getChildren().remove(tvCustomers);
-            view.getChildren().remove(tvAppointments);
-            view.getChildren().remove(interactionHeader);
-            view.getChildren().remove(tvReportType);
-            view.getChildren().remove(reportsHeader);
-            view.getChildren().remove(taReports);
-            
-            view.getChildren().add(calendarView);
-            view.getChildren().add(copyrightLabel);
-            stage.sizeToScene();
-        }
+        calendarView = CreateCalendarView(); //to ensure that we have updated the calendar
+        view.getChildren().clear();
+        view.getChildren().add(categoryHeader);
+        view.getChildren().add(calendarView);
+        view.getChildren().add(copyrightLabel);
+        stage.sizeToScene();
         selectedCategory = Selected.CALENDAR;
     }
     
     public void selectCategoryAppointment()
     {
-        if(selectedCategory != Selected.APPOINTMENTS)
-        {
-            view.getChildren().remove(hboxGreeting);
-            view.getChildren().remove(hboxImage);
-            view.getChildren().remove(copyrightLabel);
-            view.getChildren().remove(calendarView);
-            view.getChildren().remove(tvCustomers);
-            view.getChildren().remove(interactionHeader);
-            view.getChildren().remove(tvReportType);
-            view.getChildren().remove(reportsHeader);
-            view.getChildren().remove(taReports);
-            
-            tfSearch.setText("");
-            tfSearch.setPromptText("search title");
-            headerLabel.setText("Appointments:");
-            
-            view.getChildren().add(tvAppointments);
-            view.getChildren().add(interactionHeader);
-            view.getChildren().add(copyrightLabel);
-            stage.sizeToScene();
-        }
+        view.getChildren().clear();
+        tfSearch.setText("");
+        tfSearch.setPromptText("search for appointment title");
+        headerLabel.setText("Appointments:");
+        view.getChildren().add(categoryHeader);
+        view.getChildren().add(tvAppointments);
+        Platform.runLater(()->tvAppointments.refresh()); //this llambda fixes a misalignment bug between the rows and header of the tableview
+        view.getChildren().add(interactionHeader);
+        view.getChildren().add(copyrightLabel);
+        stage.sizeToScene();
         selectedCategory = Selected.APPOINTMENTS;
     }
     
     public void selectCategoryReports()
     {
-        if(selectedCategory != Selected.REPORTS)
-        {
-            view.getChildren().remove(hboxGreeting);
-            view.getChildren().remove(hboxImage);
-            view.getChildren().remove(copyrightLabel);
-            view.getChildren().remove(calendarView);
-            view.getChildren().remove(tvAppointments);
-            view.getChildren().remove(tvCustomers);
-            view.getChildren().remove(interactionHeader);
-            view.getChildren().remove(reportsHeader);
-            view.getChildren().remove(taReports);
-            
-            view.getChildren().add(tvReportType);
-            view.getChildren().add(reportsHeader);
-            view.getChildren().add(copyrightLabel);
-            stage.sizeToScene();
-        }
+        view.getChildren().clear();
+        view.getChildren().add(categoryHeader);
+        Platform.runLater(()->tvReportType.refresh()); //this llambda fixes a misalignment bug between the rows and header of the tableview
+        view.getChildren().add(tvReportType);
+        view.getChildren().add(reportsHeader);
+        view.getChildren().add(copyrightLabel);
+        stage.sizeToScene();
         selectedCategory = Selected.REPORTS;
     }
     
@@ -613,7 +545,7 @@ public class MainWindow {
         CALENDAR,
         REPORTS
     }
-    Selected selectedCategory = Selected.NONE;
+    Selected selectedCategory = Selected.CALENDAR;
     
     AppointmentView selectedAppointment;
     CustomerView selectedCustomer;
@@ -631,10 +563,10 @@ public class MainWindow {
     Label headerLabel;
     TextField tfSearch;
     VBox view;
-    HBox hboxGreeting;
     HBox hboxImage;
     HBox interactionHeader;
     HBox reportsHeader;
+    HBox categoryHeader;
     Label labelName = new Label();
     Label copyrightLabel;
     public static Button btnSignOut;

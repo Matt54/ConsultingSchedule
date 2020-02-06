@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -22,7 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -38,16 +36,16 @@ public class SignInWindow extends VBox {
         scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         
         //header image
-        Image image = new Image("LogoDraft1.png");
+        Image image = new Image("SignInGraphic.png");
         ImageView imageView = new ImageView(image);
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        //Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         //double AspectRatio = imageView.getFitWidth() / imageView.getFitHeight();
         
         //imageView.setFitHeight(200);
         
         Image gif = new Image("globe_small.gif");
         ImageView gifView = new ImageView(gif);
-        gifView.setX(55);
+        gifView.setX(35);
         gifView.setY(80);
         double width = 75;
         gifView.setFitWidth(width);
@@ -127,6 +125,7 @@ public class SignInWindow extends VBox {
         imageView.setFitWidth(view.getWidth());
         imageView.setPreserveRatio(true);
         stage.sizeToScene();
+        stage.setResizable(false);
         //stage.setScene(scene);
         //show();
     }

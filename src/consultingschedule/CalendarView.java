@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import javafx.beans.binding.Bindings;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,18 +17,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class CalendarView extends VBox {
 
-    //TODO: There's a problem with the weekly view for week 1 when sunday is day 1
-    //^^^ I think this is no longer a problem
-    
     Cell[] cells;
     HBox[] rows;
     HBox header;
@@ -184,7 +185,35 @@ public class CalendarView extends VBox {
             CreateMonthlyCalendar();
         }
     }
-    
+
+    private Color GetColorFromIndex(int index, boolean isHeader){
+        int base = 250;
+        
+        if(!isHeader) return Color.rgb(base, base, base);
+        else return Color.rgb(base - 25, base - 25, base - 25);
+        
+        /*
+        if(index % 2 == 0) return Color.rgb(base, base, base);
+        else return Color.rgb(base - 25, base - 25, base - 25);
+        */
+        
+        /*
+        int base = 230;
+        int base2 = 255;
+        
+        if(isHeader)
+        {
+            if(index % 2 == 0) return Color.rgb(base, base, base);
+            else return Color.rgb(base - 10, base - 10, base - 10);
+        }
+        else
+        {
+            if(index % 2 == 0) return Color.rgb(base2, base2, base2);
+            else return Color.rgb(base2 - 10, base2 - 10, base2 - 10);
+        }
+        */
+    }
+
     private void CreateMonthlyCalendar()
     {
         getChildren().clear();
@@ -213,9 +242,16 @@ public class CalendarView extends VBox {
                 cells[4] = new Cell("Thursday");
                 cells[5] = new Cell("Friday");
                 cells[6] = new Cell("Saturday");
-                for (int i = 0; i < 7; i++) rows[r].getChildren().add( cells[i].getView() );
+                for (int i = 0; i < 7; i++) 
+                {
+                    cells[i].getView().setBackground(new Background(new BackgroundFill(
+                            GetColorFromIndex(i,true), CornerRadii.EMPTY, Insets.EMPTY)));
+                    rows[r].getChildren().add( cells[i].getView() );
+                }
+                /*
                 rows[r].setBackground(new Background(new BackgroundFill(
-                    Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
+                    Color.rgb(220, 220, 220), CornerRadii.EMPTY, Insets.EMPTY)));
+                */
             }
             else
             {
@@ -247,7 +283,12 @@ public class CalendarView extends VBox {
                             dayNum++;
                         }
                         else cells[index] = new Cell();
+                        
                     }
+                    
+                    cells[index].getView().setBackground(new Background(new BackgroundFill(
+                            GetColorFromIndex(i,false), CornerRadii.EMPTY, Insets.EMPTY)));
+                    
                     rows[r].getChildren().add( cells[index].getView() );
                 }
             }
@@ -282,16 +323,23 @@ public class CalendarView extends VBox {
                 } while (localDate.getDayOfWeek().getValue() != java.time.DayOfWeek.SUNDAY.getValue());
             }
         }
-
         
         java.time.DayOfWeek dayOfWeek = localDate.getDayOfWeek();
-        int firstDayValue = dayOfWeek.getValue();
-        if(firstDayValue == 7) firstDayValue = 0;
         int daysInMonth = localDate.lengthOfMonth();
-            
         
-        if(weekNumber != 0) dayNum = daySearch - 1;
-        else dayNum = 1;
+        
+        int firstDayValue = dayOfWeek.getValue();
+
+        if(weekNumber != 0) 
+        {
+            dayNum = daySearch - 1;
+            if(firstDayValue == 7) dayNum += 7;
+        }
+        else 
+        {
+            if(firstDayValue == 7) firstDayValue = 0;
+            dayNum = 1;
+        }
         
         HBox[] rows = new HBox[numRows];
 
@@ -307,9 +355,16 @@ public class CalendarView extends VBox {
                 cells[4] = new Cell("Thursday");
                 cells[5] = new Cell("Friday");
                 cells[6] = new Cell("Saturday");
-                for (int i = 0; i < 7; i++) rows[r].getChildren().add( cells[i].getView() );
+                for (int i = 0; i < 7; i++) 
+                {
+                    rows[r].getChildren().add( cells[i].getView() );
+                    cells[i].getView().setBackground(new Background(new BackgroundFill(
+                            GetColorFromIndex(i,true), CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+                /*
                 rows[r].setBackground(new Background(new BackgroundFill(
                     Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
+                */
             }
             else
             {
@@ -342,6 +397,8 @@ public class CalendarView extends VBox {
                         }
                         else cells[index] = new Cell();
                     }
+                    cells[index].getView().setBackground(new Background(new BackgroundFill(
+                            GetColorFromIndex(i,false), CornerRadii.EMPTY, Insets.EMPTY)));
                     rows[r].getChildren().add( cells[index].getView() );
                 }
             }
@@ -385,8 +442,22 @@ public class CalendarView extends VBox {
             dayIndex = _dayIndex;
             label = new Label( Integer.toString(dayIndex) );
             numAppointments = _numAppointments;
-            Button btn = new Button(numAppointments + " appt");
+
+            Image image = new Image("calendar.png");
+            imageView = new ImageView(image);
+            
+            Image imageHover = new Image("calendar_hover.png");
+            imageViewHover = new ImageView(imageHover);
+
+            Button btn = new Button();
+            btn.setGraphic(imageView);
             btn.setId("button-appointment");
+            
+            
+
+            Label aptLabel = new Label( Integer.toString(numAppointments));
+
+            aptLabel.setMouseTransparent(true);
 
             btn.setOnAction(e -> { 
                 Alert appointmentInformation = new Alert(Alert.AlertType.INFORMATION);
@@ -397,17 +468,34 @@ public class CalendarView extends VBox {
                 appointmentInformation.showAndWait();
             });
             
-            view = new VBox(label,btn);
+            
+            
+            StackPane stackPane = new StackPane(btn,aptLabel);
+            btn.setTranslateY(-15);
+            aptLabel.setTranslateY(-10);
+
+            
+            view = new VBox(label,stackPane);
             view.setId("cell");
             SetupCell();
+            imageView.setFitWidth(cw/3);
+            imageView.setFitHeight(cw/3);
+            imageViewHover.setFitWidth(cw/3);
+            imageViewHover.setFitHeight(cw/3);
             view.setAlignment(Pos.TOP_LEFT);
+            
+            btn.graphicProperty().bind(
+                Bindings.when(
+                        btn.hoverProperty()
+                )
+                        .then(imageView)
+                        .otherwise(imageViewHover)
+            );
         }
         
         private void SetupCell()
         {
-            int cw = 100;
             view.setPrefSize(cw, cw);
-            
         }
         
         public VBox getView ()
@@ -415,6 +503,9 @@ public class CalendarView extends VBox {
             return view;
         }
         
+        int cw = 100;
+        ImageView imageViewHover;
+        ImageView imageView;
         Label label;
         int dayIndex;
         int numAppointments;
