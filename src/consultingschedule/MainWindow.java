@@ -96,11 +96,17 @@ public class MainWindow {
     {
         CurrentUser currentUser = CurrentUser.getInstance();
         user = currentUser.getUser().getUserName();
-        
+
         //all data pulling happens here
         consultant.setUserId(currentUser.getUser().getUserId());
         consultant.PopulateFromDB(currentUser.getUser().getUserId());
         consultant.populateReportTypeViews();
+        
+        InformationGenerator infoGen = new InformationGenerator(consultant);
+        //infoGen.CreateRandomCustomers(20, infoGen.ReadCustomerCSVFile());
+        //infoGen.DeleteAllConsultantCustomers();
+        //infoGen.CreateRandomAppointments(200, infoGen.ReadAppointmentCSVFile());
+        //infoGen.ReadAppointmentCSVFile();
         
         LoadDataAndGenerateWindow();
         selectCategoryCalendar();
@@ -250,9 +256,11 @@ public class MainWindow {
         start.setCellValueFactory(new PropertyValueFactory<>("start"));
         tv.getColumns().add(start);
         
+        /*
         TableColumn<AppointmentView, String> endTime = new TableColumn<>("End Time");
         endTime.setCellValueFactory(new PropertyValueFactory<>("end"));
         tv.getColumns().add(endTime);
+        */
         
         TableColumn<AppointmentView, String> customerName = new TableColumn<>("Customer");
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));

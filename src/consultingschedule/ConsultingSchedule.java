@@ -98,6 +98,8 @@ public class ConsultingSchedule extends Application {
         */
         
         
+        
+        
         Locale locale = Locale.getDefault();
         Locale  france = new Locale("fr");
         
