@@ -126,6 +126,8 @@ public class MainWindow {
             ioAlert.showAndWait();
         }
         
+        CheckUpcomingAppointments();
+        
     }
     
     public void WriteToActivityLog() throws IOException{
@@ -312,7 +314,7 @@ public class MainWindow {
     }
     
     public HBox CreateReportsHeader(){
-        headerLabel = new Label("Select Report Type");
+        headerLabel = new Label("Report Type");
         headerLabel.setId("header-label");
         
         ComboBox comboBox = new ComboBox(FXCollections.observableArrayList(reportTypes)); 
@@ -325,7 +327,7 @@ public class MainWindow {
             view.getChildren().clear();
             view.getChildren().add(categoryHeader);
             
-            if(comboBox.getSelectionModel().getSelectedItem().equals("Number of Hours Scheduled by Consultant")) 
+            if(comboBox.getSelectionModel().getSelectedItem().equals("Consultants' Scheduled Hours")) 
             {
                 taReports.setText(consultant.GetHoursReport());
                 view.getChildren().add(taReports);
@@ -352,7 +354,7 @@ public class MainWindow {
     String reportTypes[] = 
                {    "Number of Appointment Types by Month",
                     "Schedules for each Consultant",
-                    "Number of Hours Scheduled by Consultant"
+                    "Consultants' Scheduled Hours"
                };
     
     public HBox CreateTableInteractionHeader()
@@ -439,8 +441,11 @@ public class MainWindow {
                     }
                 }
             });
+        
+        VBox spaceWidth = new VBox();
+        spaceWidth.setPrefWidth(10);
 
-        HBox hbox = new HBox(headerLabel, btnAdd, btnDelete, btnModify, btnSearch, tfSearch);
+        HBox hbox = new HBox(headerLabel, btnAdd, btnDelete, btnModify, btnSearch, spaceWidth, tfSearch);
         
         hbox.setBackground(new Background(new BackgroundFill(
                Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -489,7 +494,6 @@ public class MainWindow {
         view.getChildren().clear();
         tfSearch.setText("");
         tfSearch.setPromptText("search for customer name");
-        headerLabel.setText("Customers:");
         view.getChildren().add(categoryHeader);
         view.getChildren().add(tvCustomers);
         Platform.runLater(()->tvCustomers.refresh()); //this llambda fixes a misalignment bug between the rows and header of the tableview
@@ -515,7 +519,6 @@ public class MainWindow {
         view.getChildren().clear();
         tfSearch.setText("");
         tfSearch.setPromptText("search for appointment title");
-        headerLabel.setText("Appointments:");
         view.getChildren().add(categoryHeader);
         view.getChildren().add(tvAppointments);
         Platform.runLater(()->tvAppointments.refresh()); //this llambda fixes a misalignment bug between the rows and header of the tableview
@@ -529,6 +532,7 @@ public class MainWindow {
     {
         view.getChildren().clear();
         view.getChildren().add(categoryHeader);
+        headerLabel.setText("Report Type:");
         Platform.runLater(()->tvReportType.refresh()); //this llambda fixes a misalignment bug between the rows and header of the tableview
         view.getChildren().add(tvReportType);
         view.getChildren().add(reportsHeader);

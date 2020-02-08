@@ -9,9 +9,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-//Only time you should use TimeStamp is when you are inserting to DB
-//Otherwise LocalDateTime
-
 public class Appointment {
     
     private Integer appointmentId;

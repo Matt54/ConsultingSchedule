@@ -66,7 +66,7 @@ public class City {
         try {
             int success = executeCitySQLStatement(this,
                     connection,
-                    "UPDATE user SET city=?, countryId=?, createDate=?, createdBy=?, lastUpdate=?, lastUpdateBy=? WHERE cityId=?",
+                    "UPDATE city SET city=?, countryId=?, createDate=?, createdBy=?, lastUpdate=?, lastUpdateBy=? WHERE cityId=?",
                     true);
           if(success == 1) {
             return true;

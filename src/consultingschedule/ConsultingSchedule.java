@@ -25,93 +25,8 @@ public class ConsultingSchedule extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        
-        
-        
-        //MainWindow mainWindow = new MainWindow();
-        
-        /*
-        Connection dbConnection = connectToDB();
-        System.out.println(dbConnection);
-        */
-        
-        //User testUser = new User(1, "name", "password");
-                /*,
-                true,
-                java.sql.Date.valueOf(LocalDate.now()),
-                "name",
-                java.sql.Timestamp.valueOf(LocalDateTime.now()));*/
-        
-        //Insert tested and works
-        //insertUser(testUser);
-        
-        ///update tested and works
-        //testUser.setCreator("GOD");
-        //updateUser(testUser);
-        
-        //Get user by name and password tested and works
-        //User dbUser = getUserByNameAndPassword("name", "password");
-        //dbUser.setCreator("JOHN");
-        //updateUser(dbUser);
-        
-        //Get user by ID tested and works
-        //User dbUser = getUserByID(1);
-        //dbUser.setCreator("MATT");
-        //updateUser(dbUser);
-        
-        //User dbUser = getUserByNameAndPassword("name", "password");
-        
-        //delete tested and works
-        //deleteUser(1);
-        
-        /*
-        Country usa = new Country(1, "USA");
-        usa.addToDB();
-        
-        City kc = new City(1,"Kansas City",1);
-        kc.addToDB();
-        
-        Address fakeAddress1 = new  Address(1,
-                                        "123 Silly Lane",
-                                        "Apt. 1",
-                                        1,
-                                        "123456",
-                                        "111-222-3333");
-        fakeAddress1.addToDB();
-        
-        Customer matt = new Customer(1,"DELETEME",1);
-        matt.addToDB();
-        
-        
-        Appointment appt1 = new Appointment(1,
-                                            matt.getCustomerId(),
-                                            1,
-                                            "title",
-                                            "description",
-                                            "location",
-                                            "contact",
-                                            "type",
-                                            "url",
-                                            LocalDateTime.now(),
-                                            LocalDateTime.now());
-        appt1.addToDB();
-        */
-        
-        
-        
-        
-        Locale locale = Locale.getDefault();
-        Locale  france = new Locale("fr");
-        
-        //System.out.println(locale);
-        //System.out.println(languageConvert(france,"Hello"));
-        
         mainWindow = new MainWindow();
-        
-        //SignInWindow signInWindow = new SignInWindow();
         signInWindow = new SignInWindow();
-        
-        //signInWindow.show();
         
         SignInWindow.btnSignIn.setDefaultButton(true);
         SignInWindow.btnSignIn.setOnAction(e -> {       
@@ -161,9 +76,14 @@ public class ConsultingSchedule extends Application {
     
     void SignInError()
     {
+        //Locale  locale = new Locale("fr");
+        //Locale  locale = new Locale("en_US");
+        Locale locale = Locale.getDefault();
+        ResourceBundle rb = GetMyResourceBundle(locale);
+        
         Alert errorAlert = new Alert(AlertType.ERROR);
-        errorAlert.setHeaderText("Invalid Input");
-        errorAlert.setContentText("Username and Password do not match our records.");
+        errorAlert.setHeaderText(rb.getString("InvalidInput"));
+        errorAlert.setContentText(rb.getString("InvalidUserPw"));
         errorAlert.showAndWait();
     }
     
@@ -172,18 +92,6 @@ public class ConsultingSchedule extends Application {
         mainWindow = new MainWindow();
         SetupMainWindow();
     }
-    
-    
-    /*
-    public interface UserDao{
-        User getUser();
-        Set<User> getAllUsers();
-        User getUserByUserNameAndPassword();
-        boolean insertUser();
-        boolean updateUser();
-        boolean deleteUser();
-    }
-    */
     
     public User getUserByNameAndPassword(String name, String pw) {
         Connection connection = connectToDB();
@@ -325,19 +233,6 @@ public class ConsultingSchedule extends Application {
      return rb.getString(input);
    }
     
-    /*
-    public static DataSource getMysqlDataSource() {
-    MysqlDataSource dataSource = new MysqlDataSource();
-
-    // Set dataSource Properties
-    dataSource.setServerName("3.227.166.251");
-    dataSource.setPortNumber(3306);
-    dataSource.setDatabaseName("U06oS9");
-    dataSource.setUser("U06oS9");
-    dataSource.setPassword("53688826761");
-    return dataSource;
-  }
-    */
 
     /**
      * @param args the command line arguments

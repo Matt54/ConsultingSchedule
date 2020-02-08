@@ -25,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 public class AppointmentWindow {
@@ -36,14 +37,20 @@ public class AppointmentWindow {
         gridPane = new GridPane();
         
         CreateTitleField(gridPane, "Title:", "",0 );
-        CreateTypeField(gridPane, "Type:", "",1 );
-        CreateDateField(gridPane, 2, null);
-        CreateTimeField(gridPane, 3, null);
-        CreateCustomersField(gridPane,"", 0);
-        CreateContactField(gridPane, "Contact:", "",1 );
-        CreateLocationField(gridPane, "Location:", "",2 );
+        CreateCustomersField(gridPane,"", 1);
+        CreateContactField(gridPane, "Contact:", "",2 );
         CreateURLField(gridPane, "URL:", "",3 );
-        CreateDescriptionField(gridPane, "Description:", "",4 );
+        
+        CreateLineSeperation(gridPane);
+        
+        CreateTypeField(gridPane, "Type:", "",0 );
+        CreateDateField(gridPane, 1, null);
+        CreateTimeField(gridPane, 2, null);
+        CreateLocationField(gridPane, "Location:", "",3 );
+
+        CreateSpaceSeperation(gridPane);
+        
+        CreateDescriptionField(gridPane, "Description:", "",5 );
 
         SetupWindow(main);
     }
@@ -57,16 +64,34 @@ public class AppointmentWindow {
         gridPane = new GridPane();
         
         CreateTitleField(gridPane, "Title:", appointmentView.getTitle(),0 );
-        CreateTypeField(gridPane, "Type:", appointmentView.getType(),1 );
-        CreateDateField(gridPane, 2, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime().toLocalDate());
-        CreateTimeField(gridPane, 3, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime().toLocalTime());
-        CreateCustomersField(gridPane,consultant.lookupAppointment(appointmentView.getAppointmentId()).getContact(), 0);
-        CreateContactField(gridPane, "Contact:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getContact() ,1 );
-        CreateLocationField(gridPane, "Location:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getLocation(),2 );
+        CreateCustomersField(gridPane,consultant.lookupCustomer(consultant.lookupAppointment(appointmentView.getAppointmentId()).getCustomerId()).getCustomerName(), 1);
+        CreateContactField(gridPane, "Contact:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getContact() ,2 );
         CreateURLField(gridPane, "URL:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getUrl(),3 );
-        CreateDescriptionField(gridPane, "Description:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getDescription(),4 );
+        
+        CreateLineSeperation(gridPane);
+        
+        CreateTypeField(gridPane, "Type:", appointmentView.getType(),0 );
+        CreateDateField(gridPane, 1, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime().toLocalDate());
+        CreateTimeField(gridPane, 2, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime().toLocalTime());
+        CreateLocationField(gridPane, "Location:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getLocation(),3 );
+        
+        CreateSpaceSeperation(gridPane);
+        
+        CreateDescriptionField(gridPane, "Description:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getDescription(),5 );
 
         SetupWindow(main);
+    }
+    
+    
+    
+    public void CreateTitleField(GridPane gridPane, String prompt, String name, int index)
+    {
+        Label label = new Label(prompt);
+        titleTextField = new TextField(name);
+        titleTextField.setId("long-textfield");
+        gridPane.add(label, 0,index,1,1);
+        gridPane.setHalignment(label,HPos.RIGHT);
+        gridPane.add(titleTextField, 1,index,1,1);
     }
     
     public void CreateCustomersField(GridPane gridPane,String customerName, int index)
@@ -78,48 +103,24 @@ public class AppointmentWindow {
         for (int i = 0; i <customers.length; i++) customers[i] = (consultant.getAllCustomers().get(i).getCustomerName());
         
         customerComboBox = new ComboBox(FXCollections.observableArrayList(customers)); 
+        customerComboBox.setId("combobox-long");
         
         if(customerName=="") customerComboBox.getSelectionModel().selectFirst();
         else {
+            boolean found = false;
             for(String customer : customers){
-                if(customer == customerName) customerComboBox.getSelectionModel().select(customerName);
-                else customerComboBox.getSelectionModel().selectFirst();
+                if(customer == customerName) 
+                {
+                    customerComboBox.getSelectionModel().select(customerName);
+                    found = true;
+                }
             }
+            if(!found) customerComboBox.getSelectionModel().selectFirst();
         }
 
-        gridPane.add(label, 2,index,1,1);
-        gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(customerComboBox, 3,index,1,1);
-    }
-    
-    public void CreateTitleField(GridPane gridPane, String prompt, String name, int index)
-    {
-        Label label = new Label(prompt);
-        titleTextField = new TextField(name);
-        titleTextField.setId("type-textfield");
         gridPane.add(label, 0,index,1,1);
         gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(titleTextField, 1,index,1,1);
-    }
-    
-    public void CreateTypeField(GridPane gridPane, String prompt, String name, int index)
-    {
-        Label label = new Label(prompt);
-        typeTextField = new TextField(name);
-        typeTextField.setId("type-textfield");
-        gridPane.add(label, 0,index,1,1);
-        gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(typeTextField, 1,index,1,1);
-    }
-    
-    public void CreateLocationField(GridPane gridPane, String prompt, String name, int index)
-    {
-        Label label = new Label(prompt);
-        locationTextField = new TextField(name);
-        locationTextField.setId("type-textfield");
-        gridPane.add(label, 2,index,1,1);
-        gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(locationTextField, 3,index,1,1);
+        gridPane.add(customerComboBox, 1,index,1,1);
     }
     
     public void CreateContactField(GridPane gridPane, String prompt, String name, int index)
@@ -127,29 +128,55 @@ public class AppointmentWindow {
         Label label = new Label(prompt);
         contactTextField = new TextField(name);
         contactTextField.setId("type-textfield");
-        gridPane.add(label, 2,index,1,1);
+        gridPane.add(label, 0,index,1,1);
         gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(contactTextField, 3,index,1,1);
+        gridPane.add(contactTextField, 1,index,1,1);
     }
-    
+
     public void CreateURLField(GridPane gridPane, String prompt, String name, int index)
     {
         Label label = new Label(prompt);
         urlTextField = new TextField(name);
         urlTextField.setId("type-textfield");
-        gridPane.add(label, 2,index,1,1);
-        gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(urlTextField, 3,index,1,1);
-    }
-    
-    public void CreateDescriptionField(GridPane gridPane, String prompt, String name, int index)
-    {
-        Label label = new Label(prompt);
-        descriptionTextArea = new TextArea(name);
         gridPane.add(label, 0,index,1,1);
         gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(descriptionTextArea, 1,index,3,1);
+        gridPane.add(urlTextField, 1,index,1,1);
     }
+    
+    public void CreateLineSeperation(GridPane gridPane){
+        
+        double width = 20;
+        
+        Line line = new Line(width/2, 20, width/2, 190);
+        line.setStrokeWidth(width/10);
+        
+        VBox vBox = new VBox(line);
+        vBox.setPrefWidth(width);
+        vBox.setAlignment(Pos.CENTER);
+        gridPane.add(vBox,2,0,1,4);
+    }
+    
+    public void CreateTypeField(GridPane gridPane, String prompt, String name, int index)
+    {
+        Label label = new Label(prompt);
+        typeTextField = new TextField(name);
+        typeTextField.setId("long-textfield");
+        gridPane.add(label, 3,index,1,1);
+        gridPane.setHalignment(label,HPos.RIGHT);
+        gridPane.add(typeTextField, 4,index,1,1);
+    }
+    
+    public void CreateLocationField(GridPane gridPane, String prompt, String name, int index)
+    {
+        Label label = new Label(prompt);
+        locationTextField = new TextField(name);
+        locationTextField.setId("type-textfield");
+        gridPane.add(label, 3,index,1,1);
+        gridPane.setHalignment(label,HPos.RIGHT);
+        gridPane.add(locationTextField, 4,index,1,1);
+    }
+    
+    
     
     public void CreateDateField(GridPane gridPane, int index, LocalDate localDate)
     {
@@ -158,9 +185,9 @@ public class AppointmentWindow {
         
         if(localDate!=null) datePicker.setValue(localDate);
         
-        gridPane.add(label, 0,index,1,1);
+        gridPane.add(label, 3,index,1,1);
         gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(datePicker, 1,index,1,1);
+        gridPane.add(datePicker, 4,index,1,1);
     }
     
     public void CreateTimeField(GridPane gridPane, int index, LocalTime localTime)
@@ -173,16 +200,32 @@ public class AppointmentWindow {
         for (int i = 0; i < timesFormatted.length; i++) timesFormatted[i] = times[i].format(dateFormat);
 
         timeComboBox = new ComboBox(FXCollections.observableArrayList(timesFormatted)); 
-        
+        timeComboBox.setId("combobox-long");
         timeComboBox.getSelectionModel().selectFirst();
 
             for(LocalTime time : times){
                 if(time == localTime) timeComboBox.getSelectionModel().select(time.format(dateFormat));
             }
 
+        gridPane.add(label, 3,index,1,1);
+        gridPane.setHalignment(label,HPos.RIGHT);
+        gridPane.add(timeComboBox, 4,index,1,1);
+    }
+    
+    public void CreateSpaceSeperation(GridPane gridPane){
+
+        HBox hBox = new HBox();
+        hBox.setPrefHeight(10);
+        gridPane.add(hBox,0,4,4,1);
+    }
+    
+    public void CreateDescriptionField(GridPane gridPane, String prompt, String name, int index)
+    {
+        Label label = new Label(prompt);
+        descriptionTextArea = new TextArea(name);
         gridPane.add(label, 0,index,1,1);
         gridPane.setHalignment(label,HPos.RIGHT);
-        gridPane.add(timeComboBox, 1,index,1,1);
+        gridPane.add(descriptionTextArea, 1,index,4,1);
     }
 
     public void SetupWindow(MainWindow main)
@@ -231,8 +274,22 @@ public class AppointmentWindow {
         copyrightLabel.setId("copyright-label");
         copyrightLabel.setAlignment(Pos.CENTER);
         copyrightLabel.setMaxWidth(Double.MAX_VALUE);
+        
+        VBox marginVBox = new VBox();
+        marginVBox.setPrefWidth(10);
+        VBox marginVBox2 = new VBox();
+        marginVBox2.setPrefWidth(10);
+        
+        HBox contentHBox = new HBox(marginVBox,gridPane,marginVBox2);
+        
+        HBox marginHBox = new HBox();
+        marginHBox.setPrefHeight(10);
+        HBox marginHBox2 = new HBox();
+        marginHBox2.setPrefHeight(5);
 
-        VBox view = new VBox(headerHBox,gridPane,btnHBox,copyrightLabel);
+        VBox view = new VBox(headerHBox,marginHBox,contentHBox,btnHBox,marginHBox2,copyrightLabel);
+        
+        
         view.setAlignment(Pos.CENTER);
         view.setBackground(new Background(new BackgroundFill(
                Color.rgb(255, 255, 255), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -303,15 +360,19 @@ public class AppointmentWindow {
         
         if(time.getHour() < 8 || time.getHour() > 17) throw new IllegalArgumentException("You can't schedule an appointment outside of business hours.");
         
+        if(localDate.getDayOfWeek().getValue() > 5) throw new IllegalArgumentException("You can't schedule an appointment during the weekend.");
         
-        for(Appointment appointment : consultant.getAllAppointments())
+        if(!isModify)
         {
-            LocalDateTime aptTime = appointment.getStartTime();
-            if(localDate.getYear() == aptTime.getYear())
+            for(Appointment appointment : consultant.getAllAppointments())
             {
-                if(localDate.getDayOfYear() == aptTime.getDayOfYear())
+                LocalDateTime aptTime = appointment.getStartTime();
+                if(localDate.getYear() == aptTime.getYear())
                 {
-                    if(time.getHour() == aptTime.getHour()) throw new IllegalArgumentException("You have another appointment during this hour.");
+                    if(localDate.getDayOfYear() == aptTime.getDayOfYear())
+                    {
+                        if(time.getHour() == aptTime.getHour()) throw new IllegalArgumentException("You have another appointment during this hour.");
+                    }
                 }
             }
         }

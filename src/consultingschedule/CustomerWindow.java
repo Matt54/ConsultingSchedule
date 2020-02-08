@@ -66,6 +66,7 @@ public class CustomerWindow {
         scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         
         Button btnSave = new Button("Save");
+        btnSave.setId("button-smaller");
         btnSave.setOnAction(e -> { 
             if( ValidateInput() ){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "You can't have an empty input.");
@@ -78,21 +79,33 @@ public class CustomerWindow {
         });
         
         Button btnCancel = new Button("Cancel");
+        btnCancel.setId("button-smaller");
         btnCancel.setOnAction(e -> { 
             mainWindow.show();
             stage.hide();
         });
 
         HBox btnHBox = new HBox(btnSave,btnCancel);
-        
+        btnHBox.setAlignment(Pos.CENTER);
         
         Label copyrightLabel = new Label("Copyright ® 2019 Matt Pfeiffer Consulting");
         copyrightLabel.setId("copyright-label");
         copyrightLabel.setAlignment(Pos.CENTER);
         copyrightLabel.setMaxWidth(Double.MAX_VALUE);
-        
 
-        VBox view = new VBox(headerHBox,gridPane,btnHBox,copyrightLabel);
+        VBox marginVBox = new VBox();
+        marginVBox.setPrefWidth(20);
+        VBox marginVBox2 = new VBox();
+        marginVBox2.setPrefWidth(20);
+        
+        HBox contentHBox = new HBox(marginVBox,gridPane,marginVBox2);
+        
+        HBox marginHBox = new HBox();
+        marginHBox.setPrefHeight(10);
+        HBox marginHBox2 = new HBox();
+        marginHBox2.setPrefHeight(10);
+
+        VBox view = new VBox(headerHBox,marginHBox,contentHBox,btnHBox,marginHBox2,copyrightLabel);
         view.setAlignment(Pos.CENTER);
         view.setBackground(new Background(new BackgroundFill(
                Color.rgb(255, 255, 255), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -152,19 +165,36 @@ public class CustomerWindow {
             Country modifiedCountry = consultant.lookupCountry(customerView.getCountry());
             modifiedCountry.setCountryName(newCountry.getCountryName());
             modifiedCountry.addToDB();
+            newCountry.setCountryId(modifiedCountry.getCountryId());
             newCity.setCountryId(modifiedCountry.getCountryId());
         }
+        else{
+            newCountry= consultant.lookupCountry(customerView.getCountry());
+            newCity.setCountryId(newCountry.getCountryId());
+        }
         
-        if( !newCity.getCityName().equals(customerView.getCity()) 
-                || !newCity.getCountryId().equals(consultant.lookupCity(customerView.getCity()).getCountryId()) )
+        if( !newCity.getCityName().equals(customerView.getCity()) )
         {
             City modifiedCity = consultant.lookupCity(customerView.getCity());
             modifiedCity.setCityName(newCity.getCityName());
             modifiedCity.setCountryId(newCity.getCountryId());
             modifiedCity.addToDB();
+            newCity.setCityId(modifiedCity.getCityId());
             newAddress.setCityId(modifiedCity.getCityId());
+            
+        }
+        else{
+            newCity = consultant.lookupCity(customerView.getCity());
+            newCity.setCountryId(newCountry.getCountryId());
+            newAddress.setCityId(newCity.getCityId());
         }
         
+        if(!newCountry.getCountryName().equals(customerView.getCountry()))
+        {
+            newCity.setCountryId(newCountry.getCountryId());
+            newCity.updateDB();
+        }
+
         if( (!newAddress.getPhone().equals(customerView.getPhone()) ) 
                 || (!newAddress.getAddress().equals(customerView.getAddress())) 
                 || (!newAddress.getPostalCode().equals(customerView.getZip()))
@@ -176,19 +206,36 @@ public class CustomerWindow {
             modifiedAddress.setPostalCode(newAddress.getPostalCode());
             modifiedAddress.setCityId(newAddress.getCityId());
             modifiedAddress.addToDB();
+            newAddress.setAddressId(modifiedAddress.getAddressId());
             newCustomer.setAddressId(modifiedAddress.getAddressId());
         }
+        else{
+            newAddress = consultant.lookupAddress(customerView.getAddress());
+            newCustomer.setAddressId(newAddress.getAddressId());
+        }
+        
+        if(!newCity.getCityName().equals(customerView.getCity()))
+        {
+            newAddress.setCityId(newCity.getCityId());
+            newAddress.updateDB();
+        }
 
-        if( !newCustomer.getCustomerName().equals(customerView.getName()) 
-                || !newCustomer.getAddressId().equals(consultant.lookupCustomer(customerView.getName()).getAddressId()) )
+        if( !(newCustomer.getCustomerName().equals(customerView.getName()) ) 
+                || !(newCustomer.getAddressId().equals(consultant.lookupCustomer(customerView.getName()).getAddressId())) )
         {
             Customer modifiedCustomer = consultant.lookupCustomer(customerView.getName());
             modifiedCustomer.setName(newCustomer.getCustomerName());
-            modifiedCustomer.setAddressId(newCustomer.getAddressId());
+            modifiedCustomer.setAddressId(newAddress.getAddressId());
+            modifiedCustomer.setId(customerView.getCustomerId());          
             modifiedCustomer.updateDB();
             
             consultant.deleteCustomerView(customerView);
             consultant.AddCustomerToView(modifiedCustomer);
+        }
+        else{
+            newCustomer = consultant.lookupCustomer(customerView.getName());
+            consultant.deleteCustomerView(customerView);
+            consultant.AddCustomerToView(newCustomer);
         }
 
         mainWindow.show();

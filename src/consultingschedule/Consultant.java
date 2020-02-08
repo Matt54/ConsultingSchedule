@@ -1,7 +1,6 @@
 package consultingschedule;
 
 import static consultingschedule.ConsultingSchedule.connectToDB;
-import static java.lang.Math.abs;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -535,6 +533,7 @@ public class Consultant {
                                                             lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCityName(),
                                                             lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
+        customerView.setCustomerId(customer.getCustomerId());
         allCustomerViews.add(customerView);
     }
             
@@ -551,6 +550,7 @@ public class Consultant {
                                                             lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCityName(),
                                                             lookupAddress( customer.getAddressId() ).getPostalCode(),
                                                             lookupCountry(lookupCity(lookupAddress( customer.getAddressId() ).getCityId()).getCountryId()).getCountryName());
+            customerView.setCustomerId(customer.getCustomerId());
             allCustomerViews.add(customerView);
         }
         
@@ -614,6 +614,7 @@ public class Consultant {
             consultantReport += System.getProperty("line.separator");
             consultantReport += System.getProperty("line.separator");
             consultantReport += "Upcoming Appointments for " + user.getUserName() + ":";
+            consultantReport += System.getProperty("line.separator");
 
             Collections.sort(allAppointments, (Appointment m1, Appointment m2) -> m1.getStartTime().compareTo(m2.getStartTime())); // 1 line llamda expression vs 4 lines with anonymous inner class creation
             
@@ -622,10 +623,11 @@ public class Consultant {
                 if( user.getUserId().equals(apt.getUserId()) )
                 {
                     consultantReport += System.getProperty("line.separator");
-                    consultantReport += dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())) + ": "
-                            + apt.getTitle() + " (" + apt.getType() + ") "
+                    consultantReport += dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())) + ": " 
+                            + System.getProperty("line.separator") + apt.getTitle() + " (" + apt.getType() + ") "
                             + " with " + lookupCustomer(apt.getCustomerId()).getCustomerName()
-                            + " at " + apt.getLocation();       
+                            + " at " + apt.getLocation();  
+                    consultantReport += System.getProperty("line.separator");
                 }
             }
         }

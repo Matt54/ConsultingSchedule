@@ -25,6 +25,10 @@
   -fx-background-insets: 10px;
 }
 
+#button-smaller{
+  -fx-pref-width: 120px;
+}
+
 #button-appointment {
   /*-fx-font-size: 12px;*/
   /*-fx-background-color: white;*/
@@ -59,6 +63,10 @@
 
 #combobox-reports{
     -fx-pref-width: 330px;
+}
+
+#combobox-long{
+    -fx-pref-width: 200px;
 }
 
 #header-button {
@@ -158,15 +166,23 @@
     -fx-pref-width: 100px;
 }
 
+#long-textfield{
+    -fx-pref-width: 200px;
+}
+
 .date-picker .text-field {
     -fx-border-insets: 0px;
     -fx-background-insets: 0px;
     -fx-background-color: white;
+    
+}
+.date-picker{
+    -fx-pref-width: 200px;
 }
 
 #search-tf{
     /*-fx-background-color: #e6e6e6;*/
-    -fx-pref-width: 180px;
+    -fx-pref-width: 200px;
     -fx-background-color: white;
     -fx-border-insets: 0px;
     -fx-background-insets: 0px;

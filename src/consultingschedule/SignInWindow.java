@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package consultingschedule;
 
 import static consultingschedule.ConsultingSchedule.languageConvert;
@@ -23,11 +18,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-/**
- *
- * @author matthewp
- */
-
 public class SignInWindow extends VBox {
     SignInWindow(){
 
@@ -38,10 +28,6 @@ public class SignInWindow extends VBox {
         //header image
         Image image = new Image("SignInGraphic.png");
         ImageView imageView = new ImageView(image);
-        //Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        //double AspectRatio = imageView.getFitWidth() / imageView.getFitHeight();
-        
-        //imageView.setFitHeight(200);
         
         Image gif = new Image("globe_small.gif");
         ImageView gifView = new ImageView(gif);
@@ -56,17 +42,11 @@ public class SignInWindow extends VBox {
         //Locale  locale = new Locale("en_US");
         Locale locale = Locale.getDefault();
         ResourceBundle rb = GetMyResourceBundle(locale);
-        //ResourceBundle rb = ResourceBundle.getBundle("resources/fr");
-        //ResourceBundle rb = ResourceBundle.getBundle("resources/en_US");
-        
-        //rb.getString("prompt");
-        //String userNamePrompt = languageConvert(france,"Hello");
         
         //name
         labelName = new Label(rb.getString("UserPrompt"));
-        //labelName = new Label("User Name: ");
         TextField tfName = new TextField("");
-        tfName.setPromptText("UserName");
+        tfName.setPromptText(rb.getString("UserPrompt"));
         tfName.textProperty().addListener((obs, oldText, newText) -> {
             name = newText;
         });
@@ -74,7 +54,7 @@ public class SignInWindow extends VBox {
         //password
         labelPw = new Label(rb.getString("PwPrompt"));
         PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
+        passwordField.setPromptText(rb.getString("PwPrompt"));
         passwordField.textProperty().addListener((obs, oldText, newText) -> {
             password = newText;
         });
@@ -118,16 +98,11 @@ public class SignInWindow extends VBox {
         stage.show();
         stage.setResizable(false);
         stage.sizeToScene();
-        //stage.setScene(scene);
-        //show();
         
-
         imageView.setFitWidth(view.getWidth());
         imageView.setPreserveRatio(true);
         stage.sizeToScene();
         stage.setResizable(false);
-        //stage.setScene(scene);
-        //show();
     }
     
     public ResourceBundle GetMyResourceBundle(Locale locale){

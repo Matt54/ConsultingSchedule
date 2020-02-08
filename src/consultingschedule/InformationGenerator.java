@@ -39,38 +39,32 @@ public class InformationGenerator {
         for (int i = 0; i < numberOfCustomers; i++) {
             Random random = new Random();
             int randomInt = random.nextInt(100);
-            //System.out.println(randomInt+2);
             String firstName = array[randomInt+2][0];
-            //System.out.println(firstName);
+            
             randomInt = random.nextInt(100);
             String lastName = array[randomInt+2][1].toLowerCase();
             lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
-            //System.out.println(lastName);
+            
             randomInt = random.nextInt(100);
             String address = rDigit() + "" + rDigit() + "" + rDigit() + " " + array[randomInt+2][2];
-            //System.out.println(address);
+            
             randomInt = random.nextInt(100);
             String city = array[randomInt+2][3];
-            
             
             String phone = rDigit() + "" + rDigit() + "" + rDigit() + "-" +
                     rDigit() + "" + rDigit() + "" + rDigit() + "-" +
                     rDigit() + "" + rDigit() + "" + rDigit() + "" + rDigit();
-            //System.out.println("phone = " + phone);
-            
             
             String zip = rDigit() + "" + rDigit() + "" + rDigit() + "" +
                     rDigit() + "" + rDigit();
-            //System.out.println("zip = " + zip);
             
-            //System.out.println(array[randomInt+2][3]);
-            
-            //System.out.println("first name = " + firstName + " , last name = " + lastName + " , address = " + address + " , city = " + city);
+            System.out.println("first name = " + firstName + " , last name = " + lastName + " , address = " + address + " , city = " + city);
             
             CreateNewCustomer(firstName,lastName,address,city,phone,zip);
         }
     }
     
+    //Used to generate a single digit random number starting at 1 (range 1 - 9)
     public int rDigit(){
         Random random = new Random();
         return (random.nextInt(8)+1);
@@ -185,7 +179,8 @@ public class InformationGenerator {
         }
     }
 
-    
+    //Reads the appointment csv file and returns a two dimensional array containing
+    //the appointment titles and types
     public String[][] ReadAppointmentCSVFile(){
         String csvFile = "GenerateAppointments.csv";
         String line = "";
