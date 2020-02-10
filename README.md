@@ -13,7 +13,7 @@ Java application for scheduling appointments with customers.
  </ol> 
 
 <h1 id="features"> Features </h1><br>
-<p>
+<p align="center">
  <ol>
   <li>All data is stored in a database and previous data is loaded on sign in.</li>
   <li>All business logic is stored in UTC and all views are provided in local time (based on the users system clock)</li>
@@ -38,7 +38,7 @@ Java application for scheduling appointments with customers.
   This error message pops up on invalid username/password combination.
   <br><br>
   <a href="#top">Back To Top</a>
-  <br>
+  <br><br>
 </p>
 
 <h1 id="calendar"> Calendar </h1><br>
@@ -46,12 +46,17 @@ Java application for scheduling appointments with customers.
   <kbd>
     <img src="MediaFiles/calendar.gif" width="600"><br>
   </kbd>
+ The calendar view is displayed first when the main screen is shown. <br>
+ The graphic on each day displays the number of appointments scheduled for the consultant. <br>
+ The month and year can be selected below the calendar. <br>
   <br><br><br>
   <kbd>
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
+  Clicking on the appointment graphic inside a day displays more information about the appointmnets. <br>
   <br>
   <a href="#top">Back To Top</a>
+  <br><br>
 </p>
 
 <h1 id="appointments_table"> Appointments Table </h1><br>
@@ -70,6 +75,7 @@ Java application for scheduling appointments with customers.
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
+  <br><br>
 </p>
 
 <h1 id="customers_table"> Customers Table </h1><br>
@@ -79,6 +85,7 @@ Java application for scheduling appointments with customers.
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
+  <br><br>
 </p>
 
 <h1> Modify Customer </h1><br>
@@ -88,6 +95,7 @@ Java application for scheduling appointments with customers.
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
+  <br><br>
 </p>
 
 <h1 id="reports"> Reports </h1><br>
@@ -97,4 +105,5 @@ Java application for scheduling appointments with customers.
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
+  <br><br>
 </p>
