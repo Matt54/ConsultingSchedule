@@ -70,7 +70,7 @@ Java application for scheduling appointments with customers.
 <h1 id="appointments_table"> Appointments Table </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/AppointmentsSelected.png" width = "600">
+    <img src="MediaFiles/AppointmentsSelectedV2.png" width = "600">
   </kbd>
  <br><br>
   The . <br>
@@ -91,7 +91,7 @@ Java application for scheduling appointments with customers.
 <h1 id="customers_table"> Customers Table </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/CustomersSelected.png" width = "600">
+    <img src="MediaFiles/CustomersSelectedV2.png" width = "600">
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
@@ -111,7 +111,7 @@ Java application for scheduling appointments with customers.
 <h1 id="reports"> Reports </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/ReportsSelected.png" width = "600">
+    <img src="MediaFiles/ReportsSelectedV2.png" width = "600">
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
