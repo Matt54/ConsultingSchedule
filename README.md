@@ -1,9 +1,7 @@
-<hr>
 <h1 id="top"> Consulting Schedule Application </h1>
 
 Java application for scheduling appointments with customers. 
 
-<hr>
 <h1 id="index"> Index </h1>
  <ol type="i">
    <li><a href="#features">Features</a></li>
@@ -75,7 +73,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/AppointmentsSelectedV2.png" width = "600">
   </kbd>
  <br><br>
-  The . <br>
+  The appointments table view displays all of the appointments for a consultant. <br>
   <br><br>
   <a href="#top">Back To Top</a>
 </p>
@@ -85,7 +83,9 @@ Java application for scheduling appointments with customers.
   <kbd>
     <img src="MediaFiles/ModifyAppointment.png" width = "600">
   </kbd>
- <br>
+ <br><br>
+  Appointments are added or modified from the add/modify appointment window. <br>
+  <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
 </p>
@@ -95,7 +95,9 @@ Java application for scheduling appointments with customers.
   <kbd>
     <img src="MediaFiles/CustomersSelectedV2.png" width = "600">
   </kbd>
- <br>
+ <br><br>
+  The customers table view displays all of the appointments for a consultant. <br>
+  <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
 </p>
@@ -105,7 +107,9 @@ Java application for scheduling appointments with customers.
   <kbd>
     <img src="MediaFiles/ModifyCustomer.png" width = "300">
   </kbd>
- <br>
+ <br><br>
+  Customers are added or modified from the add/modify customer window. <br>
+  <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
 </p>
@@ -115,7 +119,10 @@ Java application for scheduling appointments with customers.
   <kbd>
     <img src="MediaFiles/ReportsSelectedV2.png" width = "600">
   </kbd>
- <br>
+ <br><br>
+ The reports table view displays the number of each appointment type broken up by month. <br>
+ Additional reports are available that show the schedule and total the number of hours for each consultant. <br>
+  <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
 </p>
