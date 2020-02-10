@@ -20,6 +20,8 @@ A couple notes:
 <p align="center">
   <kbd>
     <img src="MediaFiles/Calendar.png" width="600"><br>
+  </kbd>
+  <kbd>
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
 </p>
@@ -38,4 +40,23 @@ A couple notes:
   </kbd>
 </p>
 
-MORE TBA
+<h1> Customers Table </h1><br>
+<p align="center">
+  <kbd>
+    <img src="MediaFiles/Customers.png" width = "600">
+  </kbd>
+</p>
+
+<h1> Modify Customer </h1><br>
+<p align="center">
+  <kbd>
+    <img src="MediaFiles/ModifyCustomer.png" width = "600">
+  </kbd>
+</p>
+
+<h1> Reports </h1><br>
+<p align="center">
+  <kbd>
+    <img src="MediaFiles/ReportType.png" width = "600">
+  </kbd>
+</p>
