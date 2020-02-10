@@ -15,31 +15,24 @@ A couple notes:
   </kbd>
 </p>
 
+
+<h1> Calendar </h1><br>
 <p align="center">
-  ## Calendar
-  
   <kbd>
-    <img src="MediaFiles/Calendar.png" width="600">
+    <img src="MediaFiles/Calendar.png" width="600"><br>
+    <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
 </p>
-                                                 
+
+<h1> Appointments Table </h1><br>
 <p align="center">
-  ## Appointment Pop-Up
-  
-  <kbd>
-    <img src="MediaFiles/AppointmentsFromCalendar.png" width = "800">
-  </kbd>
-</p>
-                                                                   
-<p align="center">
-  ## Appointments Table
   <kbd>
     <img src="MediaFiles/Appointments.png" width = "600">
   </kbd>
 </p>
-                                                      
+
+<h1> Modify Appointment </h1><br>
 <p align="center">
-  ## Modify Appointment
   <kbd>
     <img src="MediaFiles/ModifyAppointment.png" width = "600">
   </kbd>
