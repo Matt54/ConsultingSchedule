@@ -12,18 +12,15 @@ Java application for scheduling appointments with customers.
    <li><a href="#reports">Reports</a></li>
  </ol> 
 
-
 <h1 id="features"> Features </h1><br>
 <p>
  <ol>
   <li>All data is stored in a database and previous data is loaded on sign in.</li>
   <li>All business logic is stored in UTC and all views are provided in local time (based on the users system clock)</li>
  </ol>
-</p><br>
-
-
-
-<!--![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="10%" width="10%" -->
+ <br>
+ <a href="#top">Back To Top</a>
+</p>
 
 <h1 id="sign_in_screen"> Sign In Screen </h1><br>
 <p align="center">
@@ -31,7 +28,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/SignInScreen.gif" width="300">
   </kbd>
   <br>
-  Here is some description about the sign in screen.
+  The Sign in window is shown on application launch. A valid username and password must be provided in order to display the main application window.
   <br>
   <a href="#top">Back To Top</a>
 </p>
