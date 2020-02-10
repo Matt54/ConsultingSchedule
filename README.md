@@ -16,8 +16,12 @@ Java application for scheduling appointments with customers.
 <h1 id="features"> Features </h1><br>
 <p>
  <ol>
-  <li>All data is stored in a database and previous data is loaded on sign in.</li>
+  <li>Sign in screen determines user's location and translates language (only available in english and french)</li>
+  <li>Application can add, update, and delete customer and appointment records in a database.</li>
+  <li>Provides a graphical calendar view of a consultants schedule by month or by week</li>
   <li>All business logic is stored in UTC and all views are provided in local time (based on the users system clock)</li>
+  <li>User is alerted if appointment is within 15 minutes of sign in</li>
+  <li>User data is stored by recording timestamps on log-in to a textfile</li>
  </ol>
  <br>
 <p align="center">
