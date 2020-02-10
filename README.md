@@ -57,7 +57,7 @@ Java application for scheduling appointments with customers.
 <h1 id="calendar"> Calendar </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/Calendar.gif" width="600"><br>
+    <img src="MediaFiles/calendar.gif" width="600"><br>
   </kbd>
  <br><br>
  The graphic on each day displays the number of appointments scheduled for the consultant. <br>
