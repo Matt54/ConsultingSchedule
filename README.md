@@ -8,8 +8,10 @@ A couple notes:
 
 <!--![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="10%" width="10%" -->
 
-<kbd>
-  <img src="MediaFiles/SignInScreen.gif" width="200">
-</kbd>
+<p align="center">
+  <kbd>
+    <img src="MediaFiles/SignInScreen.gif" width="200">
+  </kbd>
+</p>
 
 MORE TBA
