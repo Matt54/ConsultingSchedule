@@ -41,7 +41,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/UserPw.png" width="500">
   </kbd>
   <br><br>
-  This error message pops up on invalid username/password combination.
+  Error message pops up on invalid username/password combination.
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
