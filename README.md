@@ -44,13 +44,19 @@ Java application for scheduling appointments with customers.
 <h1 id="calendar"> Calendar </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/calendar.gif" width="600"><br>
+    <img src="MediaFiles/CalendarSelected.png" width="600"><br>
   </kbd>
  <br><br>
  The calendar view is displayed first when the main screen is shown. <br>
  The graphic on each day displays the number of appointments scheduled for the consultant. <br>
  The month and year can be selected below the calendar. <br>
-  <br><hr><br>
+  <br>
+ </p>
+ 
+<hr>
+
+<p align="center">
+<br>
   <kbd>
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
@@ -64,7 +70,7 @@ Java application for scheduling appointments with customers.
 <h1 id="appointments_table"> Appointments Table </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/Appointments.png" width = "600">
+    <img src="MediaFiles/AppointmentsSelected.png" width = "600">
   </kbd>
  <br><br>
   The . <br>
@@ -85,7 +91,7 @@ Java application for scheduling appointments with customers.
 <h1 id="customers_table"> Customers Table </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/Customers.png" width = "600">
+    <img src="MediaFiles/CustomersSelected.png" width = "600">
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
@@ -105,7 +111,7 @@ Java application for scheduling appointments with customers.
 <h1 id="reports"> Reports </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/ReportType.png" width = "600">
+    <img src="MediaFiles/ReportsSelected.png" width = "600">
   </kbd>
  <br>
   <a href="#top">Back To Top</a>
