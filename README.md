@@ -36,12 +36,6 @@ Java application for scheduling appointments with customers.
   <br><br>
   The Sign in window is shown on application launch. <br>
   A valid username and password must be provided in order to display the main application window.
-  <br><br><br>
-  <kbd>
-    <img src="MediaFiles/UserPw.png" width="500">
-  </kbd>
-  <br><br>
-  Error message pops up on invalid username/password combination.
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
