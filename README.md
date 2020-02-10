@@ -27,11 +27,13 @@ Java application for scheduling appointments with customers.
 
 <h1 id="sign_in_screen"> Sign In Screen </h1><br>
 <p align="center">
-  <kbd  >
+  <kbd>
     <img src="MediaFiles/SignInScreen.gif" width="300">
   </kbd>
   <br>
   Here is some description about the sign in screen.
+  <br>
+  <a href="#index">Back To Top</a>
 </p><br>
 
 <h1 id="calendar"> Calendar </h1><br>
