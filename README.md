@@ -1,7 +1,9 @@
+<hr>
 <h1 id="top"> Consulting Schedule Application </h1>
 
 Java application for scheduling appointments with customers. 
 
+<hr>
 <h1 id="index"> Index </h1>
  <ol type="i">
    <li><a href="#features">Features</a></li>
