@@ -11,7 +11,7 @@ A couple notes:
 <h1> Sign In Screen </h1><br>
 <p align="center">
   <kbd  >
-    <img src="MediaFiles/SignInScreen.gif" width="200">
+    <img src="MediaFiles/SignInScreen.gif" width="300">
   </kbd>
 </p>
 
@@ -50,7 +50,7 @@ A couple notes:
 <h1> Modify Customer </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/ModifyCustomer.png" width = "600">
+    <img src="MediaFiles/ModifyCustomer.png" width = "300">
   </kbd>
 </p>
 
