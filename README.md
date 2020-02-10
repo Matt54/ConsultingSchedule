@@ -2,13 +2,15 @@
 
 Java application for scheduling appointments with customers. 
 
+<a href="#sign_in_screen">Sign In Screen</a>
+
 A couple notes:
 1) All data is stored in a database and previous data is loaded on sign in.
 2) All business logic is stored in UTC and all views are provided in local time (based on the users system clock)
 
 <!--![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="10%" width="10%" -->
 
-<h1> Sign In Screen </h1><br>
+<h1 id="sign_in_screen"> Sign In Screen </h1><br>
 <p align="center">
   <kbd  >
     <img src="MediaFiles/SignInScreen.gif" width="300">
