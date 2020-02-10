@@ -30,11 +30,7 @@
 }
 
 #button-appointment {
-  /*-fx-font-size: 12px;*/
-  /*-fx-background-color: white;*/
   -fx-background-color: transparent;
-  /*-fx-pref-width: 40px;*/
-  /*-fx-pref-height: 40px;*/
   -fx-background-radius: 0px;
   -fx-border-insets: 0px;
   -fx-background-insets: 0px;
@@ -144,14 +140,11 @@
    
 }
 
-
-
 #cell{
     -fx-border-color: #a0a0a0;
 }
 
 #cell-header{
-    /*-fx-border-color: black;*/
     -fx-border-color: #a0a0a0;
 }
 
@@ -181,7 +174,6 @@
 }
 
 #search-tf{
-    /*-fx-background-color: #e6e6e6;*/
     -fx-pref-width: 200px;
     -fx-background-color: white;
     -fx-border-insets: 0px;

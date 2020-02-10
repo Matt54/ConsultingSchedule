@@ -45,7 +45,6 @@ public class Address {
     public String getAddress2(){
         return address2;
     }
-    
     public Integer getCityId(){
         return cityId;
     }

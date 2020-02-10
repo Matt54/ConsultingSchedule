@@ -84,9 +84,7 @@ public class Appointment {
     public LocalDateTime getEndTime(){
         return end;
     }
-    
-    
-    
+
     public void setAppointmentId(Integer id){
         appointmentId = id;
     }

@@ -14,7 +14,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -49,7 +48,7 @@ public class MainWindow {
     MainWindow()
     {
         stage = new Stage();
-        stage.setTitle("Consulting Schedule Application By Matt Pfeiffer");
+        stage.setTitle("Consulting Schedule Application - by Matt Pfeiffer");
         scene.getStylesheets().add("consultingschedule/StyleSheet.css");
         labelName.setId("big-label");
         
@@ -107,7 +106,7 @@ public class MainWindow {
         InformationGenerator infoGen = new InformationGenerator(consultant);
         //infoGen.CreateRandomCustomers(10, infoGen.ReadCustomerCSVFile());
         //infoGen.DeleteAllConsultantCustomers();
-        //infoGen.CreateRandomAppointments(50, infoGen.ReadAppointmentCSVFile());
+        //infoGen.CreateRandomAppointments(100, infoGen.ReadAppointmentCSVFile());
         //infoGen.ReadAppointmentCSVFile();
         
         LoadDataAndGenerateWindow();
@@ -160,13 +159,6 @@ public class MainWindow {
             {
                 if(now.getDayOfYear() == startLdt.getDayOfYear())
                 {
-
-                    /*
-                    ZonedDateTime startUTC = aptTime.atZone(ZoneId.of("UTC"));
-                    ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
-                    LocalDateTime startLdt = startZdt.toLocalDateTime();
-                    */
-
                     int minuteValue = startLdt.getHour() * 60 + startLdt.getMinute();
                     int compareMinuteValue = now.getHour() * 60 + now.getMinute();
                     
@@ -251,15 +243,12 @@ public class MainWindow {
         
         tv.setPrefWidth(615);
         tv.setPrefHeight(300);
-        
-        
-        
+
         return tv;
     }
     
     public TableView CreateAppointmentTV()
     {
-        
         TableView tv = new TableView<>(consultant.getAllAppointmentViews());
         
         TableColumn<AppointmentView, String> aptTitle = new TableColumn<>("Title");

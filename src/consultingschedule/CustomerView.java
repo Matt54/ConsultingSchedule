@@ -44,7 +44,7 @@ public class CustomerView {
     public Integer getCustomerId(){
         return customerId;
     }
-    
+
     public void setName(String input){
         name = input;
     }

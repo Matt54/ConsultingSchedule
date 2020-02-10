@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,8 +29,6 @@ public class Consultant {
     ObservableList<AppointmentView> allAppointmentViews;
     ObservableList<ReportTypeView> allReportTypeViews;
     ObservableList<User> allUsers;
-    
-
     int userId;
     
     Consultant(){
@@ -208,25 +205,28 @@ public class Consultant {
         return appointment;
     }
     
-    
     public void addCountry(Country country){
         allCountries.add(country);
     }
+    
     public Country lookupCountry(Integer countryId){
         for(Country country : allCountries){
             if(country.getCountryId().equals(countryId)) return country;
         }
         return null;
     }
+    
     public Country lookupCountry(String countryName){
         for(Country country : allCountries){
             if(country.getCountryName().equals(countryName)) return country;
         }
         return null;
     }
+    
     public void updateCountry(int index, Country selectedCountry){
         allCountries.set(index, selectedCountry);
     }
+    
     public boolean deleteCountry(Country selectedCountry){
         if(allCountries.contains(selectedCountry)){
             selectedCountry.deleteCountryFromDB();
@@ -237,9 +237,11 @@ public class Consultant {
             return false;
         }
     }
+    
     public ObservableList<Country> getAllCountries(){
         return allCountries;
     }
+    
     public void SweepForUnusedCountries(){
         Country deleteThisCountry = null;
         for(Country country : allCountries)
@@ -256,21 +258,25 @@ public class Consultant {
     public void addCity(City city){
         allCities.add(city);
     }
+    
     public City lookupCity(Integer cityId){
         for(City city : allCities){
             if(city.getCityId().equals(cityId)) return city;
         }
         return null;
     }
+    
     public City lookupCity(String cityName){
         for(City city : allCities){
             if(city.getCityName().equals(cityName)) return city;
         }
         return null;
     }
+    
     public void updateCity(int index, City selectedCity){
         allCities.set(index, selectedCity);
     }
+    
     public boolean deleteCity(City selectedCity){
         if(allCities.contains(selectedCity)){
             selectedCity.deleteCityFromDB();
@@ -282,9 +288,11 @@ public class Consultant {
             return false;
         }
     }
+    
     public ObservableList<City> getAllCities(){
         return allCities;
     }
+    
     public void SweepForUnusedCities(){
         City deleteThisCity = null;
         for(City city : allCities)
@@ -301,21 +309,25 @@ public class Consultant {
     public void addAddress(Address address){
         allAddresses.add(address);
     }
+    
     public Address lookupAddress(Integer addressId){
         for(Address address : allAddresses){
             if(address.getAddressId().equals(addressId)) return address;
         }
         return null;
     }
+    
     public Address lookupAddress(String addressString){
         for(Address address : allAddresses){
             if(address.getAddress1().equals(addressString)) return address;
         }
         return null;
     }
+    
     public void updateAddress(int index, Address selectedAddress){
         allAddresses.set(index, selectedAddress);
     }
+    
     public boolean deleteAddress(Address selectedAddress){
         if(allAddresses.contains(selectedAddress)){
             selectedAddress.deleteAddressFromDB();
@@ -327,9 +339,11 @@ public class Consultant {
             return false;
         }
     }
+    
     public ObservableList<Address> getAllAddresses(){
         return allAddresses;
     }
+    
     public void SweepForUnusedAddresses(){
         Address deleteThisAddress = null;
         for(Address address : allAddresses)
@@ -346,21 +360,25 @@ public class Consultant {
     public void addCustomer(Customer customer){
         allCustomers.add(customer);
     }
+    
     public Customer lookupCustomer(String customerName){
         for(Customer customer : allCustomers){
             if(customer.getCustomerName().equals(customerName)) return customer;
         }
         return null;
     }
+    
     public Customer lookupCustomer(Integer customerId){
         for(Customer customer : allCustomers){
             if(customer.getCustomerId().equals(customerId)) return customer;
         }
         return null;
     }
+    
     public void updateCustomer(int index, Customer selectedCustomer){
         allCustomers.set(index, selectedCustomer);
     }
+    
     public boolean deleteCustomer(Customer selectedCustomer){
         if(allCustomers.contains(selectedCustomer)){
             deleteAppointmentsForCustomerId(selectedCustomer.getCustomerId());
@@ -374,6 +392,7 @@ public class Consultant {
             return false;
         }
     }
+    
     public void deleteCustomerView(String name){
         CustomerView deleteThisCustomerView = null;
         for(CustomerView cv : allCustomerViews){
@@ -381,6 +400,7 @@ public class Consultant {
         }
         if(deleteThisCustomerView != null) allCustomerViews.remove(deleteThisCustomerView);
     }
+    
     public void deleteCustomerView(int id){
         CustomerView deleteThisCustomerView = null;
         for(CustomerView cv : allCustomerViews){
@@ -388,9 +408,11 @@ public class Consultant {
         }
         if(deleteThisCustomerView != null) allCustomerViews.remove(deleteThisCustomerView);
     }
+    
     public void deleteCustomerView(CustomerView cv){
         if(allCustomerViews.contains(cv)) allCustomerViews.remove(cv);
     }
+    
     public ObservableList<Customer> getAllCustomers(){
         return allCustomers;
     }
@@ -428,18 +450,21 @@ public class Consultant {
     public void addAppointment(Appointment appointment){
         allAppointments.add(appointment);
     }
+    
     public Appointment lookupAppointment(String appointmentTitle){
         for(Appointment appointment : allAppointments){
             if(appointment.getTitle().equals(appointmentTitle)) return appointment;
         }
         return null;
     }
+    
     public Appointment lookupAppointment(Integer appointmentId){
         for(Appointment appointment : allAppointments){
             if(appointment.getAppointmentId().equals(appointmentId)) return appointment;
         }
         return null;
     }
+    
     public void AddAppointmentToView(Appointment apt){
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
@@ -474,6 +499,7 @@ public class Consultant {
             return false;
         }
     }
+    
     public void deleteAppointmentView(Integer id){
         AppointmentView deleteThisAppointmentView = null;
         for(AppointmentView av : allAppointmentViews){
@@ -481,6 +507,7 @@ public class Consultant {
         }
         if(deleteThisAppointmentView != null) allAppointmentViews.remove(deleteThisAppointmentView);
     }
+    
     public ObservableList<Appointment> getAllAppointments(){
         return allAppointments;
     }
@@ -507,7 +534,6 @@ public class Consultant {
                                                                 dateFormat.format(Date.from( endLdt.atZone( ZoneId.systemDefault()).toInstant())));
                 aptView.setAppointmentId(apt.getAppointmentId());
                 allAppointmentViews.add(aptView);
-                //PopulateCustomerView(apt.getCustomerId());
             }
         }
         return allAppointmentViews;
@@ -550,8 +576,7 @@ public class Consultant {
         customerView.setCustomerId(customer.getCustomerId());
         allCustomerViews.add(customerView);
     }
-            
-    
+
     public ObservableList<CustomerView> getAllCustomerViews(){
         //Here we will convert the appointments to their views
         //ObservableList<CustomerView> allCustomerViews = FXCollections.observableArrayList();

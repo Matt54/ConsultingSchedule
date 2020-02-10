@@ -1,13 +1,11 @@
 package consultingschedule;
 
-import static consultingschedule.ConsultingSchedule.LDTtoUTC;
 import static consultingschedule.ConsultingSchedule.UTCtoLDT;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.binding.Bindings;
