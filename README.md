@@ -6,6 +6,7 @@ Java application for scheduling appointments with customers.
  <ol type="i">
    <li><a href="#features">Features</a></li>
    <li><a href="#sign_in_screen">Sign In Screen</a></li>
+   <li><a href="#main_screen">Main Screen</a></li>
    <li><a href="#calendar">Calendar</a></li>
    <li><a href="#appointments_table">Appointments Table</a></li>
    <li><a href="#customers_table">Customers Table</a></li>
@@ -41,13 +42,24 @@ Java application for scheduling appointments with customers.
   <br><br>
 </p>
 
-<h1 id="calendar"> Calendar </h1><br>
+<h1 id="main_screen"> Main Screen </h1><br>
 <p align="center">
   <kbd>
     <img src="MediaFiles/CalendarSelected.png" width="600"><br>
   </kbd>
  <br><br>
  The calendar view is displayed first when the main screen is shown. <br>
+ <br><br>
+  <a href="#top">Back To Top</a>
+  <br><br>
+</p>
+
+<h1 id="calendar"> Calendar </h1><br>
+<p align="center">
+  <kbd>
+    <img src="MediaFiles/Calendar.gif" width="600"><br>
+  </kbd>
+ <br><br>
  The graphic on each day displays the number of appointments scheduled for the consultant. <br>
  The month and year can be selected below the calendar. <br>
   <br>
