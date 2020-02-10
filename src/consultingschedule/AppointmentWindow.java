@@ -1,6 +1,8 @@
 
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.LDTtoUTC;
+import static consultingschedule.ConsultingSchedule.UTCtoLDT;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -73,8 +75,8 @@ public class AppointmentWindow {
         CreateLineSeperation(gridPane);
         
         CreateTypeField(gridPane, "Type:", appointmentView.getType(),0 );
-        CreateDateField(gridPane, 1, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime().toLocalDate());
-        CreateTimeField(gridPane, 2, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime().toLocalTime());
+        CreateDateField(gridPane, 1, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime());
+        CreateTimeField(gridPane, 2, consultant.lookupAppointment(appointmentView.getAppointmentId()).getStartTime());
         CreateLocationField(gridPane, "Location:", consultant.lookupAppointment(appointmentView.getAppointmentId()).getLocation(),3 );
         
         CreateSpaceSeperation(gridPane);
@@ -177,11 +179,12 @@ public class AppointmentWindow {
         gridPane.setHalignment(label,HPos.RIGHT);
         gridPane.add(locationTextField, 4,index,1,1);
     }
-    
-    
-    
-    public void CreateDateField(GridPane gridPane, int index, LocalDate localDate)
+
+    public void CreateDateField(GridPane gridPane, int index, LocalDateTime localDateTime)
     {
+        LocalDateTime startLdt = UTCtoLDT(localDateTime);
+        LocalDate localDate = startLdt.toLocalDate();
+        
         Label label = new Label("Select Date:");
         datePicker = new DatePicker(); 
         
@@ -192,8 +195,11 @@ public class AppointmentWindow {
         gridPane.add(datePicker, 4,index,1,1);
     }
     
-    public void CreateTimeField(GridPane gridPane, int index, LocalTime localTime)
+    public void CreateTimeField(GridPane gridPane, int index, LocalDateTime localDateTime)
     {
+        LocalDateTime startLdt = UTCtoLDT(localDateTime);
+        LocalTime localTime = startLdt.toLocalTime();
+
         Label label = new Label("Select Time:");
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("hh:mm a");
@@ -306,18 +312,9 @@ public class AppointmentWindow {
         int index = timeComboBox.getSelectionModel().getSelectedIndex();
         LocalTime startTime = times[index];
         LocalTime endTime = times[index + 1];
-        
-        
-        LocalDateTime startDateTime = LocalDateTime.of(localDate, startTime);
-        LocalDateTime endDateTime = LocalDateTime.of(localDate, endTime);
-        
-        ZonedDateTime startZonedTime = startDateTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
-        ZonedDateTime startUTC = startZonedTime.withZoneSameInstant(ZoneId.of("UTC"));
-        LocalDateTime startUTCLDT = startUTC.toLocalDateTime();
-        
-        ZonedDateTime endZonedTime = endDateTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
-        ZonedDateTime endUTC = endZonedTime.withZoneSameInstant(ZoneId.of("UTC"));
-        LocalDateTime endUTCLDT = endUTC.toLocalDateTime();
+
+        LocalDateTime startUTCLDT = LDTtoUTC(LocalDateTime.of(localDate, startTime));
+        LocalDateTime endUTCLDT = LDTtoUTC(LocalDateTime.of(localDate, endTime));
 
         Appointment newAppointment = new Appointment(1,
                                             consultant.lookupCustomer(customerComboBox.getSelectionModel().getSelectedItem().toString()).getCustomerId(),
@@ -338,8 +335,11 @@ public class AppointmentWindow {
         newAppointment.updateDB();
         
         consultant.deleteAppointmentView(appointmentView.getAppointmentId());
-        consultant.addAppointment(newAppointment);
-        consultant.AddAppointmentToView(newAppointment);
+        //consultant.deleteAppointment(consultant.lookupAppointment(appointmentView.getAppointmentId()));
+        //consultant.addAppointment(newAppointment);
+        consultant.updateAppointment(appointmentView.getAppointmentId(), newAppointment);
+        consultant.AddAppointmentToView(consultant.lookupAppointment(appointmentView.getAppointmentId()));
+        
     }
     
     private void CreateNewAppointment(Appointment newAppointment){
@@ -368,20 +368,22 @@ public class AppointmentWindow {
         int index = timeComboBox.getSelectionModel().getSelectedIndex();
         LocalTime time = times[index];
         
-        if(time.getHour() < 8 || time.getHour() > 17) throw new IllegalArgumentException("You can't schedule an appointment outside of business hours.");
+        LocalDateTime uTCLDT = LDTtoUTC(LocalDateTime.of(localDate, time));
         
-        if(localDate.getDayOfWeek().getValue() > 5) throw new IllegalArgumentException("You can't schedule an appointment during the weekend.");
+        if(uTCLDT.getHour() < 14 || uTCLDT.getHour() > 23) throw new IllegalArgumentException("You can't schedule an appointment outside of business hours (14-23 UTC.).");
+        
+        if(uTCLDT.getDayOfWeek().getValue() > 5) throw new IllegalArgumentException("You can't schedule an appointment during the weekend.");
         
         if(!isModify)
         {
             for(Appointment appointment : consultant.getAllAppointments())
             {
                 LocalDateTime aptTime = appointment.getStartTime();
-                if(localDate.getYear() == aptTime.getYear())
+                if(uTCLDT.getYear() == aptTime.getYear())
                 {
-                    if(localDate.getDayOfYear() == aptTime.getDayOfYear())
+                    if(uTCLDT.getDayOfYear() == aptTime.getDayOfYear())
                     {
-                        if(time.getHour() == aptTime.getHour()) throw new IllegalArgumentException("You have another appointment during this hour.");
+                        if(uTCLDT.getHour() == aptTime.getHour()) throw new IllegalArgumentException("You have another appointment during this hour.");
                     }
                 }
             }

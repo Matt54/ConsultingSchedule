@@ -1,5 +1,6 @@
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.UTCtoLDT;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -152,16 +153,20 @@ public class MainWindow {
         LocalDateTime now = LocalDateTime.now();
         for(Appointment appointment : consultant.getAllAppointments())
         {
-            LocalDateTime aptTime = appointment.getStartTime();
-            if(now.getYear() == aptTime.getYear())
+            
+            LocalDateTime startLdt = UTCtoLDT(appointment.getStartTime());
+            
+            if(now.getYear() == startLdt.getYear())
             {
-                if(now.getDayOfYear() == aptTime.getDayOfYear())
+                if(now.getDayOfYear() == startLdt.getDayOfYear())
                 {
 
+                    /*
                     ZonedDateTime startUTC = aptTime.atZone(ZoneId.of("UTC"));
                     ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
                     LocalDateTime startLdt = startZdt.toLocalDateTime();
-                    
+                    */
+
                     int minuteValue = startLdt.getHour() * 60 + startLdt.getMinute();
                     int compareMinuteValue = now.getHour() * 60 + now.getMinute();
                     
@@ -268,12 +273,6 @@ public class MainWindow {
         TableColumn<AppointmentView, String> start = new TableColumn<>("Start Time");
         start.setCellValueFactory(new PropertyValueFactory<>("start"));
         tv.getColumns().add(start);
-        
-        /*
-        TableColumn<AppointmentView, String> endTime = new TableColumn<>("End Time");
-        endTime.setCellValueFactory(new PropertyValueFactory<>("end"));
-        tv.getColumns().add(endTime);
-        */
         
         TableColumn<AppointmentView, String> customerName = new TableColumn<>("Customer");
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));

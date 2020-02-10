@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import java.sql.*;  
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -232,6 +234,20 @@ public class ConsultingSchedule extends Application {
      ResourceBundle rb = ResourceBundle.getBundle("resources/"+ locale.getLanguage(), locale);
      return rb.getString(input);
    }
+    
+    public static LocalDateTime UTCtoLDT(LocalDateTime utcDT){
+        ZonedDateTime uTC = utcDT.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdt = uTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+        LocalDateTime ldt = zdt.toLocalDateTime();
+        return ldt;
+    }
+    
+    public static LocalDateTime LDTtoUTC(LocalDateTime ldt){
+        ZonedDateTime zonedTime = ldt.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+        ZonedDateTime uTC = zonedTime.withZoneSameInstant(ZoneId.of("UTC"));
+        LocalDateTime uTCLDT = uTC.toLocalDateTime();
+        return uTCLDT;
+    }
     
 
     /**

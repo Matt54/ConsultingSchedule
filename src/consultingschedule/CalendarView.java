@@ -1,5 +1,7 @@
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.LDTtoUTC;
+import static consultingschedule.ConsultingSchedule.UTCtoLDT;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -193,27 +195,6 @@ public class CalendarView extends VBox {
         
         if(!isHeader) return Color.rgb(base, base, base);
         else return Color.rgb(base - 25, base - 25, base - 25);
-        
-        /*
-        if(index % 2 == 0) return Color.rgb(base, base, base);
-        else return Color.rgb(base - 25, base - 25, base - 25);
-        */
-        
-        /*
-        int base = 230;
-        int base2 = 255;
-        
-        if(isHeader)
-        {
-            if(index % 2 == 0) return Color.rgb(base, base, base);
-            else return Color.rgb(base - 10, base - 10, base - 10);
-        }
-        else
-        {
-            if(index % 2 == 0) return Color.rgb(base2, base2, base2);
-            else return Color.rgb(base2 - 10, base2 - 10, base2 - 10);
-        }
-        */
     }
 
     private void CreateMonthlyCalendar()
@@ -250,10 +231,7 @@ public class CalendarView extends VBox {
                             GetColorFromIndex(i,true), CornerRadii.EMPTY, Insets.EMPTY)));
                     rows[r].getChildren().add( cells[i].getView() );
                 }
-                /*
-                rows[r].setBackground(new Background(new BackgroundFill(
-                    Color.rgb(220, 220, 220), CornerRadii.EMPTY, Insets.EMPTY)));
-                */
+
             }
             else
             {
@@ -270,14 +248,12 @@ public class CalendarView extends VBox {
                             String displayText = "";
                             DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
                             for (int a = 0; a < allAppointments.size(); a++) {
-                                if( (allAppointments.get(a).getStartTime().getDayOfYear() == thisDay.getDayOfYear() )
-                                        & (allAppointments.get(a).getStartTime().getYear() == yearNumber) )
+                                
+                                LocalDateTime startLdt = UTCtoLDT(allAppointments.get(a).getStartTime());
+
+                                if( (startLdt.getDayOfYear() == thisDay.getDayOfYear() )
+                                        & (startLdt.getYear() == yearNumber) )
                                 {
-
-                                    ZonedDateTime startUTC = allAppointments.get(a).getStartTime().atZone(ZoneId.of("UTC"));
-                                    ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
-                                    LocalDateTime startLdt = startZdt.toLocalDateTime();
-
                                     displayText += allAppointments.get(a).getTitle() + " (" + allAppointments.get(a).getType() + ") " + ": " 
                                             + dateFormat.format(Date.from( startLdt.atZone( ZoneId.systemDefault()).toInstant()))
                                             + "\n";
@@ -307,9 +283,6 @@ public class CalendarView extends VBox {
     private void CreateWeeklyCalendar()
     {
         getChildren().clear();
-        
-        int day = allAppointments.get(0).getStartTime().getDayOfYear();
-        int year = allAppointments.get(0).getStartTime().getYear();
         
         int numColumns = 7;
         int numRows = 2;
@@ -368,10 +341,7 @@ public class CalendarView extends VBox {
                     cells[i].getView().setBackground(new Background(new BackgroundFill(
                             GetColorFromIndex(i,true), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
-                /*
-                rows[r].setBackground(new Background(new BackgroundFill(
-                    Color.rgb(230, 230, 230), CornerRadii.EMPTY, Insets.EMPTY)));
-                */
+
             }
             else
             {
@@ -387,12 +357,16 @@ public class CalendarView extends VBox {
                             int numAppointments = 0;
                             String displayText = "";
                             DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                            
                             for (int a = 0; a < allAppointments.size(); a++) {
-                                if( (allAppointments.get(a).getStartTime().getDayOfYear() == thisDay.getDayOfYear() )
-                                        & (allAppointments.get(a).getStartTime().getYear() == yearNumber) )
+                                
+                                LocalDateTime startLdt = UTCtoLDT(allAppointments.get(a).getStartTime());
+                                
+                                if( (startLdt.getDayOfYear() == thisDay.getDayOfYear() )
+                                        & (startLdt.getYear() == yearNumber) )
                                 {
                                     displayText += allAppointments.get(a).getTitle() + " (" + allAppointments.get(a).getType() + ") " + ": " 
-                                            + dateFormat.format(Date.from( allAppointments.get(a).getStartTime().atZone( ZoneId.systemDefault()).toInstant()))
+                                            + dateFormat.format(Date.from( startLdt.atZone( ZoneId.systemDefault()).toInstant()))
                                             + "\n";
                                     numAppointments++;
                                 }
@@ -459,8 +433,6 @@ public class CalendarView extends VBox {
             Button btn = new Button();
             btn.setGraphic(imageView);
             btn.setId("button-appointment");
-            
-            
 
             Label aptLabel = new Label( Integer.toString(numAppointments));
 
@@ -474,8 +446,7 @@ public class CalendarView extends VBox {
                 appointmentInformation.setContentText(displayText);
                 appointmentInformation.showAndWait();
             });
-            
-            
+
             
             StackPane stackPane = new StackPane(btn,aptLabel);
             btn.setTranslateY(-15);

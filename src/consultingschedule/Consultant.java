@@ -1,5 +1,6 @@
 package consultingschedule;
 
+import static consultingschedule.ConsultingSchedule.UTCtoLDT;
 import static consultingschedule.ConsultingSchedule.connectToDB;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -442,13 +443,8 @@ public class Consultant {
     public void AddAppointmentToView(Appointment apt){
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
-        ZonedDateTime startUTC = apt.getStartTime().atZone(ZoneId.of("UTC"));
-        ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
-        LocalDateTime startLdt = startZdt.toLocalDateTime();
-        
-        ZonedDateTime endUTC = apt.getEndTime().atZone(ZoneId.of("UTC"));
-        ZonedDateTime endZdt = endUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
-        LocalDateTime endLdt = endZdt.toLocalDateTime();
+        LocalDateTime startLdt = UTCtoLDT(apt.getStartTime());
+        LocalDateTime endLdt = UTCtoLDT(apt.getEndTime());
 
         AppointmentView aptView = new AppointmentView(apt.getTitle(),
                                                         lookupCustomer(apt.getCustomerId()).getCustomerName(),
@@ -459,8 +455,12 @@ public class Consultant {
         allAppointmentViews.add(aptView);
     }
     
-    public void updateAppointment(int index, Appointment selectedAppointment){
-        allAppointments.set(index, selectedAppointment);
+    public void updateAppointment(int appointmentId, Appointment selectedAppointment){
+        
+        for(Appointment appointment : allAppointments){
+            if(appointment.getAppointmentId().equals(appointmentId)) appointment = selectedAppointment;
+        }
+        
     }
     
     public boolean deleteAppointment(Appointment selectedAppointment){
@@ -494,14 +494,9 @@ public class Consultant {
             if(userId == apt.getUserId())
             {
                 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
-                
-                ZonedDateTime startUTC = apt.getStartTime().atZone(ZoneId.of("UTC"));
-                ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
-                LocalDateTime startLdt = startZdt.toLocalDateTime();
 
-                ZonedDateTime endUTC = apt.getEndTime().atZone(ZoneId.of("UTC"));
-                ZonedDateTime endZdt = endUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
-                LocalDateTime endLdt = endZdt.toLocalDateTime();
+                LocalDateTime startLdt = UTCtoLDT(apt.getStartTime());
+                LocalDateTime endLdt = UTCtoLDT(apt.getEndTime());
                 
 
                 AppointmentView aptView = new AppointmentView(apt.getTitle(),
@@ -641,8 +636,11 @@ public class Consultant {
             { 
                 if( user.getUserId().equals(apt.getUserId()) )
                 {
+                    
+                    LocalDateTime startLdt = UTCtoLDT(apt.getStartTime());
+                    
                     consultantReport += System.getProperty("line.separator");
-                    consultantReport += dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())) + ": " 
+                    consultantReport += dateFormat.format(Date.from( startLdt.atZone( ZoneId.systemDefault()).toInstant())) + ": " 
                             + System.getProperty("line.separator") + apt.getTitle() + " (" + apt.getType() + ") "
                             + " with " + lookupCustomer(apt.getCustomerId()).getCustomerName()
                             + " at " + apt.getLocation();  
