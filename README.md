@@ -2,7 +2,7 @@
 
 Java application for scheduling appointments with customers. 
 
- <ul>
+ <ol type="i">
   <li><a href="#sign_in_screen">Sign In Screen</a></li>
   <li><a href="#calendar">Calendar</a></li>
   <li><a href="#appointments_table">Appointments Table</a></li>
