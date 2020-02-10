@@ -50,12 +50,12 @@ Java application for scheduling appointments with customers.
  The calendar view is displayed first when the main screen is shown. <br>
  The graphic on each day displays the number of appointments scheduled for the consultant. <br>
  The month and year can be selected below the calendar. <br>
-  <br><br><br>
+  <br><hr><br>
   <kbd>
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
  <br><br>
-  Clicking on the appointment graphic inside a day displays more information about the appointmnets. <br>
+  Clicking on the appointment graphic inside a day displays more information about the appointments. <br>
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
@@ -66,7 +66,9 @@ Java application for scheduling appointments with customers.
   <kbd>
     <img src="MediaFiles/Appointments.png" width = "600">
   </kbd>
- <br>
+ <br><br>
+  The . <br>
+  <br><br>
   <a href="#top">Back To Top</a>
 </p>
 
