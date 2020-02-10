@@ -8,6 +8,6 @@ A couple notes:
 
 <!--![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="10%" width="10%" -->
 
-<img src="MediaFiles/SignInScreen.gif" width="48">
+<img src="MediaFiles/SignInScreen.gif" width="500">
 
 MORE TBA
