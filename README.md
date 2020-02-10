@@ -9,8 +9,37 @@ A couple notes:
 <!--![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="10%" width="10%" -->
 
 <p align="center">
+  ## Sign In Screen
   <kbd>
     <img src="MediaFiles/SignInScreen.gif" width="200">
+  </kbd>
+</p>
+
+<p align="center">
+  ## Calendar
+  <kbd>
+    <img src="MediaFiles/Calendar.png width="600">
+  </kbd>
+</p>
+                                                 
+<p align="center">
+  ## Appointment Pop-Up
+  <kbd>
+    <img src="MediaFiles/AppointmentsFromCalendar.png width = "800">
+  </kbd>
+</p>
+                                                                   
+<p align="center">
+  ## Appointments Table
+  <kbd>
+    <img src="MediaFiles/Appointments.png width = "600">
+  </kbd>
+</p>
+                                                      
+<p align="center">
+  ## Modify Appointment
+  <kbd>
+    <img src="MediaFiles/ModifyAppointment.png width = "600">
   </kbd>
 </p>
 
