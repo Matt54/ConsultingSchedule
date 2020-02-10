@@ -3,6 +3,10 @@
 Java application for scheduling appointments with customers. 
 
 <a href="#sign_in_screen">Sign In Screen</a>
+<a href="#calendar">Calendar</a>
+<a href="#appointments_table">Appointments Table</a>
+<a href="#customers_table">Customers Table</a>
+<a href="#reports">Reports</a>
 
 A couple notes:
 1) All data is stored in a database and previous data is loaded on sign in.
@@ -17,8 +21,7 @@ A couple notes:
   </kbd>
 </p>
 
-
-<h1> Calendar </h1><br>
+<h1 id="calendar"> Calendar </h1><br>
 <p align="center">
   <kbd>
     <img src="MediaFiles/Calendar.png" width="600"><br>
@@ -28,7 +31,7 @@ A couple notes:
   </kbd>
 </p>
 
-<h1> Appointments Table </h1><br>
+<h1 id="appointments_table"> Appointments Table </h1><br>
 <p align="center">
   <kbd>
     <img src="MediaFiles/Appointments.png" width = "600">
@@ -42,7 +45,7 @@ A couple notes:
   </kbd>
 </p>
 
-<h1> Customers Table </h1><br>
+<h1 id="customers_table"> Customers Table </h1><br>
 <p align="center">
   <kbd>
     <img src="MediaFiles/Customers.png" width = "600">
@@ -56,7 +59,7 @@ A couple notes:
   </kbd>
 </p>
 
-<h1> Reports </h1><br>
+<h1 id="reports"> Reports </h1><br>
 <p align="center">
   <kbd>
     <img src="MediaFiles/ReportType.png" width = "600">
