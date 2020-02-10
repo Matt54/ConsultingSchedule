@@ -25,7 +25,7 @@ Java application for scheduling appointments with customers.
 <h1 id="sign_in_screen"> Sign In Screen </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/SignInScreen.gif" width="300">
+    <img src="MediaFiles/SignInScreenV2.gif" width="300">
   </kbd>
   <br>
   The Sign in window is shown on application launch. A valid username and password must be provided in order to display the main application window.
@@ -36,7 +36,7 @@ Java application for scheduling appointments with customers.
 <h1 id="calendar"> Calendar </h1><br>
 <p align="center">
   <kbd>
-    <img src="MediaFiles/Calendar.png" width="600"><br>
+    <img src="MediaFiles/calendar.gif" width="600"><br>
   </kbd>
   <br><br><br>
   <kbd>
