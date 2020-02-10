@@ -6,6 +6,6 @@ A couple notes:
 1) All data is stored in a database and previous data is loaded on sign in.
 2) All business logic is stored in UTC and all views are provided in local time (based on the users system clock)
 
-![alt text](MediaFiles/SignInScreen.gif){:height="24px" width="48px"}
+![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="50%" width="50%" -->
 
 MORE TBA
