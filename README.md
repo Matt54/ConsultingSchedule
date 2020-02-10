@@ -2,16 +2,14 @@
 
 Java application for scheduling appointments with customers. 
 
-<h1 id="calendar"> Index </h1><br>
-<p align="center">
- <ol type="i" align="center">
+<h1 id="index"> Index </h1><br>
+ <ol type="i">
    <li><a href="#sign_in_screen">Sign In Screen</a></li>
    <li><a href="#calendar">Calendar</a></li>
    <li><a href="#appointments_table">Appointments Table</a></li>
    <li><a href="#customers_table">Customers Table</a></li>
    <li><a href="#reports">Reports</a></li>
  </ol> 
-</p>
 
 A couple notes:
 1) All data is stored in a database and previous data is loaded on sign in.
