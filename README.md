@@ -2,7 +2,7 @@
 
 Java application for scheduling appointments with customers. 
 
-<h1 id="index"> Index </h1><br>
+<h1 id="index"> Index </h1>
  <ol type="i">
    <li><a href="#sign_in_screen">Sign In Screen</a></li>
    <li><a href="#calendar">Calendar</a></li>
@@ -22,6 +22,8 @@ A couple notes:
   <kbd  >
     <img src="MediaFiles/SignInScreen.gif" width="300">
   </kbd>
+  <br>
+  Here is some description about the sign in screen.
 </p>
 
 <h1 id="calendar"> Calendar </h1><br>
@@ -29,6 +31,7 @@ A couple notes:
   <kbd>
     <img src="MediaFiles/Calendar.png" width="600"><br>
   </kbd>
+  <br>
   <kbd>
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
