@@ -17,7 +17,7 @@ A couple notes:
 
 <!--![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="10%" width="10%" -->
 
-<h1 id="sign_in_screen"> Sign In Screen </h1><br>
+<h1 id="sign_in_screen"> Sign In Screen </h1>
 <p align="center">
   <kbd  >
     <img src="MediaFiles/SignInScreen.gif" width="300">
@@ -26,12 +26,12 @@ A couple notes:
   Here is some description about the sign in screen.
 </p>
 
-<h1 id="calendar"> Calendar </h1><br>
+<h1 id="calendar"> Calendar </h1>
 <p align="center">
   <kbd>
     <img src="MediaFiles/Calendar.png" width="600"><br>
   </kbd>
-  <br>
+  <br><br><br>
   <kbd>
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
