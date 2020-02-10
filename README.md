@@ -8,9 +8,9 @@ A couple notes:
 
 <!--![alt text](MediaFiles/SignInScreen.gif)<!-- .element height="10%" width="10%" -->
 
-<p>
-  <h1> Sign In Screen </h1><br>
-  <kbd  align="center">
+<h1> Sign In Screen </h1><br>
+<p align="center">
+  <kbd  >
     <img src="MediaFiles/SignInScreen.gif" width="200">
   </kbd>
 </p>
