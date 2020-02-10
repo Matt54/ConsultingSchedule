@@ -14,12 +14,13 @@ Java application for scheduling appointments with customers.
  </ol> 
 
 <h1 id="features"> Features </h1><br>
-<p align="center">
+<p>
  <ol>
   <li>All data is stored in a database and previous data is loaded on sign in.</li>
   <li>All business logic is stored in UTC and all views are provided in local time (based on the users system clock)</li>
  </ol>
  <br>
+<p align="center">
  <a href="#top">Back To Top</a>
 </p>
 
