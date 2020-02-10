@@ -3,7 +3,9 @@ package consultingschedule;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.binding.Bindings;
@@ -271,8 +273,13 @@ public class CalendarView extends VBox {
                                 if( (allAppointments.get(a).getStartTime().getDayOfYear() == thisDay.getDayOfYear() )
                                         & (allAppointments.get(a).getStartTime().getYear() == yearNumber) )
                                 {
+
+                                    ZonedDateTime startUTC = allAppointments.get(a).getStartTime().atZone(ZoneId.of("UTC"));
+                                    ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+                                    LocalDateTime startLdt = startZdt.toLocalDateTime();
+
                                     displayText += allAppointments.get(a).getTitle() + " (" + allAppointments.get(a).getType() + ") " + ": " 
-                                            + dateFormat.format(Date.from( allAppointments.get(a).getStartTime().atZone( ZoneId.systemDefault()).toInstant()))
+                                            + dateFormat.format(Date.from( startLdt.atZone( ZoneId.systemDefault()).toInstant()))
                                             + "\n";
                                     numAppointments++;
                                 }

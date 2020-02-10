@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -440,12 +442,20 @@ public class Consultant {
     public void AddAppointmentToView(Appointment apt){
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
+        ZonedDateTime startUTC = apt.getStartTime().atZone(ZoneId.of("UTC"));
+        ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+        LocalDateTime startLdt = startZdt.toLocalDateTime();
+        
+        ZonedDateTime endUTC = apt.getEndTime().atZone(ZoneId.of("UTC"));
+        ZonedDateTime endZdt = endUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+        LocalDateTime endLdt = endZdt.toLocalDateTime();
+
         AppointmentView aptView = new AppointmentView(apt.getTitle(),
                                                         lookupCustomer(apt.getCustomerId()).getCustomerName(),
                                                         apt.getLocation(),
                                                         apt.getType(),
-                                                        dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())), //"MM-dd-yyyy HH:mm"
-                                                        dateFormat.format(Date.from( apt.getEndTime().atZone( ZoneId.systemDefault()).toInstant())));
+                                                        dateFormat.format(Date.from( startLdt.atZone( ZoneId.systemDefault()).toInstant())), //"MM-dd-yyyy HH:mm"
+                                                        dateFormat.format(Date.from( endLdt.atZone( ZoneId.systemDefault()).toInstant())));
         allAppointmentViews.add(aptView);
     }
     
@@ -484,13 +494,22 @@ public class Consultant {
             if(userId == apt.getUserId())
             {
                 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+                
+                ZonedDateTime startUTC = apt.getStartTime().atZone(ZoneId.of("UTC"));
+                ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+                LocalDateTime startLdt = startZdt.toLocalDateTime();
+
+                ZonedDateTime endUTC = apt.getEndTime().atZone(ZoneId.of("UTC"));
+                ZonedDateTime endZdt = endUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+                LocalDateTime endLdt = endZdt.toLocalDateTime();
+                
 
                 AppointmentView aptView = new AppointmentView(apt.getTitle(),
                                                                 lookupCustomer(apt.getCustomerId()).getCustomerName(),
                                                                 apt.getLocation(),
                                                                 apt.getType(),
-                                                                dateFormat.format(Date.from( apt.getStartTime().atZone( ZoneId.systemDefault()).toInstant())), //"MM-dd-yyyy HH:mm"
-                                                                dateFormat.format(Date.from( apt.getEndTime().atZone( ZoneId.systemDefault()).toInstant())));
+                                                                dateFormat.format(Date.from( startLdt.atZone( ZoneId.systemDefault()).toInstant())), //"MM-dd-yyyy HH:mm"
+                                                                dateFormat.format(Date.from( endLdt.atZone( ZoneId.systemDefault()).toInstant())));
                 aptView.setAppointmentId(apt.getAppointmentId());
                 allAppointmentViews.add(aptView);
                 //PopulateCustomerView(apt.getCustomerId());

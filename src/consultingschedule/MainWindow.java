@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -103,9 +104,9 @@ public class MainWindow {
         consultant.populateReportTypeViews();
         
         InformationGenerator infoGen = new InformationGenerator(consultant);
-        //infoGen.CreateRandomCustomers(20, infoGen.ReadCustomerCSVFile());
+        //infoGen.CreateRandomCustomers(10, infoGen.ReadCustomerCSVFile());
         //infoGen.DeleteAllConsultantCustomers();
-        //infoGen.CreateRandomAppointments(200, infoGen.ReadAppointmentCSVFile());
+        //infoGen.CreateRandomAppointments(50, infoGen.ReadAppointmentCSVFile());
         //infoGen.ReadAppointmentCSVFile();
         
         LoadDataAndGenerateWindow();
@@ -156,14 +157,24 @@ public class MainWindow {
             {
                 if(now.getDayOfYear() == aptTime.getDayOfYear())
                 {
-                    if(abs(now.getMinute() - aptTime.getMinute()) < 15)
+
+                    ZonedDateTime startUTC = aptTime.atZone(ZoneId.of("UTC"));
+                    ZonedDateTime startZdt = startUTC.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+                    LocalDateTime startLdt = startZdt.toLocalDateTime();
+                    
+                    int minuteValue = startLdt.getHour() * 60 + startLdt.getMinute();
+                    int compareMinuteValue = now.getHour() * 60 + now.getMinute();
+                    
+                    int timeDifference = abs(minuteValue - compareMinuteValue);
+                    
+                    if(timeDifference <= 15)
                     {
                         DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
                         Alert appointmentInformation = new Alert(Alert.AlertType.WARNING);
                         appointmentInformation.setTitle("Appointment Reminder");
                         appointmentInformation.setHeaderText("You have an appointment within 15 minutes!");
                         appointmentInformation.setContentText(appointment.getTitle() + " (" + appointment.getType() + ") " + ": " 
-                                                + dateFormat.format(java.util.Date.from( appointment.getStartTime().atZone( ZoneId.systemDefault()).toInstant())));
+                                                + dateFormat.format(java.util.Date.from( startLdt.atZone( ZoneId.systemDefault()).toInstant())));
                         appointmentInformation.showAndWait();
                     }
                 }

@@ -4,6 +4,8 @@ package consultingschedule;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
@@ -308,6 +310,14 @@ public class AppointmentWindow {
         
         LocalDateTime startDateTime = LocalDateTime.of(localDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(localDate, endTime);
+        
+        ZonedDateTime startZonedTime = startDateTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+        ZonedDateTime startUTC = startZonedTime.withZoneSameInstant(ZoneId.of("UTC"));
+        LocalDateTime startUTCLDT = startUTC.toLocalDateTime();
+        
+        ZonedDateTime endZonedTime = endDateTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+        ZonedDateTime endUTC = endZonedTime.withZoneSameInstant(ZoneId.of("UTC"));
+        LocalDateTime endUTCLDT = endUTC.toLocalDateTime();
 
         Appointment newAppointment = new Appointment(1,
                                             consultant.lookupCustomer(customerComboBox.getSelectionModel().getSelectedItem().toString()).getCustomerId(),
@@ -318,8 +328,8 @@ public class AppointmentWindow {
                                             contactTextField.getText(),
                                             typeTextField.getText(),
                                             urlTextField.getText(),
-                                            startDateTime,
-                                            endDateTime);
+                                            startUTCLDT,
+                                            endUTCLDT);
         return newAppointment;
     }
     

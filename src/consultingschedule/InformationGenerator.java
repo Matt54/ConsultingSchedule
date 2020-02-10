@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Random;
 import javafx.scene.Node;
@@ -157,9 +159,17 @@ public class InformationGenerator {
             LocalDateTime startTime = LocalDateTime.of(localDate,localTimeStart);
             LocalDateTime endTime = LocalDateTime.of(localDate,localTimeEnd);
             
+            ZonedDateTime startZonedTime = startTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+            ZonedDateTime startUTC = startZonedTime.withZoneSameInstant(ZoneId.of("UTC"));
+            LocalDateTime startUTCLDT = startUTC.toLocalDateTime();
+
+            ZonedDateTime endZonedTime = endTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+            ZonedDateTime endUTC = endZonedTime.withZoneSameInstant(ZoneId.of("UTC"));
+            LocalDateTime endUTCLDT = endUTC.toLocalDateTime();
+            
             
             System.out.println("email = " + url + " location = " + myLocation + "title = " + title + " , type = " + type + " , customer = " + randomCustomer.getCustomerName());
-            System.out.println("Year: " + startTime.getYear() + " , Month: " + startTime.getMonth().toString() + " , Day: " + startTime.getDayOfWeek().toString() + " , Time: " + startTime.getHour());
+            System.out.println("Year: " + startTime.getYear() + " , Month: " + startUTCLDT.getMonth().toString() + " , Day: " + startUTCLDT.getDayOfWeek().toString() + " , Time: " + startUTCLDT.getHour());
         
             Appointment newAppointment = new Appointment(1,
                                             randomCustomer.getCustomerId(),
@@ -170,8 +180,8 @@ public class InformationGenerator {
                                             randomCustomer.getCustomerName(),
                                             type,
                                             url,
-                                            startTime,
-                                            endTime);
+                                            startUTCLDT,
+                                            endUTCLDT);
             
             newAppointment.addToDB();
             consultant.addAppointment(newAppointment);
