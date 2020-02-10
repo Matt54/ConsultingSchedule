@@ -53,7 +53,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/CalendarSelected.png" width="600"><br>
   </kbd>
  <br><br>
- The calendar view is displayed first when the main screen is shown. <br>
+ The calendar view is displayed first when the main screen is shown.
  <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
