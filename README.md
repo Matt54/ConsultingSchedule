@@ -1,4 +1,4 @@
-# ConsultingSchedule
+<h1 id="top"> Consulting Schedule Application </h1>
 
 Java application for scheduling appointments with customers. 
 
@@ -33,7 +33,7 @@ Java application for scheduling appointments with customers.
   <br>
   Here is some description about the sign in screen.
   <br>
-  <a href="#index">Back To Top</a>
+  <a href="#top">Back To Top</a>
 </p>
 
 <h1 id="calendar"> Calendar </h1><br>
@@ -46,7 +46,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
   <br>
-  <a href="#index">Back To Top</a>
+  <a href="#top">Back To Top</a>
 </p>
 
 <h1 id="appointments_table"> Appointments Table </h1><br>
@@ -55,7 +55,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/Appointments.png" width = "600">
   </kbd>
  <br>
-  <a href="#index">Back To Top</a>
+  <a href="#top">Back To Top</a>
 </p>
 
 <h1> Modify Appointment </h1><br>
@@ -64,7 +64,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/ModifyAppointment.png" width = "600">
   </kbd>
  <br>
-  <a href="#index">Back To Top</a>
+  <a href="#top">Back To Top</a>
 </p>
 
 <h1 id="customers_table"> Customers Table </h1><br>
@@ -73,7 +73,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/Customers.png" width = "600">
   </kbd>
  <br>
-  <a href="#index">Back To Top</a>
+  <a href="#top">Back To Top</a>
 </p>
 
 <h1> Modify Customer </h1><br>
@@ -82,7 +82,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/ModifyCustomer.png" width = "300">
   </kbd>
  <br>
-  <a href="#index">Back To Top</a>
+  <a href="#top">Back To Top</a>
 </p>
 
 <h1 id="reports"> Reports </h1><br>
@@ -91,5 +91,5 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/ReportType.png" width = "600">
   </kbd>
  <br>
-  <a href="#index">Back To Top</a>
+  <a href="#top">Back To Top</a>
 </p>
