@@ -61,7 +61,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/AppointmentsFromCalendar.png" width = "400">
   </kbd>
  <br><br>
-  Clicking on the appointment graphic inside a day displays more information about the appointments. <br>
+  Clicking on the appointment graphic inside a day displays more information about the appointments.
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
@@ -73,7 +73,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/AppointmentsSelectedV2.png" width = "600">
   </kbd>
  <br><br>
-  The appointments table view displays all of the appointments for a consultant. <br>
+  The appointments table view displays all of the appointments for a consultant.
   <br><br>
   <a href="#top">Back To Top</a>
 </p>
@@ -84,7 +84,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/ModifyAppointment.png" width = "600">
   </kbd>
  <br><br>
-  Appointments are added or modified from the add/modify appointment window. <br>
+  Appointments are added or modified from the add/modify appointment window.
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
@@ -96,7 +96,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/CustomersSelectedV2.png" width = "600">
   </kbd>
  <br><br>
-  The customers table view displays all of the appointments for a consultant. <br>
+  The customers table view displays all of the appointments for a consultant.
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
@@ -108,7 +108,7 @@ Java application for scheduling appointments with customers.
     <img src="MediaFiles/ModifyCustomer.png" width = "300">
   </kbd>
  <br><br>
-  Customers are added or modified from the add/modify customer window. <br>
+  Customers are added or modified from the add/modify customer window.
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
@@ -121,7 +121,7 @@ Java application for scheduling appointments with customers.
   </kbd>
  <br><br>
  The reports table view displays the number of each appointment type broken up by month. <br>
- Additional reports are available that show the schedule and total the number of hours for each consultant. <br>
+ Additional reports are available that show the schedule and total the number of hours for each consultant.
   <br><br>
   <a href="#top">Back To Top</a>
   <br><br>
