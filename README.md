@@ -13,7 +13,7 @@ Java application for scheduling appointments with customers.
    <li><a href="#reports">Reports</a></li>
  </ol> 
 
-<h1 id="features"> Features </h1><br>
+<h1 id="features"> Features </h1>
 <p>
  <ol>
   <li>Sign in screen determines user's location and translates language (only available in english and french).</li>
